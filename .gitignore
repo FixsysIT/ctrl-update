@@ -1,2 +1,3 @@
 .sites-runtime/
+.openai/
 agent-review-input.json
