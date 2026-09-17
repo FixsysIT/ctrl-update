@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intune Radar — acties, wijzigingen en vaknieuws</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='none' stroke='%233641d6' stroke-width='9'/><circle cx='50' cy='50' r='15' fill='%233641d6'/></svg>">
+<style>
+  /* ============================================================
+     Tokens. Kleur draagt nooit alleen betekenis: elke urgentie
+     heeft ook een icoon en een woord. Dat is de regel uit de
+     status- en severity-patronen, en het is ook gewoon nodig
+     voor wie kleur slecht onderscheidt.
+     ============================================================ */
+  :root {
+    color-scheme: light dark;
+
+    --bg:           #f3f6fa;
+    --bg-soft:      #e8edf4;
+    --panel:        #ffffff;
+    --panel-alt:    #fbfbfa;
+    --border:       #dbe2eb;
+    --border-sharp: #bdc8d7;
+    --text:         #111827;
+    --text-soft:    #455267;
+    --muted:        #69758a;
+    --faint:        #94a0b2;
+    --accent:       #2454e6;
+    --accent-soft:  #e9efff;
+    --ink:          #0b1730;
+    --ink-soft:     #14264a;
+
+    --crit:      #ab1c0b;
+    --crit-soft: #fce9e6;
+    --warn:      #8f5407;
+    --warn-soft: #fbf0db;
+    --ok:        #1c5c45;
+    --ok-soft:   #e5f2eb;
+    --sched:      #2a4a8f;
+    --sched-soft: #e9eef9;
+    --neutral:      #817f7a;
+    --neutral-soft: #eceae6;
+
+    --r:    16px;
+    --r-sm: 8px;
+    --shadow:    0 1px 2px rgba(15,23,42,.045), 0 12px 28px -22px rgba(15,23,42,.34);
+    --shadow-lg: 0 8px 30px -18px rgba(15,23,42,.35);
+
+    --row-pad: 17px;
+    --sidebar: 236px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:           #0a0a0c;
+      --bg-soft:      #17171a;
+      --panel:        #131316;
+      --panel-alt:    #161619;
+      --border:       #26262a;
+      --border-sharp: #3b3b41;
+      --text:         #f4f4f2;
+      --text-soft:    #b3b2af;
+      --muted:        #85837e;
+      --faint:        #5f5d59;
+      --accent:       #8da7ff;
+      --accent-soft:  #17213e;
+      --ink:          #080f20;
+      --ink-soft:     #111e39;
+
+      --crit:      #ff7d69;
+      --crit-soft: #291310;
+      --warn:      #e3a748;
+      --warn-soft: #251b0b;
+      --ok:        #58c391;
+      --ok-soft:   #0d2118;
+      --sched:      #7f9ee0;
+      --sched-soft: #121a2b;
+      --neutral:      #85837e;
+      --neutral-soft: #1b1b1e;
+
+      --shadow:    0 1px 2px rgba(0,0,0,.45), 0 10px 26px -20px rgba(0,0,0,.9);
+      --shadow-lg: 0 2px 6px rgba(0,0,0,.5), 0 18px 40px -26px rgba(0,0,0,1);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg:           #0a0a0c;
+    --bg-soft:      #17171a;
+    --panel:        #131316;
+    --panel-alt:    #161619;
+    --border:       #26262a;
+    --border-sharp: #3b3b41;
+    --text:         #f4f4f2;
+    --text-soft:    #b3b2af;
+    --muted:        #85837e;
+    --faint:        #5f5d59;
+    --accent:       #8da7ff;
+    --accent-soft:  #17213e;
+    --ink:          #080f20;
+    --ink-soft:     #111e39;
+
+    --crit:      #ff7d69;
+    --crit-soft: #291310;
+    --warn:      #e3a748;
+    --warn-soft: #251b0b;
+    --ok:        #58c391;
+    --ok-soft:   #0d2118;
+    --sched:      #7f9ee0;
+    --sched-soft: #121a2b;
+    --neutral:      #85837e;
+    --neutral-soft: #1b1b1e;
+
+    --shadow:    0 1px 2px rgba(0,0,0,.45), 0 10px 26px -20px rgba(0,0,0,.9);
+    --shadow-lg: 0 2px 6px rgba(0,0,0,.5), 0 18px 40px -26px rgba(0,0,0,1);
+  }
+
+  :root[data-density="compact"] { --row-pad: 11px; }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, Inter, Roboto, sans-serif;
+    font-size: 16px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent); color: #fff; }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+  .wrap { max-width: 1360px; margin: 0 auto; padding: 0 28px 120px; }
+
+  /* ===================== kop ===================== */
+
+  .masthead {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 18px; flex-wrap: wrap; padding: 27px 0 18px;
+  }
+  .brand { display: flex; align-items: center; gap: 13px; }
+  .logo {
+    width: 38px; height: 38px; border-radius: 11px; flex: none;
+    background: var(--ink); color: #fff; display: grid; place-items: center;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 8px 22px -12px rgba(11,23,48,.7);
+  }
+  .brand h1 { margin: 0; font-size: 23px; font-weight: 740; letter-spacing: -0.035em; line-height: 1.05; }
+  .brand .eyebrow { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 3px; }
+  .brand .tagline { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+
+  .toolbar { display: flex; gap: 6px; align-items: center; }
+  .tool {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text-soft);
+    border-radius: var(--r-sm); height: 31px; padding: 0 10px; cursor: pointer;
+    font: inherit; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .tool:hover { border-color: var(--border-sharp); color: var(--text); }
+  .tool.icon-only { width: 31px; padding: 0; justify-content: center; }
+
+  /* ===================== ochtendoverzicht ===================== */
+
+  .overview {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px; margin-bottom: 12px;
+  }
+  .metric {
+    appearance: none; text-align: left; font: inherit; color: inherit; cursor: pointer;
+    min-width: 0; padding: 14px 15px 13px; border: 1px solid var(--border);
+    border-radius: var(--r); background: var(--panel); box-shadow: var(--shadow);
+    transition: transform .14s, border-color .14s, box-shadow .14s;
+  }
+  .metric:hover { transform: translateY(-2px); border-color: var(--border-sharp); box-shadow: var(--shadow-lg); }
+  .metric .k { display: block; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .metric .v { display: block; margin-top: 4px; font-size: 24px; line-height: 1; font-weight: 760; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+  .metric .s { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .metric.attention .v { color: var(--crit); }
+  .metric.followup .v { color: var(--warn); }
+  .metric.signal .v { color: var(--accent); }
+  .metric.health .v { color: var(--ok); }
+  .metric[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft), var(--shadow); }
+
+  /* ===================== statusbalk =====================
+     Eén regel die de enige vraag beantwoordt die telt:
+     moet ik nu iets doen? Zo werkt een statuspagina ook. */
+
+  .status {
+    display: flex; align-items: center; gap: 13px;
+    border: 1px solid var(--border); border-left: 4px solid var(--neutral);
+    background: var(--panel); border-radius: var(--r);
+    padding: 17px 19px; margin-bottom: 24px; box-shadow: var(--shadow);
+  }
+  .status.crit { border-left-color: var(--crit); background: var(--crit-soft); border-color: color-mix(in srgb, var(--crit) 26%, var(--border)); }
+  .status.warn { border-left-color: var(--warn); background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 26%, var(--border)); }
+  .status.ok   { border-left-color: var(--ok);   background: var(--ok-soft);   border-color: color-mix(in srgb, var(--ok) 26%, var(--border)); }
+
+  .status .ico { flex: none; display: grid; place-items: center; }
+  .status.crit .ico { color: var(--crit); }
+  .status.warn .ico { color: var(--warn); }
+  .status.ok   .ico { color: var(--ok); }
+
+  .status .msg { min-width: 0; }
+  .status .headline { display: block; font-size: 16.5px; font-weight: 700; letter-spacing: -0.02em; }
+  .status.crit .headline { color: var(--crit); }
+  .status.warn .headline { color: var(--warn); }
+  .status.ok   .headline { color: var(--ok); }
+  .status .detail { display: block; color: var(--text-soft); font-size: 13px; margin-top: 3px; }
+  .status .jump {
+    margin-left: auto; flex: none; font-size: 12.5px; font-weight: 560;
+    background: none; border: none; cursor: pointer; font-family: inherit;
+    color: inherit; opacity: .75; text-decoration: underline; text-underline-offset: 3px;
+  }
+  .status .jump:hover { opacity: 1; }
+
+  /* ===================== agenda ===================== */
+
+  .section-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 11px; }
+  .section-head h2 {
+    margin: 0; font-size: 10.5px; font-weight: 780;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  }
+  .section-head .hint { color: var(--muted); font-size: 12px; }
+
+  .agenda { margin-bottom: 26px; }
+  .agenda-grid { display: grid; gap: 9px; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); }
+
+  .acard {
+    position: relative; overflow: hidden;
+    display: block; text-decoration: none; color: inherit;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 13px 15px 14px;
+    box-shadow: var(--shadow); transition: border-color .13s, transform .13s, box-shadow .13s;
+  }
+  .acard:hover { border-color: var(--border-sharp); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .acard .top { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; }
+  .acard .lab {
+    font-size: 10px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .acard .datum {
+    margin-left: auto; font-size: 12.5px; font-weight: 700;
+    font-variant-numeric: tabular-nums; letter-spacing: -0.01em; color: var(--text);
+  }
+  .acard .t {
+    font-size: 13.5px; font-weight: 570; line-height: 1.36; letter-spacing: -0.008em; color: var(--text);
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .acard .foot { margin-top: 9px; font-size: 11.5px; color: var(--muted); display: flex; gap: 6px; }
+  .acard .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--border); }
+  .acard .bar i { display: block; height: 100%; }
+
+  .u-running .lab, .u-running .datum { color: var(--crit); }
+  .u-running .bar i { background: var(--crit); }
+  .u-urgent  .lab, .u-urgent .datum  { color: var(--crit); }
+  .u-urgent  .bar i { background: var(--crit); }
+  .u-soon    .lab { color: var(--warn); }
+  .u-soon    .bar i { background: var(--warn); }
+  .u-planned .lab { color: var(--sched); }
+  .u-planned .bar i { background: var(--sched); }
+  .acard.u-running { border-color: color-mix(in srgb, var(--crit) 40%, var(--border)); }
+
+  /* ===================== raamwerk ===================== */
+
+  .layout { display: grid; grid-template-columns: var(--sidebar) minmax(0, 1fr); gap: 28px; align-items: start; }
+
+  .side { position: sticky; top: 16px; }
+  .side-block + .side-block { margin-top: 22px; }
+  .side h3 {
+    margin: 0 0 9px; font-size: 10.5px; font-weight: 780;
+    letter-spacing: .13em; text-transform: uppercase; color: var(--muted);
+  }
+
+  .facets { display: flex; flex-direction: column; gap: 1px; }
+  .facet {
+    display: flex; align-items: center; gap: 8px; width: 100%;
+    background: none; border: none; font: inherit; font-size: 13.5px;
+    color: var(--text-soft); padding: 6px 9px; border-radius: 7px;
+    cursor: pointer; text-align: left;
+  }
+  .facet:hover { background: var(--bg-soft); color: var(--text); }
+  /* display:flex hierboven wint anders van het hidden-attribuut */
+  .facet[hidden] { display: none; }
+  .facet[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 580; }
+  .facet .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; background: var(--neutral); }
+  .facet .dot.crit { background: var(--crit); }
+  .facet .dot.warn { background: var(--warn); }
+  .facet .dot.accent { background: var(--accent); }
+  .facet .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .facet .ct { font-size: 11.5px; color: var(--faint); font-variant-numeric: tabular-nums; }
+  .facet[aria-pressed="true"] .ct { color: var(--accent); }
+
+  .side select {
+    width: 100%; background: var(--panel); color: var(--text);
+    border: 1px solid var(--border); border-radius: var(--r-sm);
+    padding: 7px 9px; font-size: 13px; font-family: inherit;
+  }
+  .side .reset {
+    margin-top: 10px; width: 100%; background: none; border: 1px dashed var(--border);
+    color: var(--muted); border-radius: var(--r-sm); padding: 6px; font: inherit;
+    font-size: 12.5px; cursor: pointer;
+  }
+  .side .reset:hover { border-color: var(--border-sharp); color: var(--text); }
+
+  /* ===================== zoek en modus ===================== */
+
+  .feedbar {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(14px) saturate(1.5);
+    padding: 10px 0 11px; margin-bottom: 4px;
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  }
+  .search { position: relative; flex: 1 1 230px; min-width: 150px; }
+  .search input {
+    width: 100%; background: var(--panel); color: var(--text);
+    border: 1px solid var(--border); border-radius: var(--r-sm);
+    padding: 7px 34px 7px 32px; font-size: 14px; font-family: inherit;
+  }
+  .search .glass { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+  .search kbd {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    font: 11px ui-monospace, Consolas, monospace; color: var(--faint);
+    border: 1px solid var(--border); border-radius: 4px; padding: 0 5px; background: var(--bg-soft);
+  }
+  .search input:focus + kbd { display: none; }
+
+  .seg {
+    display: inline-flex; background: var(--bg-soft); border: 1px solid var(--border);
+    border-radius: var(--r-sm); padding: 2px; gap: 2px;
+  }
+  .seg button {
+    border: none; background: none; color: var(--muted); font: inherit; font-size: 13px;
+    padding: 4px 11px; border-radius: 6px; cursor: pointer; white-space: nowrap;
+  }
+  .seg button[aria-pressed="true"] {
+    background: var(--panel); color: var(--text); box-shadow: var(--shadow); font-weight: 570;
+  }
+  .result-count { color: var(--muted); font-size: 12.5px; margin-left: auto; white-space: nowrap; }
+
+  /* ===================== dagkoppen ===================== */
+
+  .daybar {
+    position: sticky; top: 52px; z-index: 10;
+    display: flex; align-items: center; gap: 11px;
+    padding: 13px 0 7px;
+    background: linear-gradient(to bottom, var(--bg) 62%, transparent);
+  }
+  .daybar .d {
+    font-size: 11.5px; font-weight: 700; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--text-soft); white-space: nowrap;
+  }
+  .daybar .line { flex: 1; height: 1px; background: var(--border); }
+  .daybar .n { font-size: 11.5px; color: var(--faint); font-variant-numeric: tabular-nums; }
+
+  /* ===================== item ===================== */
+
+  .item {
+    position: relative;
+    display: grid; grid-template-columns: 4px 1fr; gap: 0;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--r); margin-bottom: 8px;
+    box-shadow: var(--shadow); overflow: hidden;
+    transition: border-color .12s, box-shadow .12s;
+  }
+  .item:hover { border-color: var(--border-sharp); }
+  .item.cursor { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft), var(--shadow); }
+  .item.read { opacity: .42; }
+  .item.triage-done, .item.triage-skip { opacity: .56; }
+  .item.triage-followup { border-color: color-mix(in srgb, var(--warn) 46%, var(--border)); }
+
+  /* severity als eerste ding links: F-patroon, belangrijkste informatie
+     komt de lezer als eerste tegen */
+  .rail { background: var(--neutral); }
+  .item[data-tier="action"] .rail { background: var(--crit); }
+  .item[data-tier="watch"]  .rail { background: var(--warn); }
+
+  .body { min-width: 0; padding: var(--row-pad) 18px var(--row-pad) 16px; }
+
+  .flags { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+  .flags:empty { display: none; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 780; letter-spacing: .08em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 5px; white-space: nowrap;
+  }
+  .badge.action  { background: var(--crit); color: #fff; }
+  .badge.watch   { background: var(--warn-soft); color: var(--warn); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--warn) 30%, transparent); }
+  .badge.new     { background: var(--ok-soft); color: var(--ok); }
+  .badge.mc      { background: var(--accent-soft); color: var(--accent); }
+  .badge.demoted { background: var(--neutral-soft); color: var(--muted); }
+
+  /* de datum is het zwaarste element op de kaart */
+  .datehit {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 13px; font-weight: 730; letter-spacing: -0.008em;
+    padding: 4px 11px 4px 9px; border-radius: 6px; white-space: nowrap;
+  }
+  .datehit .lab { font-size: 10px; letter-spacing: .1em; font-weight: 820; opacity: .95; }
+  .datehit .rel { font-weight: 500; font-size: 11.5px; opacity: .82; }
+  .datehit.u-running, .datehit.u-urgent { background: var(--crit); color: #fff; }
+  .datehit.u-soon    { background: var(--warn-soft); color: var(--warn); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--warn) 30%, transparent); }
+  .datehit.u-planned { background: var(--sched-soft); color: var(--sched); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sched) 26%, transparent); }
+  .datehit.u-past    { background: var(--neutral-soft); color: var(--muted); }
+
+  .title {
+    display: block; color: var(--text); text-decoration: none;
+    font-size: 16.5px; font-weight: 620; letter-spacing: -0.019em; line-height: 1.33;
+  }
+  .title:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
+  .meta {
+    color: var(--muted); font-size: 12px; margin-top: 7px;
+    display: flex; gap: 7px; flex-wrap: wrap; align-items: center;
+  }
+  .meta .src { color: var(--text-soft); font-weight: 570; }
+  .meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--faint); flex: none; }
+  .meta .origin { display: inline-flex; align-items: center; gap: 5px; font-weight: 650; }
+  .meta .origin::before { content: ""; width: 6px; height: 6px; border-radius: 2px; background: var(--faint); }
+  .meta .origin.microsoft::before { background: var(--accent); }
+  .meta .origin.tenant::before { background: var(--crit); }
+
+  .workflow {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--border);
+  }
+  .workflow label { font-size: 11px; font-weight: 760; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+  .workflow select {
+    appearance: none; min-height: 32px; padding: 5px 31px 5px 10px;
+    border: 1px solid var(--border-sharp); border-radius: 8px; color: var(--text);
+    background: var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2369758a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E") no-repeat right 9px center;
+    font: inherit; font-size: 12.5px; cursor: pointer;
+  }
+  .workflow .trust { margin-left: auto; color: var(--faint); font-size: 11.5px; }
+
+  .summary { color: var(--text-soft); font-size: 13.5px; margin-top: 9px; }
+  :root[data-density="compact"] .summary { display: none; }
+
+  .why {
+    margin-top: 11px; border-radius: 10px; overflow: hidden;
+    background: var(--bg-soft); border: 1px solid var(--border);
+  }
+  .why.hot { background: var(--crit-soft); border-color: color-mix(in srgb, var(--crit) 24%, var(--border)); }
+  .why > summary {
+    cursor: pointer; list-style: none; user-select: none;
+    padding: 9px 13px; font-size: 10.5px; font-weight: 780;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+    display: flex; align-items: center; gap: 7px;
+  }
+  .why > summary::-webkit-details-marker { display: none; }
+  .why.hot > summary { color: var(--crit); }
+  .why > summary .chev { margin-left: auto; transition: transform .15s; opacity: .6; }
+  .why[open] > summary .chev { transform: rotate(90deg); }
+  .why .inner { padding: 0 13px 12px; }
+  .why ul { margin: 0; padding: 0; list-style: none; }
+  .why li { font-size: 13px; line-height: 1.5; color: var(--text-soft); padding-left: 15px; position: relative; }
+  .why li + li { margin-top: 7px; }
+  .why li::before {
+    content: ""; position: absolute; left: 3px; top: .63em;
+    width: 4px; height: 4px; border-radius: 50%; background: var(--faint);
+  }
+  .why.hot li::before { background: var(--crit); }
+  .why .note { font-size: 11px; color: var(--faint); margin-top: 9px; font-style: italic; }
+
+  .tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  :root[data-density="compact"] .tags { margin-top: 7px; }
+  .cat {
+    font-size: 11.5px; padding: 2px 9px; border-radius: 999px; font-family: inherit;
+    background: var(--bg-soft); color: var(--text-soft); border: 1px solid transparent; cursor: pointer;
+  }
+  .cat:hover { border-color: var(--accent); color: var(--accent); }
+  .cat.native { background: none; border: 1px dashed var(--border); color: var(--muted); }
+  .cat.native::before { content: "#"; opacity: .5; margin-right: 1px; }
+  .kw { font-size: 11px; color: var(--faint); font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
+
+  .rowtools { position: absolute; top: 10px; right: 12px; display: flex; gap: 2px; opacity: 0; transition: opacity .12s; }
+  .item:hover .rowtools, .item.read .rowtools, .item.cursor .rowtools { opacity: 1; }
+  .rowtools button {
+    background: none; border: none; color: var(--muted); cursor: pointer;
+    font: inherit; font-size: 11.5px; padding: 3px 7px; border-radius: 5px;
+  }
+  .rowtools button:hover { background: var(--bg-soft); color: var(--text); }
+
+  .more {
+    width: 100%; margin-top: 10px; padding: 11px; cursor: pointer;
+    background: var(--panel); border: 1px dashed var(--border); border-radius: var(--r);
+    color: var(--text-soft); font: inherit; font-size: 13.5px;
+  }
+  .more:hover { border-color: var(--accent); color: var(--accent); }
+
+  .empty { color: var(--muted); text-align: center; padding: 70px 0; font-size: 14px; }
+
+  /* ===================== hulp ===================== */
+
+  dialog.help {
+    border: 1px solid var(--border); border-radius: var(--r); padding: 0;
+    background: var(--panel); color: var(--text); box-shadow: var(--shadow-lg);
+    max-width: 380px; width: calc(100% - 32px);
+  }
+  dialog.help::backdrop { background: rgba(0,0,0,.42); backdrop-filter: blur(2px); }
+  dialog.help .hd {
+    padding: 15px 18px 11px; border-bottom: 1px solid var(--border);
+    font-weight: 640; font-size: 15px; letter-spacing: -0.015em;
+  }
+  dialog.help .bd { padding: 13px 18px 17px; }
+  dialog.help dl { margin: 0; display: grid; grid-template-columns: 62px 1fr; gap: 8px 12px; font-size: 13.5px; }
+  dialog.help dt { margin: 0; }
+  dialog.help dd { margin: 0; color: var(--text-soft); }
+  dialog.help kbd {
+    font: 11.5px ui-monospace, Consolas, monospace; background: var(--bg-soft);
+    border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px; padding: 1px 6px;
+  }
+
+  /* ===================== voet ===================== */
+
+  details.feeds { margin-top: 44px; border-top: 1px solid var(--border); padding-top: 18px; }
+  details.feeds summary { cursor: pointer; color: var(--muted); font-size: 12.5px; list-style: none; user-select: none; }
+  details.feeds summary::-webkit-details-marker { display: none; }
+  details.feeds summary::before { content: "\25B8  "; }
+  details.feeds[open] summary::before { content: "\25BE  "; }
+  table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 12.5px; }
+  th, td { text-align: left; padding: 6px 9px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 620; }
+  td.n { font-variant-numeric: tabular-nums; color: var(--muted); }
+  td.bad { color: var(--crit); font-weight: 620; }
+
+  /* ===================== smal scherm ===================== */
+
+  @media (max-width: 900px) {
+    .overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .layout { grid-template-columns: 1fr; gap: 16px; }
+    .side { position: static; }
+    .side-block.facets-block { display: none; }
+    .side.open .side-block.facets-block { display: block; }
+    .daybar { top: 50px; }
+  }
+  @media (min-width: 901px) { .tool.filters-toggle { display: none; } }
+  @media (max-width: 620px) {
+    .wrap { padding: 0 14px 80px; }
+    .masthead { padding: 22px 0 14px; }
+    .overview { grid-template-columns: 1fr 1fr; gap: 7px; }
+    .metric { padding: 12px; }
+    .metric .v { font-size: 21px; }
+    .metric .s { white-space: normal; line-height: 1.3; }
+    .status { flex-wrap: wrap; }
+    .status .jump { margin-left: 0; }
+    .result-count { margin-left: 0; width: 100%; }
+    .workflow .trust { width: 100%; margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="brand">
+      <div class="logo">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="8.6"></circle>
+          <circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"></circle>
+          <path d="M12 3.4v2.4M12 18.2v2.4M3.4 12h2.4M18.2 12h2.4"></path>
+        </svg>
+      </div>
+      <div>
+        <div class="eyebrow">Endpoint intelligence</div>
+        <h1>Intune Radar</h1>
+        <div class="tagline" id="tagline"></div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button class="tool filters-toggle" id="filters-toggle">Filters</button>
+      <button class="tool" id="density" title="Regelhoogte">Compact</button>
+      <button class="tool icon-only" id="help-btn" title="Sneltoetsen" aria-label="Sneltoetsen">?</button>
+      <button class="tool icon-only" id="theme" title="Licht of donker" aria-label="Licht of donker">&#9680;</button>
+    </div>
+  </header>
+
+  <section class="overview" aria-label="Ochtendoverzicht">
+    <button class="metric attention" id="metric-review" type="button" aria-pressed="false">
+      <span class="k">Te beoordelen</span><span class="v" id="metric-review-v">0</span><span class="s">automatische actiesignalen</span>
+    </button>
+    <button class="metric followup" id="metric-followup" type="button" aria-pressed="false">
+      <span class="k">Opvolging nodig</span><span class="v" id="metric-followup-v">0</span><span class="s">door jou bevestigd</span>
+    </button>
+    <button class="metric signal" id="metric-new" type="button" aria-pressed="false">
+      <span class="k">Nieuwe signalen</span><span class="v" id="metric-new-v">0</span><span class="s">sinds de vorige run</span>
+    </button>
+    <button class="metric health" id="metric-health" type="button" aria-pressed="false">
+      <span class="k">Bronnen</span><span class="v" id="metric-health-v">0/0</span><span class="s" id="metric-health-s">status onbekend</span>
+    </button>
+  </section>
+
+  <section class="status" id="status" aria-live="polite">
+    <span class="ico" id="status-ico"></span>
+    <span class="msg">
+      <span class="headline" id="status-headline"></span>
+      <span class="detail" id="status-detail"></span>
+    </span>
+    <button class="jump" id="status-jump" hidden>Bekijk</button>
+  </section>
+
+  <section class="agenda" id="agenda" hidden>
+    <div class="section-head">
+      <h2>Wijzigingskalender</h2>
+      <span class="hint" id="agenda-hint"></span>
+    </div>
+    <div class="agenda-grid" id="agenda-grid"></div>
+  </section>
+
+  <div class="layout">
+
+    <aside class="side" id="side">
+      <div class="side-block">
+        <h3>Urgentie</h3>
+        <div class="facets" id="tiers"></div>
+      </div>
+      <div class="side-block facets-block">
+        <h3>Categorie</h3>
+        <div class="facets" id="cats"></div>
+      </div>
+      <div class="side-block facets-block">
+        <h3>Bron</h3>
+        <select id="src"><option value="">Alle bronnen</option></select>
+        <button class="reset" id="reset">Filters wissen</button>
+      </div>
+    </aside>
+
+    <main>
+      <div class="feedbar">
+        <label class="search">
+          <svg class="glass" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>
+          </svg>
+          <input type="search" id="q" placeholder="Zoek op onderwerp, product of bron..." aria-label="Zoeken">
+          <kbd>/</kbd>
+        </label>
+        <div class="seg" role="group" aria-label="Volgorde">
+          <button id="v-urgentie" aria-pressed="true">Urgentie</button>
+          <button id="v-tijdlijn"  aria-pressed="false">Tijdlijn</button>
+        </div>
+        <span class="result-count" id="count"></span>
+      </div>
+
+      <div id="list"></div>
+      <button class="more" id="more" hidden></button>
+
+      <details class="feeds">
+        <summary id="feeds-summary">Bronnen</summary>
+        <table>
+          <thead><tr><th>Bron</th><th>Status</th><th>Items</th><th>Toelichting</th></tr></thead>
+          <tbody id="feeds-body"></tbody>
+        </table>
+      </details>
+    </main>
+  </div>
+</div>
+
+<dialog class="help" id="help">
+  <div class="hd">Sneltoetsen</div>
+  <div class="bd">
+    <dl>
+      <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Volgend / vorig item</dd>
+      <dt><kbd>o</kbd></dt><dd>Item openen in nieuw tabblad</dd>
+      <dt><kbd>m</kbd></dt><dd>Gelezen of ongelezen markeren</dd>
+      <dt><kbd>e</kbd></dt><dd>Uitleg open- of dichtklappen</dd>
+      <dt><kbd>/</kbd></dt><dd>Naar het zoekveld</dd>
+      <dt><kbd>a</kbd></dt><dd>Acties die nog beoordeeld moeten worden</dd>
+      <dt><kbd>v</kbd></dt><dd>Bevestigde acties met opvolging</dd>
+      <dt><kbd>r</kbd></dt><dd>Filters wissen</dd>
+      <dt><kbd>Esc</kbd></dt><dd>Zoekveld leegmaken</dd>
+    </dl>
+  </div>
+</dialog>
+
+<script id="payload" type="application/json">__DATA__</script>
+<script>
+(function () {
+  "use strict";
+
+  var data = JSON.parse(document.getElementById('payload').textContent);
+
+  var READ_KEY    = 'intuneradar.read';
+  var THEME_KEY   = 'intuneradar.theme';
+  var DENSITY_KEY = 'intuneradar.density';
+  var TRIAGE_KEY  = 'intuneradar.triage';
+  var PAGE        = 30;
+
+  function store(key, fallback) {
+    try { return JSON.parse(localStorage.getItem(key)) || fallback; }
+    catch (e) { return fallback; }
+  }
+  function persist(key, value) {
+    try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* private venster */ }
+  }
+
+  var read = store(READ_KEY, {});
+  var triage = store(TRIAGE_KEY, {});
+
+  function triageState(item) {
+    return item.tier === 'action' ? (triage[item.id] || 'review') : '';
+  }
+
+  /* ---------- iconen: kleur draagt nooit alleen de betekenis ---------- */
+
+  var ICON = {
+    crit: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M12 3.6 1.9 20.4h20.2z"/><path d="M12 9.7v4.4M12 17.4v.1"/></svg>',
+    warn: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.4v5.2M12 16.4v.1"/></svg>',
+    ok:   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.3 2.6 2.6 5-5.4"/></svg>',
+    clock:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.3V12l3 2"/></svg>',
+    stop: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="8.6"/><path d="M8.6 8.6h6.8v6.8H8.6z"/></svg>',
+    play: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M8.4 6.3 17.2 12l-8.8 5.7z"/></svg>',
+    star: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="m12 4.4 2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4-3.9-3.8 5.4-.8z"/></svg>',
+    chev: '<svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>'
+  };
+
+  /* Elk datumsoort krijgt een eigen icoon, zodat DEADLINE en VANAF ook
+     zonder kleur uit elkaar te houden zijn. */
+  var KIND_ICON = { deadline: ICON.clock, retirement: ICON.stop, start: ICON.play, available: ICON.star, mentioned: ICON.clock };
+
+  function svg(markup) {
+    var s = document.createElement('span');
+    s.style.display = 'inline-flex';
+    s.innerHTML = markup;
+    return s;
+  }
+
+  /* ---------- voorkeuren ---------- */
+
+  var savedTheme = store(THEME_KEY, null);
+  if (savedTheme) { document.documentElement.setAttribute('data-theme', savedTheme); }
+
+  var density = store(DENSITY_KEY, 'comfortabel');
+  document.documentElement.setAttribute('data-density', density);
+
+  var densityBtn = document.getElementById('density');
+  function syncDensity() {
+    densityBtn.textContent = density === 'compact' ? 'Ruim' : 'Compact';
+    densityBtn.title = density === 'compact' ? 'Terug naar ruime weergave' : 'Compacte weergave';
+  }
+  syncDensity();
+  densityBtn.addEventListener('click', function () {
+    density = density === 'compact' ? 'comfortabel' : 'compact';
+    document.documentElement.setAttribute('data-density', density);
+    persist(DENSITY_KEY, density);
+    syncDensity();
+  });
+
+  document.getElementById('theme').addEventListener('click', function () {
+    var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var now  = document.documentElement.getAttribute('data-theme') || (systemDark ? 'dark' : 'light');
+    var next = now === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    persist(THEME_KEY, next);
+  });
+
+  var helpDialog = document.getElementById('help');
+  document.getElementById('help-btn').addEventListener('click', function () { helpDialog.showModal(); });
+  helpDialog.addEventListener('click', function (e) { if (e.target === helpDialog) { helpDialog.close(); } });
+
+  document.getElementById('filters-toggle').addEventListener('click', function () {
+    document.getElementById('side').classList.toggle('open');
+  });
+
+  /* ---------- tellingen ---------- */
+
+  function calculateCounts() {
+    var next = { action: 0, watch: 0, info: 0, nieuw: 0, dated: 0, ongelezen: 0, review: 0, followup: 0, done: 0, skip: 0 };
+    data.items.forEach(function (i) {
+      next[i.tier]++;
+      if (i.isNew) { next.nieuw++; }
+      if (i.keyDate) { next.dated++; }
+      if (!read[i.id]) { next.ongelezen++; }
+      if (i.tier === 'action') { next[triageState(i)]++; }
+    });
+    return next;
+  }
+
+  var counts = calculateCounts();
+
+  document.getElementById('tagline').textContent =
+    data.generated + ' · ' + data.items.length + ' items uit ' + data.days + ' dagen' +
+    (data.duplicates > 0 ? ' · ' + data.duplicates + ' dubbel gefilterd' : '');
+
+  /* ---------- ochtendoverzicht en status ---------- */
+
+  var running = data.agenda.filter(function (a) { return a.date.urgency === 'running'; });
+  var urgent  = data.agenda.filter(function (a) { return a.date.urgency === 'urgent'; });
+
+  var statusEl = document.getElementById('status');
+  var jump = document.getElementById('status-jump');
+
+  function syncOverview() {
+    var okSources = data.feeds.filter(function (f) { return f.Status === 'OK'; }).length;
+    document.getElementById('metric-review-v').textContent = counts.review;
+    document.getElementById('metric-followup-v').textContent = counts.followup;
+    document.getElementById('metric-new-v').textContent = counts.nieuw;
+    document.getElementById('metric-health-v').textContent = okSources + '/' + data.feeds.length;
+    var failedSources = data.feeds.length - okSources;
+    document.getElementById('metric-health-s').textContent = failedSources === 0 ? 'alle bronnen bereikbaar' : failedSources + (failedSources === 1 ? ' bron met een probleem' : ' bronnen met problemen');
+    document.getElementById('metric-health').className = 'metric ' + (okSources === data.feeds.length ? 'health' : 'attention');
+  }
+
+  function renderStatus() {
+    var level, headline, detail, target = '';
+    if (counts.review > 0) {
+      level = 'crit';
+      headline = counts.review + (counts.review === 1 ? ' actiesignaal moet worden beoordeeld' : ' actiesignalen moeten worden beoordeeld');
+      detail = 'Dit zijn automatische signalen, geen bevestigde tenantimpact. Controleer bron, scope en toepasbaarheid.';
+      target = 'todo';
+    } else if (counts.followup > 0) {
+      level = 'warn';
+      headline = counts.followup + (counts.followup === 1 ? ' bevestigde actie vraagt opvolging' : ' bevestigde acties vragen opvolging');
+      detail = 'Je hebt deze signalen als relevant aangemerkt. Rond ze af zodra de wijziging is verwerkt.';
+      target = 'followup';
+    } else if (running.length || urgent.length) {
+      level = 'warn';
+      headline = 'Geen open acties, wel een wijziging in de buurt';
+      detail = (running.length ? running.length + ' loopt al. ' : '') + (urgent.length ? urgent.length + ' valt binnen drie weken.' : '');
+      target = 'dated';
+    } else {
+      level = 'ok';
+      headline = 'Actielijst is bijgewerkt';
+      detail = counts.watch + ' signalen om in de gaten te houden en ' + counts.nieuw + ' nieuw sinds de vorige run.';
+    }
+
+    statusEl.className = 'status ' + level;
+    document.getElementById('status-ico').innerHTML = ICON[level];
+    document.getElementById('status-headline').textContent = headline;
+    document.getElementById('status-detail').textContent = detail;
+    jump.hidden = !target;
+    jump.textContent = target === 'todo' ? 'Beoordeel nu' : (target === 'followup' ? 'Bekijk opvolging' : 'Bekijk kalender');
+    jump.onclick = target ? function () { setTier(target); } : null;
+  }
+
+  syncOverview();
+  renderStatus();
+
+  /* ---------- agenda ---------- */
+
+  if (data.agenda.length) {
+    var grid = document.getElementById('agenda-grid');
+    document.getElementById('agenda').hidden = false;
+    document.getElementById('agenda-hint').textContent =
+      data.agenda.length + (data.agenda.length === 1 ? ' harde afspraak' : ' harde afspraken') +
+      ', oplopend op datum';
+
+    data.agenda.forEach(function (entry) {
+      var d = entry.date;
+
+      var card = document.createElement('a');
+      card.className = 'acard u-' + d.urgency;
+      card.href = entry.link; card.target = '_blank'; card.rel = 'noopener';
+
+      var top = document.createElement('div');
+      top.className = 'top';
+
+      var lab = document.createElement('span');
+      lab.className = 'lab';
+      lab.appendChild(svg(KIND_ICON[d.kind] || ICON.clock));
+      lab.appendChild(document.createTextNode(d.label));
+      top.appendChild(lab);
+
+      var datum = document.createElement('span');
+      datum.className = 'datum';
+      datum.textContent = d.text;
+      top.appendChild(datum);
+      card.appendChild(top);
+
+      var t = document.createElement('div');
+      t.className = 't';
+      t.textContent = entry.title;
+      card.appendChild(t);
+
+      var foot = document.createElement('div');
+      foot.className = 'foot';
+      foot.textContent = d.relative + ' · ' + entry.source;
+      card.appendChild(foot);
+
+      /* Balkje onderaan: hoe dichterbij, hoe voller. Loopt het al,
+         dan helemaal vol. */
+      var bar = document.createElement('div');
+      bar.className = 'bar';
+      var fill = document.createElement('i');
+      var pct = d.daysAway < 0 ? 100 : Math.max(6, Math.round((1 - Math.min(d.daysAway, 200) / 200) * 100));
+      fill.style.width = pct + '%';
+      bar.appendChild(fill);
+      card.appendChild(bar);
+
+      grid.appendChild(card);
+    });
+  }
+
+  /* ---------- filters ---------- */
+
+  var filters = { tier: counts.review > 0 ? 'todo' : 'all', q: '', src: '', cats: [] };
+  var view = 'urgentie';
+  var shownLimit = PAGE;
+
+  var TIERS = [
+    { key: 'all',    label: 'Alles',      dot: '',       count: data.items.length },
+    { key: 'todo',   label: 'Te beoordelen', dot: 'crit', count: counts.review },
+    { key: 'followup', label: 'Opvolging nodig', dot: 'warn', count: counts.followup },
+    { key: 'action', label: 'Actie',      dot: 'crit',   count: counts.action },
+    { key: 'watch',  label: 'Let op',     dot: 'warn',   count: counts.watch },
+    { key: 'dated',  label: 'Met datum',  dot: 'accent', count: counts.dated },
+    { key: 'new',    label: 'Nieuw',      dot: '',       count: counts.nieuw },
+    { key: 'unread', label: 'Ongelezen',  dot: '',       count: counts.ongelezen }
+  ];
+
+  var tierBox = document.getElementById('tiers');
+  TIERS.forEach(function (t) {
+    var b = document.createElement('button');
+    b.className = 'facet';
+    b.dataset.tier = t.key;
+    b.setAttribute('aria-pressed', String(t.key === filters.tier));
+    b.innerHTML = '<span class="dot ' + t.dot + '"></span><span class="nm"></span><span class="ct"></span>';
+    if (!t.dot) { b.querySelector('.dot').style.visibility = 'hidden'; }
+    b.querySelector('.nm').textContent = t.label;
+    b.querySelector('.ct').textContent = t.count;
+    b.addEventListener('click', function () { setTier(t.key); });
+    tierBox.appendChild(b);
+  });
+
+  function setTier(key) {
+    filters.tier = key;
+    Array.prototype.forEach.call(tierBox.querySelectorAll('[data-tier]'), function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.tier === key));
+    });
+    document.getElementById('metric-review').setAttribute('aria-pressed', String(key === 'todo'));
+    document.getElementById('metric-followup').setAttribute('aria-pressed', String(key === 'followup'));
+    document.getElementById('metric-new').setAttribute('aria-pressed', String(key === 'new'));
+    document.getElementById('metric-health').setAttribute('aria-pressed', 'false');
+    shownLimit = PAGE;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function refreshTierCounts() {
+    var values = { all: data.items.length, todo: counts.review, followup: counts.followup, action: counts.action, watch: counts.watch, dated: counts.dated, new: counts.nieuw, unread: counts.ongelezen };
+    Array.prototype.forEach.call(tierBox.querySelectorAll('[data-tier]'), function (b) {
+      b.querySelector('.ct').textContent = values[b.dataset.tier];
+    });
+  }
+
+  document.getElementById('metric-review').addEventListener('click', function () { setTier('todo'); });
+  document.getElementById('metric-followup').addEventListener('click', function () { setTier('followup'); });
+  document.getElementById('metric-new').addEventListener('click', function () { setTier('new'); });
+  document.getElementById('metric-health').addEventListener('click', function () {
+    var feeds = document.querySelector('details.feeds');
+    feeds.open = true;
+    feeds.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  document.getElementById('metric-review').setAttribute('aria-pressed', String(filters.tier === 'todo'));
+
+  /* Vijftien categorieen maken de zijbalk langer dan het scherm. De negen
+     grootste staan open, de rest achter een knop. */
+  var CAT_VISIBLE = 9;
+  var catBox = document.getElementById('cats');
+
+  data.categories.forEach(function (c, index) {
+    var b = document.createElement('button');
+    b.className = 'facet';
+    b.dataset.cat = c.name;
+    b.setAttribute('aria-pressed', 'false');
+    if (index >= CAT_VISIBLE) { b.dataset.overflow = '1'; b.hidden = true; }
+    b.innerHTML = '<span class="dot" style="visibility:hidden"></span><span class="nm"></span><span class="ct"></span>';
+    b.querySelector('.nm').textContent = c.name;
+    b.querySelector('.ct').textContent = c.count;
+    b.addEventListener('click', function () { toggleCat(c.name); });
+    catBox.appendChild(b);
+  });
+
+  if (data.categories.length > CAT_VISIBLE) {
+    var catToggle = document.createElement('button');
+    catToggle.className = 'facet';
+    catToggle.style.color = 'var(--muted)';
+    var expanded = false;
+    catToggle.textContent = '+ ' + (data.categories.length - CAT_VISIBLE) + ' meer';
+    catToggle.addEventListener('click', function () {
+      expanded = !expanded;
+      Array.prototype.forEach.call(catBox.querySelectorAll('[data-overflow]'), function (b) { b.hidden = !expanded; });
+      catToggle.textContent = expanded ? 'Minder tonen' : '+ ' + (data.categories.length - CAT_VISIBLE) + ' meer';
+    });
+    catBox.appendChild(catToggle);
+  }
+
+  function toggleCat(name) {
+    var at = filters.cats.indexOf(name);
+    if (at === -1) { filters.cats.push(name); } else { filters.cats.splice(at, 1); }
+    Array.prototype.forEach.call(catBox.querySelectorAll('[data-cat]'), function (b) {
+      b.setAttribute('aria-pressed', String(filters.cats.indexOf(b.dataset.cat) !== -1));
+    });
+    shownLimit = PAGE;
+    render();
+  }
+
+  var sel = document.getElementById('src');
+  data.items.map(function (i) { return i.source; })
+    .filter(function (v, i, a) { return a.indexOf(v) === i; })
+    .sort()
+    .forEach(function (s) {
+      var o = document.createElement('option');
+      o.value = s; o.textContent = s;
+      sel.appendChild(o);
+    });
+  sel.addEventListener('change', function (e) {
+    filters.src = e.target.value; shownLimit = PAGE; render();
+  });
+
+  var searchBox = document.getElementById('q');
+  searchBox.addEventListener('input', function (e) {
+    filters.q = e.target.value.toLowerCase().trim(); shownLimit = PAGE; render();
+  });
+
+  document.getElementById('reset').addEventListener('click', resetFilters);
+  function resetFilters() {
+    filters = { tier: 'all', q: '', src: '', cats: [] };
+    searchBox.value = ''; sel.value = '';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-cat]'), function (b) { b.setAttribute('aria-pressed', 'false'); });
+    setTier('all');
+  }
+
+  var viewButtons = { urgentie: document.getElementById('v-urgentie'), tijdlijn: document.getElementById('v-tijdlijn') };
+  Object.keys(viewButtons).forEach(function (key) {
+    viewButtons[key].addEventListener('click', function () {
+      view = key;
+      Object.keys(viewButtons).forEach(function (k) { viewButtons[k].setAttribute('aria-pressed', String(k === key)); });
+      shownLimit = PAGE;
+      render();
+    });
+  });
+
+  /* ---------- datumlabels voor de dagkoppen ---------- */
+
+  var WEEKDAYS = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
+  var MONTHS   = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+
+  function dayLabel(iso) {
+    var parts = iso.split('-');
+    var d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    var t = data.today.split('-');
+    var today = new Date(Number(t[0]), Number(t[1]) - 1, Number(t[2]));
+    var diff = Math.round((today - d) / 86400000);
+
+    if (diff === 0) { return 'Vandaag'; }
+    if (diff === 1) { return 'Gisteren'; }
+    if (diff < 7)   { return WEEKDAYS[d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS[d.getMonth()]; }
+    return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  /* ---------- filteren ---------- */
+
+  function matches(item) {
+    if (filters.tier === 'todo' && (item.tier !== 'action' || triageState(item) !== 'review')) { return false; }
+    if (filters.tier === 'followup' && (item.tier !== 'action' || triageState(item) !== 'followup')) { return false; }
+    if (filters.tier === 'action' && item.tier !== 'action') { return false; }
+    if (filters.tier === 'watch'  && item.tier !== 'watch')  { return false; }
+    if (filters.tier === 'dated'  && !item.keyDate)          { return false; }
+    if (filters.tier === 'new'    && !item.isNew)            { return false; }
+    if (filters.tier === 'unread' && read[item.id])          { return false; }
+    if (filters.src && item.source !== filters.src)          { return false; }
+
+    if (filters.cats.length) {
+      var hit = filters.cats.some(function (c) { return item.categories.indexOf(c) !== -1; });
+      if (!hit) { return false; }
+    }
+    if (filters.q) {
+      var hay = (item.title + ' ' + item.summary + ' ' + item.keywords.join(' ') + ' ' +
+                 item.categories.join(' ') + ' ' + (item.nativeTags || []).join(' ')).toLowerCase();
+      if (hay.indexOf(filters.q) === -1) { return false; }
+    }
+    return true;
+  }
+
+  /* ---------- een item tekenen ---------- */
+
+  function buildItem(item) {
+    var el = document.createElement('article');
+    var itemState = triageState(item);
+    el.className = 'item' + (read[item.id] ? ' read' : '') + (itemState ? ' triage-' + itemState : '');
+    el.setAttribute('data-tier', item.tier);
+    el.dataset.id = item.id;
+
+    var rail = document.createElement('div');
+    rail.className = 'rail';
+    el.appendChild(rail);
+
+    var body = document.createElement('div');
+    body.className = 'body';
+
+    var flags = document.createElement('div');
+    flags.className = 'flags';
+
+    /* De datum eerst. Dat is wat je niet mag missen, dus die krijgt
+       het meeste gewicht en staat het meest links. */
+    if (item.keyDate) {
+      var d = item.keyDate;
+      var dh = document.createElement('span');
+      dh.className = 'datehit u-' + d.urgency;
+      dh.appendChild(svg(KIND_ICON[d.kind] || ICON.clock));
+
+      var lab = document.createElement('span');
+      lab.className = 'lab'; lab.textContent = d.label;
+      dh.appendChild(lab);
+
+      var val = document.createElement('span');
+      val.textContent = d.text;
+      dh.appendChild(val);
+
+      var rel = document.createElement('span');
+      rel.className = 'rel'; rel.textContent = d.relative;
+      dh.appendChild(rel);
+
+      flags.appendChild(dh);
+    }
+
+    if (item.tier !== 'info') {
+      var b = document.createElement('span');
+      b.className = 'badge ' + item.tier;
+      b.appendChild(svg(item.tier === 'action' ? ICON.crit : ICON.warn));
+      b.appendChild(document.createTextNode(item.tier === 'action' ? 'Actie' : 'Let op'));
+      flags.appendChild(b);
+    }
+    if (item.kind === 'messagecenter') {
+      var mc = document.createElement('span');
+      mc.className = 'badge mc'; mc.textContent = 'Message Center';
+      flags.appendChild(mc);
+    }
+    if (item.demote) {
+      var dm = document.createElement('span');
+      dm.className = 'badge demoted';
+      dm.textContent = item.demote === 'guide' ? 'Handleiding' : (item.demote === 'reference' ? 'Naslag' : 'Verzamelpost');
+      dm.title = item.demote === 'guide'
+        ? 'Uitleg of handleiding: noemt woorden als retire en mandatory in het voorbijgaan, wordt daarom nooit rood'
+        : (item.demote === 'reference'
+          ? 'Naslagpagina zonder concrete wijzigingsdatum: nuttig om te lezen, maar geen bevestigde actie'
+          : 'Maandoverzicht of nieuwsbrief: vat andermans wijzigingen samen, wordt daarom nooit rood');
+      flags.appendChild(dm);
+    }
+    if (item.isNew) {
+      var nw = document.createElement('span');
+      nw.className = 'badge new'; nw.textContent = 'Nieuw';
+      flags.appendChild(nw);
+    }
+    body.appendChild(flags);
+
+    var a = document.createElement('a');
+    a.className = 'title';
+    a.href = item.link; a.target = '_blank'; a.rel = 'noopener';
+    a.textContent = item.title;
+    body.appendChild(a);
+
+    var meta = document.createElement('div');
+    meta.className = 'meta';
+
+    function metaPart(text, title, cls) {
+      if (meta.childNodes.length) {
+        var sep = document.createElement('span');
+        sep.className = 'dot';
+        meta.appendChild(sep);
+      }
+      var s = document.createElement('span');
+      if (cls) { s.className = cls; }
+      if (title) { s.title = title; }
+      s.textContent = text;
+      meta.appendChild(s);
+    }
+
+    metaPart(item.source, null, 'src');
+    if (item.tag) {
+      var originClass = item.tag.toLowerCase() === 'microsoft' ? 'origin microsoft' : (item.tag.toLowerCase() === 'tenant' ? 'origin tenant' : 'origin');
+      metaPart(item.tag === 'Microsoft' ? 'Officiële bron' : (item.tag === 'Tenant' ? 'Eigen tenant' : 'Community'), null, originClass);
+    }
+    metaPart(item.dateText);
+    if (item.alsoIn && item.alsoIn.length) {
+      metaPart('ook op ' + item.alsoIn.length + ' andere bron' + (item.alsoIn.length > 1 ? 'nen' : ''), item.alsoIn.join(', '));
+    }
+    metaPart('score ' + item.score, 'Hoe hoger, hoe meer actiewoorden en onderwerpen uit sources.json in dit item zitten');
+
+    if (item.allDates && item.allDates.length) {
+      var extra = item.allDates.filter(function (x) { return !item.keyDate || x.iso !== item.keyDate.iso; });
+      if (extra.length) {
+        metaPart('ook genoemd: ' + extra.map(function (x) { return x.text; }).join(', '));
+      }
+    }
+    body.appendChild(meta);
+
+    if (item.summary) {
+      var p = document.createElement('div');
+      p.className = 'summary';
+      p.textContent = item.summary;
+      body.appendChild(p);
+    }
+
+    /* Uitleg: letterlijke zinnen uit de bron. Bij een actie-item staat die
+       open, want dat is precies waarvoor het item er staat. Bij de rest
+       dichtgeklapt, zodat de lijst scanbaar blijft. */
+    if (item.actionCtx && item.actionCtx.length && item.tier !== 'info') {
+      var why = document.createElement('details');
+      why.className = 'why' + (item.tier === 'action' ? ' hot' : '');
+      why.open = item.tier === 'action';
+
+      var sum = document.createElement('summary');
+      sum.appendChild(svg(item.tier === 'action' ? ICON.crit : ICON.warn));
+      sum.appendChild(document.createTextNode(item.tier === 'action' ? 'Waarom dit actie is' : 'Waar het om gaat'));
+      sum.appendChild(svg(ICON.chev));
+      why.appendChild(sum);
+
+      var inner = document.createElement('div');
+      inner.className = 'inner';
+
+      var ul = document.createElement('ul');
+      item.actionCtx.forEach(function (c) {
+        var li = document.createElement('li');
+        li.textContent = c.text;
+        ul.appendChild(li);
+      });
+      inner.appendChild(ul);
+
+      var note = document.createElement('div');
+      note.className = 'note';
+      note.textContent = 'Letterlijk overgenomen uit de bron - lees het artikel voor de volledige context.';
+      inner.appendChild(note);
+
+      why.appendChild(inner);
+      body.appendChild(why);
+    }
+
+    if (item.categories.length || item.keywords.length || (item.nativeTags || []).length) {
+      var tags = document.createElement('div');
+      tags.className = 'tags';
+
+      item.categories.forEach(function (c) {
+        var cb = document.createElement('button');
+        cb.className = 'cat'; cb.textContent = c; cb.title = 'Filter op ' + c;
+        cb.addEventListener('click', function () { toggleCat(c); });
+        tags.appendChild(cb);
+      });
+
+      /* Rubrieken van de blog zelf. Die verschillen per site, dus geen
+         filterchip maar een zoekterm. */
+      (item.nativeTags || []).forEach(function (t) {
+        if (item.categories.indexOf(t) !== -1) { return; }
+        var nb = document.createElement('button');
+        nb.className = 'cat native'; nb.textContent = t; nb.title = 'Zoek op "' + t + '"';
+        nb.addEventListener('click', function () {
+          searchBox.value = t; filters.q = t.toLowerCase(); shownLimit = PAGE; render();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        tags.appendChild(nb);
+      });
+
+      if (item.keywords.length) {
+        var kw = document.createElement('span');
+        kw.className = 'kw';
+        kw.textContent = item.keywords.join(' · ');
+        kw.title = 'Trefwoorden uit sources.json die dit item lieten scoren';
+        tags.appendChild(kw);
+      }
+      body.appendChild(tags);
+    }
+
+    if (item.tier === 'action') {
+      var workflow = document.createElement('div');
+      workflow.className = 'workflow';
+
+      var workflowLabel = document.createElement('label');
+      workflowLabel.setAttribute('for', 'triage-' + Math.abs(hashCode(item.id)));
+      workflowLabel.textContent = 'Beoordeling';
+      workflow.appendChild(workflowLabel);
+
+      var workflowSelect = document.createElement('select');
+      workflowSelect.id = 'triage-' + Math.abs(hashCode(item.id));
+      workflowSelect.setAttribute('aria-label', 'Beoordeling voor ' + item.title);
+      [
+        { value: 'review', label: 'Te beoordelen' },
+        { value: 'followup', label: 'Opvolging nodig' },
+        { value: 'done', label: 'Afgehandeld' },
+        { value: 'skip', label: 'Niet van toepassing' }
+      ].forEach(function (choice) {
+        var option = document.createElement('option');
+        option.value = choice.value; option.textContent = choice.label;
+        workflowSelect.appendChild(option);
+      });
+      workflowSelect.value = itemState;
+      workflowSelect.addEventListener('change', function () {
+        triage[item.id] = workflowSelect.value;
+        persist(TRIAGE_KEY, triage);
+        counts = calculateCounts();
+        syncOverview();
+        renderStatus();
+        refreshTierCounts();
+        render();
+      });
+      workflow.appendChild(workflowSelect);
+
+      var trust = document.createElement('span');
+      trust.className = 'trust';
+      trust.textContent = 'Check scope, pilot, stopcriterium en herstelpad; test bij toegangswijzigingen ook aanmelden en hersteltoegang.';
+      workflow.appendChild(trust);
+      body.appendChild(workflow);
+    }
+
+    el.appendChild(body);
+
+    var tools = document.createElement('div');
+    tools.className = 'rowtools';
+    var markBtn = document.createElement('button');
+    markBtn.textContent = read[item.id] ? 'ongelezen' : 'gelezen';
+    markBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleRead(item.id);
+    });
+    tools.appendChild(markBtn);
+    el.appendChild(tools);
+
+    return el;
+  }
+
+  function hashCode(value) {
+    var hash = 0;
+    for (var i = 0; i < value.length; i++) { hash = ((hash << 5) - hash) + value.charCodeAt(i); hash |= 0; }
+    return hash;
+  }
+
+  function toggleRead(id) {
+    if (read[id]) { delete read[id]; } else { read[id] = 1; }
+    persist(READ_KEY, read);
+
+    counts = calculateCounts();
+    refreshTierCounts();
+
+    render();
+  }
+
+  /* ---------- lijst tekenen ---------- */
+
+  var list     = document.getElementById('list');
+  var countEl  = document.getElementById('count');
+  var moreBtn  = document.getElementById('more');
+  var cursor   = -1;
+
+  moreBtn.addEventListener('click', function () { shownLimit += PAGE; render(); });
+
+  function render() {
+    var visible = data.items.filter(matches);
+
+    if (view === 'tijdlijn') {
+      visible = visible.slice().sort(function (a, b) {
+        if (a.date === b.date) { return b.score - a.score; }
+        return a.date < b.date ? 1 : -1;
+      });
+    }
+
+    var page = visible.slice(0, shownLimit);
+    var frag = document.createDocumentFragment();
+    var lastDay = null;
+
+    page.forEach(function (item) {
+      if (view === 'tijdlijn' && item.date !== lastDay) {
+        lastDay = item.date;
+        var sameDay = visible.filter(function (x) { return x.date === item.date; }).length;
+
+        var bar = document.createElement('div');
+        bar.className = 'daybar';
+        bar.innerHTML = '<span class="d"></span><span class="line"></span><span class="n"></span>';
+        bar.querySelector('.d').textContent = dayLabel(item.date);
+        bar.querySelector('.n').textContent = sameDay + (sameDay === 1 ? ' item' : ' items');
+        frag.appendChild(bar);
+      }
+      frag.appendChild(buildItem(item));
+    });
+
+    list.textContent = '';
+    if (page.length) {
+      list.appendChild(frag);
+    } else {
+      var e = document.createElement('div');
+      e.className = 'empty';
+      e.textContent = 'Niets dat aan dit filter voldoet.';
+      list.appendChild(e);
+    }
+
+    var rest = visible.length - page.length;
+    moreBtn.hidden = rest <= 0;
+    moreBtn.textContent = 'Nog ' + rest + (rest === 1 ? ' item tonen' : ' items tonen');
+
+    countEl.textContent = visible.length === data.items.length
+      ? data.items.length + ' items'
+      : visible.length + ' van ' + data.items.length;
+
+    cursor = -1;
+  }
+
+  /* ---------- toetsenbord ---------- */
+
+  function rows() { return Array.prototype.slice.call(list.querySelectorAll('.item')); }
+
+  function moveCursor(step) {
+    var all = rows();
+    if (!all.length) { return; }
+
+    all.forEach(function (r) { r.classList.remove('cursor'); });
+    cursor = Math.max(0, Math.min(all.length - 1, cursor + step));
+
+    var el = all[cursor];
+    el.classList.add('cursor');
+    el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+
+  function currentItem() {
+    var all = rows();
+    if (cursor < 0 || cursor >= all.length) { return null; }
+    var id = all[cursor].dataset.id;
+    return data.items.filter(function (i) { return i.id === id; })[0] || null;
+  }
+
+  document.addEventListener('keydown', function (e) {
+    var typing = document.activeElement === searchBox ||
+                 document.activeElement.tagName === 'SELECT';
+
+    if (e.key === 'Escape' && typing) {
+      searchBox.value = ''; filters.q = ''; searchBox.blur(); render();
+      return;
+    }
+    if (typing || e.metaKey || e.ctrlKey || e.altKey) { return; }
+    if (helpDialog.open) { return; }
+
+    switch (e.key) {
+      case '/': e.preventDefault(); searchBox.focus(); break;
+      case 'j': e.preventDefault(); moveCursor(cursor < 0 ? 0 : 1); break;
+      case 'k': e.preventDefault(); moveCursor(-1); break;
+      case 'o': {
+        var it = currentItem();
+        if (it) { window.open(it.link, '_blank', 'noopener'); }
+        break;
+      }
+      case 'm': {
+        var mi = currentItem();
+        if (mi) {
+          var keep = cursor;
+          toggleRead(mi.id);
+          cursor = keep - 1;
+          moveCursor(1);
+        }
+        break;
+      }
+      case 'e': {
+        var all = rows();
+        if (cursor >= 0 && all[cursor]) {
+          var det = all[cursor].querySelector('details.why');
+          if (det) { det.open = !det.open; }
+        }
+        break;
+      }
+      case 'a': setTier(filters.tier === 'todo' ? 'all' : 'todo'); break;
+      case 'v': setTier(filters.tier === 'followup' ? 'all' : 'followup'); break;
+      case 'r': resetFilters(); break;
+      case '?': helpDialog.showModal(); break;
+    }
+  });
+
+  /* ---------- bronnen ---------- */
+
+  var tbody = document.getElementById('feeds-body');
+  var broken = 0;
+  data.feeds.forEach(function (f) {
+    if (f.Status !== 'OK') { broken++; }
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td></td><td></td><td class="n"></td><td class="n"></td>';
+    tr.children[0].textContent = f.Source;
+    tr.children[1].textContent = f.Status;
+    if (f.Status !== 'OK') { tr.children[1].className = 'bad'; }
+    tr.children[2].textContent = f.Items;
+    tr.children[3].textContent = f.Detail || '';
+    tbody.appendChild(tr);
+  });
+  document.getElementById('feeds-summary').textContent =
+    'Bronnen (' + data.feeds.length + (broken ? ', ' + broken + ' met problemen' : ', alles OK') + ')';
+
+  render();
+})();
+</script>
+</body>
+</html>

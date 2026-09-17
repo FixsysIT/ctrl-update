@@ -1,0 +1,170 @@
+{
+  "_comment": "Feeds staan in 'feeds'. Plak een blog- of categorie-URL erin via .\\Add-NewsSource.ps1 <url>, dan zoekt die zelf de RSS-feed op. boost telt op bij elke score van die bron (negatief = ruisbron dempen), enabled:false zet er een uit. Scoring: per keywordgroep tellen maximaal maxTerms treffers mee, titel-treffers wegen titleWeightMultiplier keer zwaarder. Een term matcht op hele woorden; zet er een * achter voor prefix-match (retir* vangt retire/retiring/retirement). Tier Actie vereist score >= actionThreshold EN, als requireActionSignal aanstaat, een treffer uit een groep met isActionSignal.",
+
+  "settings": {
+    "defaultDays": 14,
+    "actionThreshold": 12,
+    "watchThreshold": 6,
+    "titleWeightMultiplier": 2,
+    "requireActionSignal": true,
+    "scoreTextLength": 6000,
+    "summaryLength": 320,
+    "agendaMaxItems": 14,
+    "urgentWithinDays": 21,
+    "soonWithinDays": 60,
+    "agendaLookbackDays": 45,
+    "agendaKinds": [ "deadline", "retirement", "start" ],
+    "actionMaxSentences": 3,
+    "actionSentenceLength": 260,
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    "timeoutSec": 20
+  },
+
+  "digest": {
+    "_comment": "Twee soorten posts worden gedempt: ze mogen in de lijst staan maar worden nooit rood en komen niet in de agenda. Verzamelposts (maandoverzichten, nieuwsbrieven) noemen tien wijzigingen van anderen - de echte post staat er los ook in. Handleidingen noemen woorden als 'retire' en 'mandatory' in het voorbijgaan, zonder dat er iets te doen is.",
+    "guideTerms": [
+      "practical guide", "a guide to", "the guide to", "how to", "how-to",
+      "from scratch", "step by step", "step-by-step", "getting started",
+      "beginners guide", "beginner's guide", "tutorial", "deep dive",
+      "explained", "walkthrough", "part 1", "part 2", "cheat sheet",
+      "remove any preinstalled", "replace vpn access"
+    ],
+    "terms": [
+      "what's new in", "whats new in", "what is new in", "newsletter", "roundup",
+      "round-up", "weekly update", "monthly update", "recap", "in development",
+      "this week in", "this month in", "nieuwsbrief", "maandoverzicht"
+    ]
+  },
+
+  "enrich": {
+    "_comment": "Veel feeds geven maar een fragment van ~150 tekens mee. Voor de kandidaten die er al uitspringen wordt de artikelpagina zelf opgehaald, zodat datums en actiewoorden uit de hele post meetellen. Dit is de enige trage stap: maxPages bepaalt hoe lang een run duurt.",
+    "enabled": true,
+    "maxPages": 45,
+    "minScore": 6,
+    "shortTextBelow": 400,
+    "timeoutSec": 15
+  },
+
+  "feeds": [
+    { "name": "Microsoft Intune Blog",             "url": "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=MicrosoftIntuneBlog",     "boost": 4,  "tag": "Microsoft" },
+    { "name": "Intune Customer Success",           "url": "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=IntuneCustomerSuccess",   "boost": 4,  "tag": "Microsoft" },
+    { "name": "Microsoft Entra Blog",              "url": "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=microsoft-entra-blog",    "boost": 4,  "tag": "Microsoft" },
+    { "name": "Microsoft Security Blog",           "url": "https://www.microsoft.com/en-us/security/blog/feed/",                                           "boost": 3,  "tag": "Microsoft" },
+    { "name": "Learn Docs - Entra what's new",     "url": "https://learn.microsoft.com/api/search/rss?search=%22Microsoft+Entra%22+%22What%27s+new%22&locale=en-us", "boost": -2, "tag": "Microsoft" },
+    { "name": "Learn Docs - Intune",               "url": "https://learn.microsoft.com/api/search/rss?search=%22Microsoft+Intune%22&locale=en-us",          "boost": -4, "tag": "Microsoft" },
+
+    { "name": "System Center Dudes - Intune",      "url": "https://www.systemcenterdudes.com/category/intune/feed/",     "boost": 0, "tag": "Community" },
+    { "name": "System Center Dudes - Windows 11",  "url": "https://www.systemcenterdudes.com/category/windows-11/feed/", "boost": 0, "tag": "Community" },
+    { "name": "Patch My PC",                       "url": "https://patchmypc.com/blog/feed/",                            "boost": 0, "tag": "Community" },
+    { "name": "Call4Cloud (Rudy Ooms)",            "url": "https://call4cloud.nl/feed/",                                 "boost": 0, "tag": "Community" },
+    { "name": "MSEndpointMgr",                     "url": "https://msendpointmgr.com/feed/",                             "boost": 2, "tag": "Community" },
+    { "name": "OurCloudNetwork",                   "url": "https://ourcloudnetwork.com/feed/",                           "boost": 0, "tag": "Community" },
+    { "name": "Andrew Taylor",                     "url": "https://andrewstaylor.com/feed/",                             "boost": 0, "tag": "Community" },
+    { "name": "Anoop C Nair",                      "url": "https://www.anoopcnair.com/feed/",                            "boost": 0, "tag": "Community" },
+    { "name": "Peter van der Woude",               "url": "https://petervanderwoude.nl/feed/",                           "boost": 0, "tag": "Community" },
+    { "name": "IntuneStuff",                       "url": "https://intunestuff.com/feed/",                               "boost": 0, "tag": "Community" },
+    { "name": "Jannik Reinhard",                   "url": "https://www.jannikreinhard.com/feed",                         "boost": 0, "tag": "Community" },
+    { "name": "scloud.work",                       "url": "https://scloud.work/feed/",                                   "boost": 0, "tag": "Community" },
+    { "name": "Oliver Kieselbach",                 "url": "https://oliverkieselbach.com/feed/",                          "boost": 0, "tag": "Community" },
+    { "name": "SysAndDeploy (Damien Van Robaeys)", "url": "https://www.systanddeploy.com/feeds/posts/default",           "boost": 0, "tag": "Community" },
+    { "name": "System Center Dudes - Autopilot", "url": "https://www.systemcenterdudes.com/category/autopilot/feed/", "boost": 0, "tag": "Community" }
+  ],
+
+  "categories": {
+    "Autopilot":        [ "autopilot", "device preparation", "device association", "enrollment status page", "esp", "pre-provision*", "white glove" ],
+    "Enrollment":       [ "enrollment", "enroll*", "apple business manager", "abm", "android enterprise", "co-management", "comanagement", "entra join", "hybrid join", "bulk enrollment" ],
+    "Compliance":       [ "compliance", "compliant", "noncompliant", "non-compliant", "device health attestation", "compliance policy" ],
+    "Conditional Access": [ "conditional access", "named location", "authentication context", "continuous access evaluation", "cae" ],
+    "Identiteit & MFA": [ "passkey*", "fido2", "windows hello", "mfa", "multifactor", "multi-factor", "authentication method", "sms", "voice call", "temporary access pass", "sspr", "password*", "sign-in", "token protection" ],
+    "Defender & Security": [ "defender", "asr", "attack surface", "edr", "security baseline", "tamper protection", "exploit protection", "antivirus", "vulnerabilit*", "threat", "firewall", "bitlocker", "laps", "endpoint privilege management", "epm" ],
+    "Windows Update":   [ "windows update", "wufb", "feature update", "quality update", "update ring", "driver update", "hotpatch*", "patch tuesday", "expedited update", "autopatch" ],
+    "Apps & Packaging": [ "win32", "intunewin", "lob app", "company portal", "app protection", "msix", "store app", "winget", "app deployment", "managed app" ],
+    "Scripting & Graph":[ "powershell", "graph api", "remediation*", "platform script", "device query", "kusto", "kql", "rest api", "sdk" ],
+    "Windows 11":       [ "windows 11", "windows 10", "24h2", "25h2", "esu", "windows backup" ],
+    "macOS":            [ "macos", "apple silicon", "platform sso", "declarative device management", "ddm" ],
+    "iOS & iPadOS":     [ "ios", "ipados", "iphone", "ipad", "supervised", "vpp", "declarative" ],
+    "Android":          [ "android", "work profile", "dedicated device", "knox", "fully managed" ],
+    "Licensing":        [ "licens*", "e3", "e5", "intune suite", "add-on", "pricing", "cost" ],
+    "Reporting":        [ "report*", "dashboard", "log analytics", "workbook", "telemetry", "audit log" ]
+  },
+
+  "keywords": {
+    "action": {
+      "weight": 5,
+      "maxTerms": 3,
+      "isActionSignal": true,
+      "terms": [
+        "breaking change", "retir*", "deprecat*", "end of support", "end of life",
+        "action required", "action needed", "will be removed", "no longer supported",
+        "no longer available", "mandatory", "enforc*", "required by", "must migrate",
+        "plan for change", "sunset", "discontinu*", "migrate before", "cutoff",
+        "no opt out", "opt out", "blocking prompt"
+      ]
+    },
+    "topic": {
+      "weight": 3,
+      "maxTerms": 2,
+      "terms": [
+        "passkey*", "fido2", "windows hello", "conditional access", "authentication method",
+        "mfa", "autopilot", "device compliance", "enrollment", "esp",
+        "windows update for business", "wufb", "feature update", "quality update",
+        "defender", "security baseline", "attack surface", "bitlocker", "laps",
+        "win32", "lob app", "platform script", "remediation*",
+        "configuration profile", "settings catalog", "device query",
+        "endpoint privilege management", "epm", "macos", "android enterprise", "ios",
+        "driver update", "update ring", "scope tag", "rbac",
+        "graph api", "company portal", "cloud pki", "intune suite", "autopatch"
+      ]
+    },
+    "general": {
+      "weight": 1,
+      "maxTerms": 1,
+      "terms": [
+        "intune", "entra", "endpoint manager", "powershell", "microsoft 365",
+        "windows 11", "policy", "tenant", "licens*"
+      ]
+    },
+    "mute": {
+      "weight": -6,
+      "terms": [
+        "sponsored", "podcast", "webinar", "newsletter roundup", "community call",
+        "job opening", "giveaway", "merch",
+        "certification", "renewal for microsoft", "exam", "learning path", "training module"
+      ]
+    }
+  },
+
+  "dateTriggers": {
+    "_comment": "Bepaalt hoe een datum in de tekst gelabeld wordt. De woorden worden gezocht in de ~80 tekens voor de datum. Volgorde telt: de eerste groep die matcht wint.",
+    "deadline": {
+      "label": "DEADLINE",
+      "terms": [ "required by", "no later than", "not later than", "deadline", "before", "until", "prior to", "must be completed", "uiterlijk" ]
+    },
+    "retirement": {
+      "label": "STOPT",
+      "terms": [ "retir*", "end of support", "end of life", "removed on", "will be removed", "discontinu*", "sunset", "no longer", "stopt", "vervalt" ]
+    },
+    "start": {
+      "label": "VANAF",
+      "terms": [ "starting", "starts", "start on", "beginning", "begins", "from", "effective", "as of", "on or after", "commencing", "rolling out", "rollout begins", "vanaf", "per", "ingaande" ]
+    },
+    "available": {
+      "label": "BESCHIKBAAR",
+      "terms": [ "available", "generally available", "ga on", "public preview", "released", "ships", "launching", "beschikbaar" ]
+    }
+  },
+
+  "messageCenter": {
+    "enabled": true,
+    "services": [ "Microsoft Intune", "Microsoft Entra", "Microsoft Defender", "Windows" ],
+    "scoring": {
+      "planForChange": 5,
+      "preventOrFixIssue": 4,
+      "isMajorChange": 4,
+      "actionRequiredByDateTime": 6,
+      "severityHigh": 3,
+      "severityCritical": 5
+    }
+  }
+}
+
