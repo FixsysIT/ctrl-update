@@ -201,10 +201,19 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 
 | Punt | Waarom nog niet |
 |---|---|
-| Titels en samenvattingen naar het Nederlands vertalen | Vereist Claude API of Azure Translator plus sleutelbeheer. Per item een call, dus kosten per run. |
 | Automatisch draaien | Nu handmatig, op verzoek. Taakplanner of Azure Automation is een latere stap. |
 | Message Center meenemen | Werkt, maar vereist `Connect-MgGraph -Scopes 'ServiceMessage.Read.All'` voor de run. |
 | Meerdere klanttenants | Message Center is nu een tenant. Voor meerdere klanten is app-only auth per tenant nodig. |
+
+## V10 - Agent-eindredactie, kanalen en persoonlijke radar
+
+- Codex beoordeelt ieder artikel inhoudelijk en schrijft titel, samenvatting en actiepunten in het Nederlands.
+- Een inhoudshash voorkomt nieuwe modelcalls voor ongewijzigde artikelen; `agent-review.json` is de cache.
+- De regelscore blijft zichtbaar en uitlegbaar. De agent mag een trefwoordfoutpositief terugzetten naar informatie.
+- Eén stroom blijft de bron van waarheid, met weergaven voor Voor jou, Microsoft & tenant, Vakblogs en Alles.
+- Onderwerp- en bronkeuzes zijn per browser. Optionele domeinen staan standaard uit.
+- Een RSS-aanvraag uit de browser wordt geëxporteerd en daarna centraal ontdekt en gevalideerd. De statische
+  browserpagina is bewust geen open RSS-proxy.
 
 ---
 
@@ -213,7 +222,11 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 | Bestand | Rol |
 |---|---|
 | `Get-IntuneNews.ps1` | Ophalen, scoren, datums herkennen, dashboard schrijven |
+| `Invoke-IntuneNewsReview.ps1` | Nederlandse Codex-eindredactie met cache en schema-validatie |
 | `Add-NewsSource.ps1` | Bron toevoegen vanaf een gewone URL |
+| `Import-IntuneRadarPreferences.ps1` | Geëxporteerde RSS-aanvragen valideren en importeren |
+| `agent-review-schema.json` | Strikt uitvoerschema voor de agentreview |
+| `agent-review.json` | Reviewcache op inhoudshash |
 | `sources.json` | Feeds, categorieen, trefwoorden, drempels - hier tune je |
 | `template.html` | Vormgeving, los van de logica |
 | `news.html` | Het resultaat |

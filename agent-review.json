@@ -1,0 +1,811 @@
+{
+  "generated": "2026-09-17T17:30:56.3422593Z",
+  "items": [
+    {
+      "id": "https://andrewstaylor.com/2026/09/04/intune-newsletter-4th-september-2026/",
+      "contentHash": "bf86595602309c83150ef315d922b13056417714f2520459969e2d7856c19f3e",
+      "titleNl": "Intune-nieuwsbrief van 4 september 2026",
+      "summaryNl": "Deze nieuwsbrief bundelt ontwikkelingen rond Windows 365, Autopilot Device Association, Android Enterprise 2608 en Entra dynamic groups. MemberOf-regels in dynamische groepen stoppen volgens de brontekst in november 2026 met werken.",
+      "whyNl": [
+        "Inventariseer en vervang MemberOf-regels vóór november 2026.",
+        "Device Association kan apparaten al vóór inschrijving aan een tenant koppelen."
+      ],
+      "categories": [
+        "Autopilot",
+        "Identiteit & MFA",
+        "Windows 365 & AVD"
+      ],
+      "kind": "nieuws",
+      "tier": "action",
+      "confidence": 0.94,
+      "reasonNl": "De aangekondigde beëindiging van MemberOf-regels vereist vóór november een concrete beheeractie."
+    },
+    {
+      "id": "https://andrewstaylor.com/2026/09/11/intune-newsletter-11th-september-2026/",
+      "contentHash": "3073280942b2f2525af011a32133d38c2e06d041900aa28df3a12f40574e5fde",
+      "titleNl": "Intune-nieuwsbrief van 11 september 2026",
+      "summaryNl": "Deze editie behandelt onder meer Autopilot Device Preparation, meerdere beheerde accounts in app protection en wijzigingen rond OSVersion-assignment filters. Ook verwijst de nieuwsbrief naar de komende uitfasering van NTLM en VBS-gebaseerde activeringsscripts.",
+      "whyNl": [
+        "Controleer assignment filters die OSVersion gebruiken en vervang deze waar nodig.",
+        "Breng gebruik van slmgr.vbs in kaart en beoordeel de genoemde PowerShell-alternatieven."
+      ],
+      "categories": [
+        "Autopilot",
+        "Apps & Packaging",
+        "Scripting & Graph"
+      ],
+      "kind": "nieuws",
+      "tier": "action",
+      "confidence": 0.87,
+      "reasonNl": "De brontekst noemt bestaande filters die niet meer werken en automatisering waarvoor vervanging nodig is."
+    },
+    {
+      "id": "https://intunestuff.com/2026/09/07/device-association/",
+      "contentHash": "6c07fb568cc741169fb3d15b0564b7607af7a8bae7ebcc37ba532af0f467ef88",
+      "titleNl": "Windows Autopilot Device Preparation en de nieuwe Device Association",
+      "summaryNl": "De handleiding legt uit hoe Device Association een fysiek Windows 11-apparaat vóór inschrijving aan de tenant koppelt via UEFI en TPM-attestation. De volledige inrichting, vereisten en beperkingen worden stap voor stap behandeld.",
+      "whyNl": [
+        "Device Association vereist ondersteunde Windows 11-versies, TPM 2.0 en een fysiek apparaat.",
+        "Virtuele machines en Windows 365 Cloud PCs worden niet ondersteund.",
+        "De koppeling blijft behouden na een reset of herinstallatie van Windows."
+      ],
+      "categories": [
+        "Autopilot",
+        "Enrollment",
+        "Windows 11"
+      ],
+      "kind": "handleiding",
+      "tier": "info",
+      "confidence": 0.98,
+      "reasonNl": "Dit is een implementatiehandleiding voor een optionele functie, zonder verplichte migratie of deadline."
+    },
+    {
+      "id": "https://jannikreinhard.com/azure-api-management-mcp-control-plane/",
+      "contentHash": "5d0c25329cbef69ad128573c79ccb65b376e5594531f818d545d94f45b92022b",
+      "titleNl": "Azure API Management als control plane voor MCP-tools",
+      "summaryNl": "Het artikel analyseert hoe Azure API Management identity, tooltoegang, limieten en monitoring voor MCP-servers kan centraliseren. Het waarschuwt dat response-bodylogging en buffering de streaming van MCP kunnen verstoren.",
+      "whyNl": [
+        "Beperk per agent welke tools en bewerkingen zichtbaar zijn.",
+        "Log metadata en correlatiegegevens, maar geen prompts, credentials of toolresultaten.",
+        "Beleid dat response-bodies leest kan MCP-streaming onderbreken."
+      ],
+      "categories": [
+        "Scripting & Graph",
+        "Compliance",
+        "Reporting"
+      ],
+      "kind": "analyse",
+      "tier": "info",
+      "confidence": 0.96,
+      "reasonNl": "Het betreft architectuur- en governanceadvies zonder aangekondigde verplichting of deadline."
+    },
+    {
+      "id": "https://jannikreinhard.com/copilot-vs-cowork-vs-agents/",
+      "contentHash": "32ea99c7617e1cf80687f6e693d980a309d008482a4e04ea37f9426fba8fadd0",
+      "titleNl": "Copilot, Cowork of agents: licenties, kosten en governance",
+      "summaryNl": "Deze analyse vergelijkt Copilot Chat, Microsoft 365 Copilot, Cowork, Agent Builder en Copilot Studio op inzet, beheer en kosten. Cowork vereist volgens de brontekst een Microsoft 365 Copilot-licentie, ingeschakelde toegang en verbruiksfacturering.",
+      "whyNl": [
+        "Cowork-verbruik wordt aanvullend gemeten boven op de vereiste Copilot-licentie.",
+        "Beschikbaarheid en rechten verschillen per regio, cloud, licentie en uitrol.",
+        "Een gedeelde agent vraagt eigenaarschap, toegangsbeheer, monitoring en ondersteuning."
+      ],
+      "categories": [
+        "Licensing"
+      ],
+      "kind": "analyse",
+      "tier": "info",
+      "confidence": 0.95,
+      "reasonNl": "De vergelijking ondersteunt product- en licentiekeuzes, maar kondigt geen verplichte beheeractie aan."
+    },
+    {
+      "id": "https://jannikreinhard.com/five-gates-mcp-tool-production/",
+      "contentHash": "4e56f04db7ecd81687ffc043b07bded414d6c29a04798752c02727cf4bc9a8c5",
+      "titleNl": "Vijf controles voordat een MCP-tool naar productie gaat",
+      "summaryNl": "Het artikel beschrijft vijf productiecontroles voor MCP-tools: identity, scope, limits, approval en evidence. Azure API Management kan daarbij authenticatie, begrenzing en telemetrie leveren, maar vervangt de autorisatie in de backend niet.",
+      "whyNl": [
+        "Leg de identiteit van gebruiker, agent en backend bij iedere aanroep vast.",
+        "Beperk zichtbare tools en gegevens tot wat de agent werkelijk nodig heeft.",
+        "Gebruik menselijke goedkeuring voor wijzigingen met een grote impact."
+      ],
+      "categories": [
+        "Compliance",
+        "Scripting & Graph",
+        "Reporting"
+      ],
+      "kind": "analyse",
+      "tier": "info",
+      "confidence": 0.97,
+      "reasonNl": "Dit is een aanbevolen beoordelingsmodel zonder verplichte wijziging of harde datum."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-reference",
+      "contentHash": "439dc23694a9b506da221b64c78c9a2731450c21b3aa0dabeeb84e2f794ae8ae",
+      "titleNl": "Naslagwerk voor Attack Surface Reduction-regels",
+      "summaryNl": "Dit naslagwerk beschrijft per ASR-regel de ondersteunde Windows-versies, implementatiemethoden en meldingen. Het vergelijkt ondersteuning via Intune, Configuration Manager, MDM CSP, Group Policy en lokale configuratie.",
+      "whyNl": [
+        "Niet iedere ASR-regel ondersteunt op elk besturingssysteem dezelfde implementatiemethode.",
+        "Centrale rapportage en waarschuwingen vereisen Microsoft Defender for Endpoint."
+      ],
+      "categories": [
+        "Defender & Security",
+        "Windows 11"
+      ],
+      "kind": "naslag",
+      "tier": "info",
+      "confidence": 0.99,
+      "reasonNl": "De pagina is technisch naslagwerk en bevat geen algemene migratieplicht of deadline."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/defender-endpoint/configure-endpoints-mdm",
+      "contentHash": "e600f000b1efe6b18074114017346825878b03570be024bfab8cb7c680580d8f",
+      "titleNl": "Windows-apparaten via Intune onboarden bij Microsoft Defender for Endpoint",
+      "summaryNl": "De handleiding beschrijft het onboarden en offboarden van Windows 10- en Windows 11-apparaten via Intune. Ook worden vereiste rollen, licenties, verificatietests en ondersteunde beleidsmethoden uitgelegd.",
+      "whyNl": [
+        "Een gedownload offboardingpakket verloopt na zeven dagen.",
+        "Wijs onboarding- en offboardingbeleid niet gelijktijdig aan hetzelfde apparaat toe.",
+        "De instelling voor de frequentie van diagnostische gegevens is verouderd en heeft geen effect op nieuwe apparaten."
+      ],
+      "categories": [
+        "Defender & Security",
+        "Enrollment",
+        "Windows 11"
+      ],
+      "kind": "handleiding",
+      "tier": "info",
+      "confidence": 0.99,
+      "reasonNl": "De aandachtspunten gelden tijdens een gekozen implementatie; er is geen algemene verplichte wijziging aangekondigd."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/defender-endpoint/mac-install-with-intune",
+      "contentHash": "691b4a2385d534408760a7c266f4829170497b4b13a187c459a822a1269e62db",
+      "titleNl": "Microsoft Defender for Endpoint op macOS implementeren met Intune",
+      "summaryNl": "Deze handleiding behandelt de vereiste macOS-profielen, app-installatie, onboarding en verificatie voor Microsoft Defender for Endpoint. De configuratie omvat onder meer system extensions, network filtering, Full Disk Access en Microsoft AutoUpdate.",
+      "whyNl": [
+        "Voor deze implementatiemethode is een licentie met Intune vereist.",
+        "macOS ondersteunt slechts één network filter-profiel; meerdere profielen kunnen verbindingsproblemen veroorzaken.",
+        "Configureer passive mode wanneer een andere antivirusoplossing actief blijft."
+      ],
+      "categories": [
+        "Defender & Security",
+        "macOS",
+        "Apps & Packaging"
+      ],
+      "kind": "handleiding",
+      "tier": "info",
+      "confidence": 0.99,
+      "reasonNl": "Dit is implementatiedocumentatie voor beheerders die deze methode kiezen, zonder deadline of verplichte migratie."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/overview",
+      "contentHash": "09b6c319542788db36bfc1bca3b256fd4df25a0ae50de75e11b51d2f6682e9a2",
+      "titleNl": "Nieuwe functies in .NET 11 RC 1",
+      "summaryNl": "Het overzicht beschrijft nieuwe runtime-, bibliotheek- en platformfuncties in .NET 11 RC 1. General availability wordt verwacht in november 2026.",
+      "whyNl": [],
+      "categories": [
+        "Scripting & Graph"
+      ],
+      "kind": "nieuws",
+      "tier": "info",
+      "confidence": 0.94,
+      "reasonNl": "Dit is een prerelease-overzicht zonder concrete Intune- of Entra-beheeractie."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15",
+      "contentHash": "fbaa0a71ef898dad13948935c3d54ac3ff859b49a1b54eaf5e359a77412b7cb6",
+      "titleNl": "Nieuw in C# 15",
+      "summaryNl": "C# 15 is beschikbaar als preview via de .NET 11 preview SDK en Visual Studio 2026 Insiders. Het overzicht beschrijft onder meer union types, closed hierarchies, extension indexers en labeled break en continue.",
+      "whyNl": [],
+      "categories": [
+        "Scripting & Graph"
+      ],
+      "kind": "nieuws",
+      "tier": "info",
+      "confidence": 0.99,
+      "reasonNl": "Dit is een previewoverzicht voor ontwikkelaars zonder vereiste beheeractie."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/entra/fundamentals/what-is-entra",
+      "contentHash": "282a43ebec96bb01a5803cd1413d5f0b2037ab358af6f322da681ebd7bce555f",
+      "titleNl": "Overzicht van Microsoft Entra",
+      "summaryNl": "Dit artikel beschrijft de Microsoft Entra-productfamilie voor identiteits-, toegangs- en beveiligingsbeheer. Het licht de doelen en typische toepassingen van de afzonderlijke producten toe.",
+      "whyNl": [],
+      "categories": [
+        "Identiteit & MFA",
+        "Conditional Access"
+      ],
+      "kind": "naslag",
+      "tier": "info",
+      "confidence": 0.99,
+      "reasonNl": "Het betreft algemene productnaslag zonder aangekondigde wijziging of beheeractie."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/entra/id-governance/licensing-fundamentals",
+      "contentHash": "1266305be5ee806ed434a87f259d987b433cac3cde303a27cc966be8724fcd73",
+      "titleNl": "Licentiegrondslagen voor Microsoft Entra ID Governance",
+      "summaryNl": "Het artikel vergelijkt de beschikbare Microsoft Entra ID Governance-licenties en hun vereisten. De benodigde licentie hangt af van de gebruikte functies en aanwezige P1- of P2-abonnementen.",
+      "whyNl": [
+        "Controleer per governancescenario welke basislicentie en eventuele add-on vereist zijn."
+      ],
+      "categories": [
+        "Licensing",
+        "Identiteit & MFA"
+      ],
+      "kind": "naslag",
+      "tier": "info",
+      "confidence": 0.99,
+      "reasonNl": "Dit is licentienaslag zonder deadline, verplichte migratie of aangekondigde prijswijziging."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-authentication-entra-passkeys-on-windows",
+      "contentHash": "5b973234a8977d4598964e107ec9ec69767b0f13c7c1b7dd19810210992678bd",
+      "titleNl": "Microsoft Entra passkey op Windows inschakelen",
+      "summaryNl": "Microsoft Entra passkey op Windows slaat FIDO2-passkeys op in de lokale Windows Hello-container, ook zonder Entra-registratie of -join. Het artikel beschrijft de vereisten, verschillen met Windows Hello for Business en configuratie van een passkey-profiel.",
+      "whyNl": [
+        "Sta de Windows Hello-AAGUID's expliciet toe in het passkey-profiel.",
+        "Enforce attestation kan voor dit profiel niet zijn ingeschakeld.",
+        "Registratie voor hetzelfde account kan mislukken als al een Windows Hello for Business-referentie bestaat."
+      ],
+      "categories": [
+        "Identiteit & MFA",
+        "Windows 11"
+      ],
+      "kind": "handleiding",
+      "tier": "info",
+      "confidence": 0.99,
+      "reasonNl": "Dit is een optionele configuratiehandleiding; de brontekst noemt geen verplichte invoering of deadline."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/entra/verified-id/",
+      "contentHash": "280239b883a622839993265497e0a339c12cebfc2757cbb24dfaf545148ca9bc",
+      "titleNl": "Documentatie voor Microsoft Entra Verified ID",
+      "summaryNl": "Deze documentatiebundel verwijst naar inrichting, architectuur, API's en gebruiksscenario's voor Microsoft Entra Verified ID. Er is ook informatie over uitgifte, verificatie, sleutelrotatie en integraties.",
+      "whyNl": [],
+      "categories": [
+        "Identiteit & MFA",
+        "Scripting & Graph"
+      ],
+      "kind": "naslag",
+      "tier": "info",
+      "confidence": 0.99,
+      "reasonNl": "Het is een documentatie-index zonder concrete wijziging of vereiste beheeractie."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/intune/app-management/ref-protected-apps",
+      "contentHash": "2cae43f688ad7c93d1396c6e1d1680e626cc791c3a9996a2eb6293945a7db562",
+      "titleNl": "Ondersteunde apps voor Microsoft Intune App Protection",
+      "summaryNl": "Het overzicht vermeldt welke Microsoft- en partnerapps Intune App Protection Policy en geavanceerde appconfiguratie-instellingen ondersteunen. De ondersteuning verschilt per app, platform, instelling en soms per minimale appversie.",
+      "whyNl": [
+        "Controleer de tabel voordat je een specifieke beveiligings- of configuratie-instelling aan een app toewijst."
+      ],
+      "categories": [
+        "Apps & Packaging",
+        "iOS & iPadOS",
+        "Android"
+      ],
+      "kind": "naslag",
+      "tier": "info",
+      "confidence": 0.99,
+      "reasonNl": "Dit is een compatibiliteitsoverzicht zonder verplichte wijziging of deadline."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/intune/whats-new/in-development",
+      "contentHash": "1e0df149e0e341bdf6d5c64d9b35d7f0136e5305bbe25b9f9c1821020b8dd7c1",
+      "titleNl": "In ontwikkeling voor Microsoft Intune",
+      "summaryNl": "Microsoft werkt aan onder meer scope tags voor EPM-rapporten, extra bescherming voor Managed Home Screen, Declarative VPP-downloads en nieuwe Apple-instellingen. Ook zijn functies voorzien voor Apple-VPN-routes, macOS-wifiprofielen en het starten van Defender tijdens Android-inschrijving.",
+      "whyNl": [
+        "De functies zijn nog niet uitgebracht en inhoud of planning kan wijzigen.",
+        "Beoordeel de gevolgen voor Managed Home Screen, Apple-profielen en Android-inschrijving zodra Microsoft productie-informatie publiceert."
+      ],
+      "categories": [
+        "Enrollment",
+        "iOS & iPadOS",
+        "Defender & Security"
+      ],
+      "kind": "nieuws",
+      "tier": "watch",
+      "confidence": 0.97,
+      "reasonNl": "De aangekondigde functies zijn relevant voor voorbereiding, maar hebben nog geen vaste releasedatum of verplichte beheeractie."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/microsoft-365/enterprise/desktop-deployment-center-home",
+      "contentHash": "9cae62cfd888d44d0077cfba7bd47c288cc42067fa82ce8e2ef19c341ff35f59",
+      "titleNl": "Desktop Deployment Center is verouderd",
+      "summaryNl": "De inhoud van het Desktop Deployment Center is verouderd verklaard. Microsoft verwijst voor moderne desktopimplementaties naar afzonderlijke documentatie voor Windows 11, Microsoft 365 Apps, Intune en identiteits- en apparaattoegangsbeleid.",
+      "whyNl": [
+        "Vervang interne verwijzingen naar het Desktop Deployment Center door de genoemde actuele documentatie."
+      ],
+      "categories": [
+        "Windows 11",
+        "Autopilot",
+        "Apps & Packaging"
+      ],
+      "kind": "wijziging",
+      "tier": "action",
+      "confidence": 0.99,
+      "reasonNl": "De documentatiebron is verouderd verklaard, waardoor beheerders gebruikte verwijzingen moeten bijwerken."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/known-issues",
+      "contentHash": "e131e654ae16f7db7880f723377bbc28b3921a6d8db6ab9b63784c73fd2d5b31",
+      "titleNl": "Actuele bekende problemen met Microsoft Intune",
+      "summaryNl": "Microsoft meldt meerdere actieve Intune-problemen, waaronder ontbrekende regionale selectie voor Microsoft Store-apps, trage of ontbrekende apps in Company Portal en onvolledige complianceberichten. Ook kunnen bepaalde Office-instellingen zonder de vereiste bovenliggende instelling niet worden toegepast.",
+      "whyNl": [
+        "Controleer bij nieuwe Microsoft Store-apps of de tijdelijk gebruikte Amerikaanse standaardcatalogus het juiste pakket oplevert.",
+        "Schakel voor de gemarkeerde Office-instellingen zo nodig ook de vereiste bovenliggende instelling in.",
+        "De compliancepolicy blijft correct afdwingen wanneer Company Portal slechts de eerste geldige Windows-buildreeks toont."
+      ],
+      "categories": [
+        "Apps & Packaging",
+        "Compliance",
+        "Enrollment"
+      ],
+      "kind": "wijziging",
+      "tier": "action",
+      "confidence": 0.99,
+      "reasonNl": "De pagina beschrijft actieve operationele problemen die appdistributie, gebruikerservaring of beleidsconfiguratie kunnen beïnvloeden."
+    },
+    {
+      "id": "https://msendpointmgr.com/2026/09/05/1phonemirror-levels-up-webcam-stats-better-screenshots-and-signed/",
+      "contentHash": "94c52244f126c0232bd16cd3d619ca83d4d6681d282ad7194e44179301ea4e6b",
+      "titleNl": "1PhoneMirror voegt webcamweergave, statistieken en ondertekende installatie toe",
+      "summaryNl": "1PhoneMirror heeft nieuwe functies voor webcamweergave, lokale gebruiksstatistieken, schermafbeeldingen en opnamen gekregen. Vanaf versie 0.6.0 zijn het MSI-pakket en de meegeleverde bestanden digitaal ondertekend.",
+      "whyNl": [
+        "De auteur meldt dat implementatie en updates van de MSI via Patch My PC Custom Apps en Intune succesvol zijn getest."
+      ],
+      "categories": [
+        "Apps & Packaging",
+        "iOS & iPadOS",
+        "Android"
+      ],
+      "kind": "nieuws",
+      "tier": "info",
+      "confidence": 0.96,
+      "reasonNl": "Het gaat om een optionele communitytool en er is geen vereiste beheeractie of deadline."
+    },
+    {
+      "id": "https://ourcloudnetwork.com/microsoft-adds-basic-permissions-for-groups-in-graph/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-adds-basic-permissions-for-groups-in-graph",
+      "contentHash": "18f8c5d87f653bc23a41ccf3d0a790034df438199df67c06daefd18616b6dc13",
+      "titleNl": "Microsoft Graph krijgt beperktere machtigingen voor groepsgegevens",
+      "summaryNl": "Drie nieuwe Graph-machtigingen bieden beperktere toegang tot basisgegevens, lidmaatschappen en preferredDataLocation van groepen. Apps hoeven daardoor niet altijd meer Group.Read.All of Group.ReadWrite.All te gebruiken.",
+      "whyNl": [
+        "Alle drie de machtigingen zijn beschikbaar voor gedelegeerde en applicatietoegang en vereisen beheerderstoestemming.",
+        "De centrale machtigingenreferentie vermeldt de nieuwe machtigingen nog niet."
+      ],
+      "categories": [
+        "Scripting & Graph",
+        "Identiteit & MFA"
+      ],
+      "kind": "nieuws",
+      "tier": "info",
+      "confidence": 0.97,
+      "reasonNl": "Dit biedt een mogelijkheid voor least-privilege-toegang, maar er is geen verplichte migratie of deadline."
+    },
+    {
+      "id": "https://ourcloudnetwork.com/microsoft-closes-a-data-access-gap-for-graph-api-permission/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-closes-a-data-access-gap-for-graph-api-permission",
+      "contentHash": "aab813e801dd9b0ac535f28a95709138441cc39baa9e8b5c3628d065c4e01b35",
+      "titleNl": "MC1470871 beperkt de gegevens die User.ReadBasic.All kan lezen",
+      "summaryNl": "User.ReadBasic.All geeft straks geen toegang meer tot app role assignments en licentiegegevens van gebruikers. Applicaties die van deze onbedoelde toegang afhankelijk zijn, kunnen machtigingsfouten krijgen.",
+      "whyNl": [
+        "Inventariseer applicaties die met User.ReadBasic.All app role assignments of licentiegegevens ophalen.",
+        "Test per endpoint en authenticatiestroom de smalste geschikte vervangende machtiging.",
+        "De wereldwijde uitrol begint medio september 2026 en moet eind september 2026 zijn voltooid."
+      ],
+      "categories": [
+        "Scripting & Graph",
+        "Licensing",
+        "Identiteit & MFA"
+      ],
+      "kind": "wijziging",
+      "tier": "action",
+      "confidence": 0.97,
+      "reasonNl": "Beheerders moeten mogelijk getroffen applicaties vóór afronding van de uitrol aanpassen om uitval te voorkomen."
+    },
+    {
+      "id": "https://ourcloudnetwork.com/microsoft-delays-entra-sms-and-voice-retirement-dates/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-delays-entra-sms-and-voice-retirement-dates",
+      "contentHash": "fc7b86da40e4f898ceb9dcc310195f261d60ac43004d2401db7acd1e958fcca4",
+      "titleNl": "MC1426371 wijzigt deadlines voor Entra SMS- en spraakverificatie",
+      "summaryNl": "Microsoft stopt de eigen SMS- en spraakverificatie op 1 februari 2027 voor de meeste gebruikers. Voor Global Administrators en externe gebruikers is deze datum verschoven naar 1 juli 2027.",
+      "whyNl": [
+        "Analyseer nu welke gebruikers uitsluitend SMS of spraak als MFA-methode gebruiken.",
+        "Migreer gewone gebruikers vóór 1 februari 2027 naar een andere methode of een zelf geconfigureerde telecomprovider.",
+        "Rond de migratie voor Global Administrators en externe gebruikers vóór 1 juli 2027 af."
+      ],
+      "categories": [
+        "Identiteit & MFA"
+      ],
+      "kind": "wijziging",
+      "tier": "action",
+      "confidence": 0.96,
+      "reasonNl": "Er gelden harde uitfaseringsdata en zonder migratie kunnen gebruikers bij aanmelding worden geblokkeerd."
+    },
+    {
+      "id": "https://ourcloudnetwork.com/microsoft-entra-expands-passkey-registration-campaigns/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-entra-expands-passkey-registration-campaigns",
+      "contentHash": "6a9021d5cc113d6983325517b19da0f5337a7eb8d3a85dacdccc03f90fb3943a",
+      "titleNl": "MC1469555 breidt Microsoft Entra passkey registration campaigns uit",
+      "summaryNl": "Microsoft-managed registration campaigns kunnen voortaan ook gebruikers met bepaalde beperkte passkey-profielen bereiken. Hierdoor kunnen gebruikers zonder beleidswijziging nieuwe registratieprompts zien.",
+      "whyNl": [
+        "Controleer de opgenomen groepen, vooral gebruikers met beperkte passkey-profielen.",
+        "Informeer de servicedesk over de grotere groep gebruikers die tijdens het aanmelden een prompt kan krijgen."
+      ],
+      "categories": [
+        "Identiteit & MFA"
+      ],
+      "kind": "wijziging",
+      "tier": "action",
+      "confidence": 0.95,
+      "reasonNl": "De gewijzigde targeting kan tijdens de lopende uitrol direct nieuwe gebruikersprompts en ondersteuningsvragen veroorzaken."
+    },
+    {
+      "id": "https://ourcloudnetwork.com/microsoft-graph-hints-at-external-tenant-reporting/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-graph-hints-at-external-tenant-reporting",
+      "contentHash": "310f721d6c0a36bf6b9f5a78d75bc6492b6f695cf55abe1af922dc97420178da",
+      "titleNl": "Microsoft Graph-metadata wijst op rapportage over externe tenants",
+      "summaryNl": "Metadata voor User.Read.All noemt een nieuwe route waarmee mogelijk toegankelijke externe tenants per gebruiker kunnen worden opgevraagd. De endpoint is nog niet gedocumenteerd of beschikbaar voor beheerders.",
+      "whyNl": [
+        "Een API-versie, responsschema, releasedatum, licentievereiste en definitief machtigingsmodel zijn nog niet bevestigd.",
+        "De routenaam bewijst niet dat de endpoint alle B2B-gastlidmaatschappen zal tonen."
+      ],
+      "categories": [
+        "Scripting & Graph",
+        "Reporting",
+        "Identiteit & MFA"
+      ],
+      "kind": "analyse",
+      "tier": "watch",
+      "confidence": 0.72,
+      "reasonNl": "De metadata kan op een relevante rapportagemogelijkheid wijzen, maar de functionaliteit is nog onbevestigd en niet bruikbaar."
+    },
+    {
+      "id": "https://ourcloudnetwork.com/microsoft-outlook-adds-meeting-organiser-transfers/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-outlook-adds-meeting-organiser-transfers",
+      "contentHash": "f1db3ff91884f578915397eb689182c02be0f4e49a1e909c375526140a327a67",
+      "titleNl": "MC1472028 voegt overdracht van vergaderorganisatoren toe aan Outlook",
+      "summaryNl": "Outlook-gebruikers kunnen in de eerste fase geschikte niet-onlinevergaderingen en terugkerende reeksen overdragen aan een andere organisator binnen hun tenant. Teams-vergaderingen, opnamen, chats en transcripties volgen pas in latere fasen zonder gepubliceerde datum.",
+      "whyNl": [
+        "Externe en on-premises deelnemers ontvangen bij overdracht een annulering en nieuwe uitnodiging waarop zij opnieuw moeten reageren.",
+        "De eerste wereldwijde fase loopt volgens de aankondiging van eind september tot eind oktober 2026."
+      ],
+      "categories": [
+        "Apps & Packaging"
+      ],
+      "kind": "nieuws",
+      "tier": "info",
+      "confidence": 0.94,
+      "reasonNl": "De functie wordt automatisch beschikbaar en de brontekst noemt geen vereiste beheeractie."
+    },
+    {
+      "id": "https://patchmypc.com/blog/autopilot-device-preparation-vs-device-association-vs-autopilot/",
+      "contentHash": "0e976704e6cd04ce976b2b4dbd78cc0c7b218a99dad594bc71b0c02f83d71d1e",
+      "titleNl": "Autopilot Device Preparation, Device Association en Classic Autopilot vergeleken",
+      "summaryNl": "Classic Autopilot gebruikt registratie vooraf om een deployment profile vóór aanmelding toe te passen, terwijl basisgebruik van Autopilot Device Preparation de organisatie pas na de gebruikersaanmelding kent. Device Association voegt herkenning vóór aanmelding toe via een apparaatgebonden CSV en TPM-verificatie.",
+      "whyNl": [
+        "Zonder Device Association kan Autopilot Device Preparation de vroege OOBE-pagina's niet vooraf aanpassen of verbergen.",
+        "Device Association maakt apparaattoewijzing mogelijk en geeft een apparaatbeleid voorrang op een gebruikersbeleid.",
+        "De beschreven Intune-import accepteert momenteel één apparaat per geëxporteerd Device Association-CSV-bestand."
+      ],
+      "categories": [
+        "Autopilot",
+        "Enrollment",
+        "Windows 11"
+      ],
+      "kind": "analyse",
+      "tier": "info",
+      "confidence": 0.94,
+      "reasonNl": "Het artikel verklaart ontwerp- en procesverschillen, maar bevat geen verplichte wijziging of deadline."
+    },
+    {
+      "id": "https://patchmypc.com/blog/autopilot-device-preparation-vs-device-association-vs-autopilot/?utm_term=rss",
+      "contentHash": "a9d8f83931773db99d220f7197c6821346334b757ba6b9ac829f761e988b5576",
+      "titleNl": "Autopilot Device Preparation, Device Association en Classic Autopilot vergeleken",
+      "summaryNl": "Classic Autopilot gebruikt registratie vooraf om een deployment profile vóór aanmelding toe te passen, terwijl basisgebruik van Autopilot Device Preparation de organisatie pas na de gebruikersaanmelding kent. Device Association voegt herkenning vóór aanmelding toe via een apparaatgebonden CSV en TPM-verificatie.",
+      "whyNl": [
+        "Zonder Device Association kan Autopilot Device Preparation de vroege OOBE-pagina's niet vooraf aanpassen of verbergen.",
+        "Device Association maakt apparaattoewijzing mogelijk en geeft een apparaatbeleid voorrang op een gebruikersbeleid.",
+        "De beschreven Intune-import accepteert momenteel één apparaat per CSV; preassociation door OEM's, resellers en partners vóór verzending wordt nog niet ondersteund."
+      ],
+      "categories": [
+        "Autopilot",
+        "Enrollment",
+        "Windows 11"
+      ],
+      "kind": "analyse",
+      "tier": "info",
+      "confidence": 0.97,
+      "reasonNl": "Het artikel verklaart ontwerp- en procesverschillen, maar bevat geen verplichte wijziging of deadline."
+    },
+    {
+      "id": "https://patchmypc.com/blog/defender-is-on-intune-says-noncompliant/?utm_term=rss",
+      "contentHash": "05df3855a1e65f88764ed2fc153af81ac238e7869005d40dc946ec5421f77f2f",
+      "titleNl": "Actieve Defender kan door Intune ten onrechte als niet-conform worden gemeld",
+      "summaryNl": "Een timingprobleem kan Windows Security Center een onjuiste antivirusstatus laten vasthouden terwijl Microsoft Defender Antivirus wel actief is. Intune kan het apparaat daardoor als niet-conform markeren, waarna Conditional Access de toegang kan blokkeren.",
+      "whyNl": [
+        "Controleer bij getroffen apparaten zowel de werkelijke Defender-status als de door Windows Security Center gemelde status.",
+        "De beschreven PowerShell-oplossing is niet officieel ondersteund en herstelt de status, maar niet het onderliggende timingprobleem.",
+        "Na een herstart kan de fout volgens de brontekst terugkeren."
+      ],
+      "categories": [
+        "Compliance",
+        "Defender & Security",
+        "Conditional Access"
+      ],
+      "kind": "handleiding",
+      "tier": "action",
+      "confidence": 0.91,
+      "reasonNl": "Dit is een operationeel probleem dat gezonde apparaten ten onrechte niet-conform kan maken en gebruikerstoegang kan blokkeren."
+    },
+    {
+      "id": "https://patchmypc.com/blog/your-windows-compliance-report-is-lying-to-you/",
+      "contentHash": "34e5407438657bf450d2ce14afba4079b23f30580a48b262a49802e40298db80",
+      "titleNl": "Windows-compliancerapportage dekt risico's in externe applicaties niet",
+      "summaryNl": "Het artikel betoogt dat actuele Windows-updates geen volledig beeld geven van kwetsbaarheden in applicaties van derden. Het adviseert daarom de tijd tussen ontdekking en installatie van applicatie-updates als belangrijkere risicomaatstaf te gebruiken.",
+      "whyNl": [
+        "Een apparaat kan volgens Windows-compliancerapportage gezond zijn en tegelijk applicaties met bekende kwetsbaarheden bevatten."
+      ],
+      "categories": [
+        "Apps & Packaging",
+        "Defender & Security",
+        "Reporting"
+      ],
+      "kind": "analyse",
+      "tier": "info",
+      "confidence": 0.92,
+      "reasonNl": "Dit is een algemene analyse zonder nieuwe productwijziging, harde deadline of direct vereiste beheeractie."
+    },
+    {
+      "id": "https://patchmypc.com/blog/your-windows-compliance-report-is-lying-to-you/?utm_term=rss",
+      "contentHash": "24c7e606e9691c7aa015a624e6812e2ecae6fe7053fcc711e92e9c7db2e317b9",
+      "titleNl": "Waarom Windows-compliancerapportage niet het volledige patchrisico toont",
+      "summaryNl": "Windows-updatecompliance geeft volgens deze analyse geen volledig beeld van kwetsbaarheden in applicaties van derden. De auteur pleit voor kortere hersteltermijnen en geautomatiseerde verpakking en implementatie van updates.",
+      "whyNl": [
+        "Neem applicaties van derden mee in kwetsbaarheids- en compliancerapportages.",
+        "Meet ook de tijd tussen detectie en installatie van een beveiligingsupdate."
+      ],
+      "categories": [
+        "Compliance",
+        "Defender & Security",
+        "Apps & Packaging"
+      ],
+      "kind": "analyse",
+      "tier": "info",
+      "confidence": 0.98,
+      "reasonNl": "Dit is een algemene risicoanalyse zonder aangekondigde wijziging, deadline of verplichte beheeractie."
+    },
+    {
+      "id": "https://petervanderwoude.nl/post/using-multiple-managed-accounts-with-app-protection-policies/",
+      "contentHash": "be045a03bb7789cb25d101a3e8d818621dbdad6c9e0872e80b19b40002b0bfff",
+      "titleNl": "Meerdere beheerde accounts gebruiken met app protection policies",
+      "summaryNl": "Een recent geïntroduceerde functie maakt meerdere beheerde accounts met app protection policies mogelijk. De uitrol is volgens de auteur nog niet overal voltooid.",
+      "whyNl": [
+        "Gebruikers kunnen beheerde accounts van verschillende organisaties combineren zodra de functie beschikbaar is."
+      ],
+      "categories": [
+        "Apps & Packaging"
+      ],
+      "kind": "wijziging",
+      "tier": "watch",
+      "confidence": 0.78,
+      "reasonNl": "De nieuwe mogelijkheid is relevant om te volgen, maar de brontekst noemt geen vereiste actie of datum."
+    },
+    {
+      "id": "https://scloud.work/en/dynamic-autopilot-group-queries/",
+      "contentHash": "20bf59746cd114fe5e5dcf2e2c31e6b886e477d6b35671b3a6a93c413aa2151c",
+      "titleNl": "Geavanceerde dynamische groepsregels voor Windows Autopilot v1",
+      "summaryNl": "Deze handleiding toont dynamische Autopilot-groepsregels voor meerdere tags, aanvullende voorwaarden, voorvoegsels en reguliere expressies. Ook wordt een veelgemaakte fout bij uitsluitingen in devicePhysicalIds uitgelegd.",
+      "whyNl": [
+        "Controleer bestaande uitsluitingsregels die -any met -ne gebruiken; deze sluiten volgens de auteur doorgaans niets uit.",
+        "Gebruik voor uitsluiting uit de meervoudige eigenschap devicePhysicalIds -all met -ne."
+      ],
+      "categories": [
+        "Autopilot",
+        "Enrollment"
+      ],
+      "kind": "handleiding",
+      "tier": "action",
+      "confidence": 0.97,
+      "reasonNl": "Beheerders die het beschreven uitsluitingspatroon gebruiken, moeten hun productieregels controleren vanwege mogelijk onjuiste targeting."
+    },
+    {
+      "id": "https://techcommunity.microsoft.com/t5/intune-customer-success/moving-from-windows-autopilot-to-windows-autopilot-device/ba-p/4557269",
+      "contentHash": "bd57d298534a68837c5bba5db0a149380b31a13d443f58595397339ed11f6f68",
+      "titleNl": "Gefaseerd overstappen naar Windows Autopilot device preparation",
+      "summaryNl": "Microsoft adviseert Windows Autopilot device preparation voortaan voor geschikte, gebruikersgestuurde implementaties. De handleiding beschrijft een gefaseerde overgang waarbij beide Autopilot-modellen naast elkaar kunnen bestaan.",
+      "whyNl": [
+        "Toekomstige ontwikkelinvesteringen richten zich op Windows Autopilot device preparation.",
+        "Pre-provisioning, self-deploying mode, Hybrid Microsoft Entra join en Autopilot met co-management blijven op Windows Autopilot.",
+        "Begin met een afgebakende groep zakelijke Windows 11-apparaten met user-driven Microsoft Entra join."
+      ],
+      "categories": [
+        "Autopilot",
+        "Enrollment",
+        "Windows 11"
+      ],
+      "kind": "handleiding",
+      "tier": "watch",
+      "confidence": 0.98,
+      "reasonNl": "De aanbevolen koers is relevant voor toekomstige provisioning, maar er is geen verplichte migratie of einddatum aangekondigd."
+    },
+    {
+      "id": "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/simplify-employee-identity-lifecycle-with-hibob-and-microsoft/ba-p/4554510",
+      "contentHash": "62f679e1fdcdf811ba0fead7e236cc0a3481f59906ae9548a96d02b9967d6ae5",
+      "titleNl": "HiBob-integratie met Microsoft Entra algemeen beschikbaar",
+      "summaryNl": "De native HiBob-integratie met Microsoft Entra is algemeen beschikbaar voor HR-gestuurde identiteitsprocessen. Er zijn aparte integraties voor hybride identiteiten en cloudidentiteiten.",
+      "whyNl": [
+        "Alleen organisaties die HiBob gebruiken, kunnen hiermee instroom, functiewijzigingen en uitstroom aan Entra-processen koppelen.",
+        "IT beheert de attribuuttoewijzingen, scopingregels, provisioningpolicies en governancecontroles."
+      ],
+      "categories": [
+        "Identiteit & MFA"
+      ],
+      "kind": "nieuws",
+      "tier": "info",
+      "confidence": 0.99,
+      "reasonNl": "Het betreft een optionele integratie zonder verplichte beheeractie of deadline."
+    },
+    {
+      "id": "https://www.anoopcnair.com/apple-software-update-recommendation-intune/",
+      "contentHash": "ddc066fe72c8e65712e9ce9744b0832ff8609907dffef5338f9839281bdb11ec",
+      "titleNl": "Apple Software Update Recommendation Cadence configureren met Intune",
+      "summaryNl": "Het artikel behandelt het configureren van Apple Software Update Recommendation Cadence in Intune voor gecontroleerde uitrol van besturingssysteemupdates.",
+      "whyNl": [],
+      "categories": [
+        "macOS"
+      ],
+      "kind": "handleiding",
+      "tier": "info",
+      "confidence": 0.43,
+      "reasonNl": "De aangeleverde brontekst bevat alleen de titel en onderbouwt geen wijziging, impact of vereiste actie."
+    },
+    {
+      "id": "https://www.anoopcnair.com/control-built-in-administrator-account-lockout/",
+      "contentHash": "152c26b10db257018fe1f60927d80f6e4366b02b52f84bcb51c52d9a1e38d904",
+      "titleNl": "Vergrendeling van het ingebouwde Administrator-account beheren met Intune",
+      "summaryNl": "Het artikel behandelt het beheren van accountvergrendeling na mislukte aanmeldpogingen voor het ingebouwde Administrator-account met Microsoft Intune.",
+      "whyNl": [],
+      "categories": [
+        "Defender & Security",
+        "Windows 11"
+      ],
+      "kind": "handleiding",
+      "tier": "info",
+      "confidence": 0.43,
+      "reasonNl": "De brontekst bevat geen inhoudelijke details, deadline of aantoonbaar operationeel probleem."
+    },
+    {
+      "id": "https://www.anoopcnair.com/intune-company-portal-branding-customisation/",
+      "contentHash": "e5d4778dc65863c73ab75ed4660d4403f725da8fae107411551b87c0b658e11f",
+      "titleNl": "Branding van Intune Company Portal configureren",
+      "summaryNl": "Aangepaste brandingpolicies gelden voor Company Portal, de website en de Intune-app op Android en kunnen alleen aan gebruikersgroepen worden toegewezen. Intune ondersteunt nu maximaal 25 aangepaste brandingpolicies en voegt meerdere toegewezen policies niet samen.",
+      "whyNl": [
+        "Een aangepaste brandingpolicy overschrijft voor toegewezen gebruikers de standaardpolicy.",
+        "Bij meerdere toegewezen brandingpolicies wordt de policy gebruikt die als eerste is gemaakt.",
+        "Het maximum is verhoogd van 10 naar 25 aangepaste brandingpolicies."
+      ],
+      "categories": [
+        "Apps & Packaging",
+        "Enrollment",
+        "Android"
+      ],
+      "kind": "handleiding",
+      "tier": "info",
+      "confidence": 0.98,
+      "reasonNl": "De handleiding beschrijft werking en een hogere limiet, maar bevat geen verplichte aanpassing of deadline."
+    },
+    {
+      "id": "https://www.anoopcnair.com/intune-mma-to-manage-multiple-work-accounts/",
+      "contentHash": "1b8be824b8de0bfb92709529d0c305eeb9731de64041f4e9fd1130e72cbb4a96",
+      "titleNl": "Meerdere werkaccounts beheren met afzonderlijke app protection policies",
+      "summaryNl": "Het artikel gaat over Microsoft Intune MMA voor het beheren van meerdere werkaccounts met afzonderlijke app protection policies.",
+      "whyNl": [],
+      "categories": [
+        "Apps & Packaging"
+      ],
+      "kind": "wijziging",
+      "tier": "watch",
+      "confidence": 0.49,
+      "reasonNl": "De titel wijst op een relevante nieuwe mogelijkheid, maar de aangeleverde brontekst bevat geen details over uitrol of beheeractie."
+    },
+    {
+      "id": "https://www.anoopcnair.com/intune-remote-help-enterprise-app-catalog-apps/",
+      "contentHash": "a6a9be187249b3e404f5d8af7185c29e8df5d9132c75b229c1a702d63d06b5c6",
+      "titleNl": "Microsoft Intune Remote Help-client upgraden met Enterprise App Catalog-apps",
+      "summaryNl": "Het artikel behandelt het upgraden van de Microsoft Intune Remote Help-client met Enterprise App Catalog-apps.",
+      "whyNl": [],
+      "categories": [
+        "Apps & Packaging"
+      ],
+      "kind": "handleiding",
+      "tier": "info",
+      "confidence": 0.43,
+      "reasonNl": "De brontekst bevat alleen de titel en noemt geen verplichte upgrade, deadline of operationeel probleem."
+    },
+    {
+      "id": "https://www.microsoft.com/en-us/security/blog/2026/09/04/secure-edge-ai-customer-owned-environments/",
+      "contentHash": "28c933b134afb0be68b101b88660931a3721a0064877d44d448b757791ce1cf6",
+      "titleNl": "Edge AI beveiligen in omgevingen van klanten",
+      "summaryNl": "Het artikel legt uit hoe Edge AI verantwoordelijkheden voor runtime, modellen, gegevens en toegangsrechten naar de klant verplaatst. Het adviseert attestation, provenance en deterministische bemiddeling om gevoelige middelen en modelacties te beveiligen.",
+      "whyNl": [
+        "Klanten moeten de runtime en geladen componenten verifiëren voordat zij modellen, sleutels of gegevens vrijgeven.",
+        "Modelacties moeten buiten het model door afdwingbaar beleid worden begrensd.",
+        "Offline omgevingen moeten verificatie en handhaving lokaal kunnen uitvoeren."
+      ],
+      "categories": [
+        "Defender & Security"
+      ],
+      "kind": "handleiding",
+      "tier": "info",
+      "confidence": 0.98,
+      "reasonNl": "Dit is beveiligingsadvies zonder productwijziging, deadline of verplichte migratie."
+    },
+    {
+      "id": "https://www.microsoft.com/en-us/security/blog/2026/09/09/passkey-themed-social-engineering-leads-identity-cloud-compromise/",
+      "contentHash": "dfb6dd8f7dd5a12e74535234e882c514e6b97a368e48bcdc85107a1a5516986d",
+      "titleNl": "Social engineering rond passkeys leidt tot identiteits- en cloudcompromis",
+      "summaryNl": "Microsoft volgt actieve aanvallen waarbij passkey- en SSO-lokmiddelen worden gebruikt voor AiTM-phishing of misbruik van device-code-authenticatie. Na toegang voegen aanvallers authenticatiemethoden toe en verzamelen zij gegevens via Microsoft Graph, SharePoint, OneDrive en Exchange.",
+      "whyNl": [
+        "Onderzoek ongebruikelijke aanmeldingen samen met device-code-gebeurtenissen, tokenactiviteit en gewijzigde authenticatiemethoden.",
+        "Trek sessies in en verwijder ongeautoriseerde authenticatiemethoden bij bevestigde compromissen.",
+        "Aanvallen kunnen op persoonlijke, onbeheerde telefoons beginnen en daardoor weinig endpointtelemetrie achterlaten."
+      ],
+      "categories": [
+        "Identiteit & MFA",
+        "Defender & Security",
+        "Scripting & Graph"
+      ],
+      "kind": "analyse",
+      "tier": "action",
+      "confidence": 0.99,
+      "reasonNl": "Er is sprake van actieve compromissen en Microsoft noemt concrete onderzoeks- en herstelacties."
+    },
+    {
+      "id": "https://www.microsoft.com/en-us/security/blog/2026/09/09/threat-matrix-mapping-threats-across-cloud-web-applications/",
+      "contentHash": "3fb0ac6dd72a97dcdbf41d1b2e32c01d536d551527be90ab3213dcf751f92c25",
+      "titleNl": "Microsoft introduceert Cloud web applications threat matrix",
+      "summaryNl": "De nieuwe, op MITRE ATT&CK gebaseerde matrix ordent aanvalstechnieken voor cloudwebapplicaties en serverless platforms. Beveiligingsteams kunnen hiermee hiaten in zichtbaarheid, hardening en onderzoek in kaart brengen.",
+      "whyNl": [
+        "De matrix verbindt dreigingen in applicatiecode, runtimes, workloadidentiteiten, deploymentpipelines en gekoppelde cloudresources."
+      ],
+      "categories": [
+        "Defender & Security"
+      ],
+      "kind": "naslag",
+      "tier": "info",
+      "confidence": 0.99,
+      "reasonNl": "Het betreft een nieuw referentiekader zonder concrete deadline of verplichte beheeractie."
+    },
+    {
+      "id": "https://www.microsoft.com/en-us/security/blog/2026/09/10/detect-and-disrupt-ai-themed-attacks-with-microsoft-defender/",
+      "contentHash": "6094be2c8993188f5d9cdf1622b3bcea34c958ff8bade41b2110ce148ffeff35",
+      "titleNl": "AI-themed attacks detecteren en verstoren met Microsoft Defender",
+      "summaryNl": "Aanvallers misbruiken bekende AI-merken voor phishing, malvertising, schadelijke installaties en AiTM-aanvallen. Microsoft beschrijft hoe Defender-beveiligingslagen zulke aanvallen kunnen detecteren, correleren en verstoren.",
+      "whyNl": [
+        "Eén lokmiddel kan uitgroeien van een e-mail tot identiteits- of endpointcompromis.",
+        "Safe Links, Safe Attachments en anti-phishingbeleid bieden alleen de beschreven bescherming wanneer de bijbehorende beleidsregels zijn geconfigureerd.",
+        "Defender kan signalen uit e-mail, endpoints, identiteiten en SaaS-apps samenbrengen tot één aanvalsoverzicht."
+      ],
+      "categories": [
+        "Defender & Security",
+        "Identiteit & MFA"
+      ],
+      "kind": "analyse",
+      "tier": "watch",
+      "confidence": 0.98,
+      "reasonNl": "De aanvalstrend verdient aandacht, maar de tekst kondigt geen verplichte wijziging of deadline aan."
+    },
+    {
+      "id": "https://www.microsoft.com/en-us/security/blog/2026/09/10/protecting-organizations-ai-assisted-executive-impersonation-invoice-fraud/",
+      "contentHash": "507a6bdf7944d0c42ff35a4bc06a058b2105eb12784a734005cf2567266cd4ae",
+      "titleNl": "AI-ondersteunde directie-impersonatie en factuurfraude herkennen",
+      "summaryNl": "Microsoft analyseert een campagne met meer dan een miljoen frauduleuze e-mails die directieleden, leveranciers en facturen imiteerden. De aanvallers probeerden financiële afdelingen betalingen van bijna 50.000 dollar te laten uitvoeren.",
+      "whyNl": [
+        "De campagne combineerde directie-impersonatie, lookalike-domeinen, vervalste facturen en gefabriceerde e-mailgesprekken.",
+        "Afwijkende afzenderadressen, ontbrekende headers en verdachte financiële formuleringen kunnen de fraude verraden.",
+        "De genoemde legitieme organisaties waren volgens Microsoft niet gecompromitteerd."
+      ],
+      "categories": [
+        "Defender & Security"
+      ],
+      "kind": "analyse",
+      "tier": "watch",
+      "confidence": 0.98,
+      "reasonNl": "Dit is een relevante actieve fraudecampagne, maar de aangeleverde tekst bevat geen verplichte beheeractie of deadline."
+    }
+  ]
+}

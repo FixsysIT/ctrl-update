@@ -337,6 +337,18 @@
   }
   .result-count { color: var(--muted); font-size: 12.5px; margin-left: auto; white-space: nowrap; }
 
+  .channelbar {
+    display: flex; gap: 5px; align-items: center; flex-wrap: wrap;
+    margin: 2px 0 10px; padding: 4px;
+    border: 1px solid var(--border); border-radius: 11px; background: var(--panel);
+    width: fit-content; max-width: 100%;
+  }
+  .channelbar button {
+    border: 0; background: transparent; color: var(--muted); cursor: pointer;
+    font: inherit; font-size: 12.5px; padding: 6px 11px; border-radius: 7px;
+  }
+  .channelbar button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 680; }
+
   /* ===================== dagkoppen ===================== */
 
   .daybar {
@@ -389,6 +401,8 @@
   .badge.new     { background: var(--ok-soft); color: var(--ok); }
   .badge.mc      { background: var(--accent-soft); color: var(--accent); }
   .badge.demoted { background: var(--neutral-soft); color: var(--muted); }
+  .badge.reviewed { background: var(--ok-soft); color: var(--ok); }
+  .badge.unreviewed { background: var(--neutral-soft); color: var(--muted); }
 
   /* de datum is het zwaarste element op de kaart */
   .datehit {
@@ -462,6 +476,21 @@
   .why.hot li::before { background: var(--crit); }
   .why .note { font-size: 11px; color: var(--faint); margin-top: 9px; font-style: italic; }
 
+  .scorebtn {
+    border: 0; padding: 0; background: none; color: inherit; font: inherit;
+    text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px;
+    cursor: help;
+  }
+  .scorecard { margin-top: 9px; border-top: 1px dashed var(--border); padding-top: 8px; }
+  .scorecard summary { cursor: pointer; color: var(--muted); font-size: 11.5px; list-style: none; }
+  .scorecard summary::-webkit-details-marker { display: none; }
+  .scorecard summary::before { content: "+ "; color: var(--accent); font-weight: 800; }
+  .scorecard[open] summary::before { content: "- "; }
+  .scoregrid { margin-top: 7px; display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; max-width: 520px; }
+  .scoregrid span { font-size: 11.5px; color: var(--text-soft); }
+  .scoregrid .pts { text-align: right; font-variant-numeric: tabular-nums; font-weight: 680; }
+  .score-explain { margin-top: 7px; color: var(--faint); font-size: 11.5px; }
+
   .tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
   :root[data-density="compact"] .tags { margin-top: 7px; }
   .cat {
@@ -492,13 +521,14 @@
 
   /* ===================== hulp ===================== */
 
-  dialog.help {
+  dialog.help, dialog.settings {
     border: 1px solid var(--border); border-radius: var(--r); padding: 0;
     background: var(--panel); color: var(--text); box-shadow: var(--shadow-lg);
     max-width: 380px; width: calc(100% - 32px);
   }
-  dialog.help::backdrop { background: rgba(0,0,0,.42); backdrop-filter: blur(2px); }
-  dialog.help .hd {
+  dialog.settings { max-width: 720px; max-height: min(840px, calc(100vh - 32px)); }
+  dialog.help::backdrop, dialog.settings::backdrop { background: rgba(0,0,0,.42); backdrop-filter: blur(2px); }
+  dialog.help .hd, dialog.settings .hd {
     padding: 15px 18px 11px; border-bottom: 1px solid var(--border);
     font-weight: 640; font-size: 15px; letter-spacing: -0.015em;
   }
@@ -546,7 +576,32 @@
     .status .jump { margin-left: 0; }
     .result-count { margin-left: 0; width: 100%; }
     .workflow .trust { width: 100%; margin-left: 0; }
+    .settings-grid { grid-template-columns: 1fr; }
+    .channelbar { width: 100%; }
+    .channelbar button { flex: 1 1 auto; }
   }
+  dialog.settings .bd { padding: 16px 18px 19px; overflow: auto; max-height: calc(100vh - 95px); }
+  .settings p { color: var(--text-soft); font-size: 13px; margin: 0 0 14px; }
+  .settings h3 { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 19px 0 9px; }
+  .settings-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 16px; }
+  .setting-check { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--text-soft); }
+  .setting-check input { margin-top: 3px; accent-color: var(--accent); }
+  .field { display: grid; gap: 4px; margin-top: 9px; }
+  .field label { color: var(--muted); font-size: 11.5px; font-weight: 650; }
+  .field input, .field textarea {
+    width: 100%; background: var(--panel); color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 10px; font: inherit; font-size: 13px;
+  }
+  .field textarea { min-height: 64px; resize: vertical; }
+  .settings-actions { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 17px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .settings-actions button, .rss-add {
+    border: 1px solid var(--border); border-radius: 8px; background: var(--panel); color: var(--text-soft);
+    padding: 7px 10px; font: inherit; font-size: 12.5px; cursor: pointer;
+  }
+  .settings-actions .primary, .rss-add { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .rss-request { border: 1px solid var(--border); border-radius: 10px; padding: 10px; margin-top: 8px; }
+  .rss-status { color: var(--muted); font-size: 12px; margin-top: 7px; }
+  .storage-note { background: var(--accent-soft); color: var(--text-soft); padding: 10px 12px; border-radius: 9px; }
 </style>
 </head>
 <body>
@@ -562,13 +617,14 @@
         </svg>
       </div>
       <div>
-        <div class="eyebrow">Endpoint intelligence</div>
+        <div class="eyebrow">Endpoint-informatie</div>
         <h1>Intune Radar</h1>
         <div class="tagline" id="tagline"></div>
       </div>
     </div>
     <div class="toolbar">
       <button class="tool filters-toggle" id="filters-toggle">Filters</button>
+      <button class="tool" id="settings-btn">Voorkeuren</button>
       <button class="tool" id="density" title="Regelhoogte">Compact</button>
       <button class="tool icon-only" id="help-btn" title="Sneltoetsen" aria-label="Sneltoetsen">?</button>
       <button class="tool icon-only" id="theme" title="Licht of donker" aria-label="Licht of donker">&#9680;</button>
@@ -577,7 +633,7 @@
 
   <section class="overview" aria-label="Ochtendoverzicht">
     <button class="metric attention" id="metric-review" type="button" aria-pressed="false">
-      <span class="k">Te beoordelen</span><span class="v" id="metric-review-v">0</span><span class="s">automatische actiesignalen</span>
+      <span class="k">Te beoordelen</span><span class="v" id="metric-review-v">0</span><span class="s">inhoudelijk beoordeelde signalen</span>
     </button>
     <button class="metric followup" id="metric-followup" type="button" aria-pressed="false">
       <span class="k">Opvolging nodig</span><span class="v" id="metric-followup-v">0</span><span class="s">door jou bevestigd</span>
@@ -626,6 +682,12 @@
     </aside>
 
     <main>
+      <nav class="channelbar" id="channels" aria-label="Soort bron">
+        <button data-channel="personal" aria-pressed="true">Voor jou</button>
+        <button data-channel="official" aria-pressed="false">Microsoft &amp; tenant</button>
+        <button data-channel="community" aria-pressed="false">Vakblogs</button>
+        <button data-channel="all" aria-pressed="false">Alles</button>
+      </nav>
       <div class="feedbar">
         <label class="search">
           <svg class="glass" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
@@ -672,6 +734,44 @@
   </div>
 </dialog>
 
+<dialog class="settings" id="settings">
+  <div class="hd">Persoonlijke voorkeuren</div>
+  <div class="bd">
+    <p class="storage-note">Deze voorkeuren, leesstatus en beoordelingen worden alleen in de lokale opslag van deze browser bewaard. Ze worden niet naar een server verstuurd en synchroniseren niet automatisch met een andere browser of computer.</p>
+
+    <h3>Onderwerpen voor ‘Voor jou’</h3>
+    <div class="settings-grid" id="interest-settings"></div>
+
+    <h3>Bronnen</h3>
+    <p>Vink bronnen uit die je niet in ‘Voor jou’ wilt zien. Via ‘Alles’ blijven ze bereikbaar.</p>
+    <div class="settings-grid" id="source-settings"></div>
+
+    <h3>Eigen trefwoorden</h3>
+    <div class="field">
+      <label for="custom-terms">Komma-gescheiden, bijvoorbeeld Veeam, Nutanix, Cloud PC</label>
+      <textarea id="custom-terms" placeholder="Veeam, Nutanix"></textarea>
+    </div>
+
+    <h3>RSS-bron aanvragen</h3>
+    <p>Plak een blog-, categorie- of RSS-URL. De aanvraag wordt lokaal bewaard en kan als JSON worden geëxporteerd. Een beheerder valideert de feed centraal voordat nieuws in de radar verschijnt.</p>
+    <div class="rss-request">
+      <div class="field"><label for="rss-name">Naam</label><input id="rss-name" placeholder="Bijvoorbeeld Veeam Blog"></div>
+      <div class="field"><label for="rss-url">Website- of RSS-URL</label><input id="rss-url" type="url" placeholder="https://..."></div>
+      <button class="rss-add" id="rss-add" type="button">Aanvraag toevoegen</button>
+      <div class="rss-status" id="rss-status"></div>
+    </div>
+
+    <div class="settings-actions">
+      <button class="primary" id="settings-save" type="button">Opslaan</button>
+      <button id="settings-export" type="button">Exporteren</button>
+      <button id="settings-import" type="button">Importeren</button>
+      <button id="settings-reset" type="button">Standaard herstellen</button>
+      <button id="settings-close" type="button">Sluiten</button>
+      <input id="settings-file" type="file" accept="application/json" hidden>
+    </div>
+  </div>
+</dialog>
+
 <script id="payload" type="application/json">__DATA__</script>
 <script>
 (function () {
@@ -683,6 +783,7 @@
   var THEME_KEY   = 'intuneradar.theme';
   var DENSITY_KEY = 'intuneradar.density';
   var TRIAGE_KEY  = 'intuneradar.triage';
+  var PREF_KEY    = 'intuneradar.preferences.v2';
   var PAGE        = 30;
 
   function store(key, fallback) {
@@ -695,6 +796,30 @@
 
   var read = store(READ_KEY, {});
   var triage = store(TRIAGE_KEY, {});
+
+  function defaultPreferences() {
+    return {
+      enabledTopics: (data.interests || []).filter(function (x) { return x.default; }).map(function (x) { return x.name; }),
+      hiddenSources: [],
+      customTerms: [],
+      requestedFeeds: [],
+      channel: 'personal'
+    };
+  }
+
+  function normalizePreferences(value) {
+    var defaults = defaultPreferences();
+    value = value && typeof value === 'object' ? value : {};
+    return {
+      enabledTopics: Array.isArray(value.enabledTopics) ? value.enabledTopics : defaults.enabledTopics,
+      hiddenSources: Array.isArray(value.hiddenSources) ? value.hiddenSources : [],
+      customTerms: Array.isArray(value.customTerms) ? value.customTerms : [],
+      requestedFeeds: Array.isArray(value.requestedFeeds) ? value.requestedFeeds : [],
+      channel: ['personal', 'official', 'community', 'all'].indexOf(value.channel) !== -1 ? value.channel : 'personal'
+    };
+  }
+
+  var preferences = normalizePreferences(store(PREF_KEY, null));
 
   function triageState(item) {
     return item.tier === 'action' ? (triage[item.id] || 'review') : '';
@@ -757,6 +882,108 @@
   document.getElementById('help-btn').addEventListener('click', function () { helpDialog.showModal(); });
   helpDialog.addEventListener('click', function (e) { if (e.target === helpDialog) { helpDialog.close(); } });
 
+  var settingsDialog = document.getElementById('settings');
+  var interestSettings = document.getElementById('interest-settings');
+  var sourceSettings = document.getElementById('source-settings');
+  var customTerms = document.getElementById('custom-terms');
+
+  function makeSettingCheck(container, id, label, checked, kind, value) {
+    var row = document.createElement('label');
+    row.className = 'setting-check';
+    var box = document.createElement('input');
+    box.type = 'checkbox'; box.id = id; box.checked = checked;
+    box.dataset.kind = kind; box.dataset.value = value;
+    var text = document.createElement('span'); text.textContent = label;
+    row.appendChild(box); row.appendChild(text); container.appendChild(row);
+  }
+
+  function renderSettings() {
+    interestSettings.textContent = '';
+    (data.interests || []).forEach(function (interest, index) {
+      makeSettingCheck(interestSettings, 'interest-' + index, interest.name + (interest.default ? '' : ' (optioneel)'), preferences.enabledTopics.indexOf(interest.name) !== -1, 'interest', interest.name);
+    });
+
+    sourceSettings.textContent = '';
+    (data.sourceCatalog || []).slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).forEach(function (source, index) {
+      var suffix = source.channel === 'official' ? ' — Microsoft' : (source.channel === 'tenant' ? ' — eigen tenant' : ' — vakblog');
+      makeSettingCheck(sourceSettings, 'source-' + index, source.name + suffix, preferences.hiddenSources.indexOf(source.name) === -1, 'source', source.name);
+    });
+
+    customTerms.value = preferences.customTerms.join(', ');
+    var status = document.getElementById('rss-status');
+    status.textContent = preferences.requestedFeeds.length
+      ? preferences.requestedFeeds.length + (preferences.requestedFeeds.length === 1 ? ' bronaanvraag lokaal bewaard: ' : ' bronaanvragen lokaal bewaard: ') + preferences.requestedFeeds.map(function (x) { return x.name || x.url; }).join(', ')
+      : 'Nog geen bronaanvragen.';
+  }
+
+  function openSettings() { renderSettings(); settingsDialog.showModal(); }
+  document.getElementById('settings-btn').addEventListener('click', openSettings);
+  document.getElementById('settings-close').addEventListener('click', function () { settingsDialog.close(); });
+  settingsDialog.addEventListener('click', function (e) { if (e.target === settingsDialog) { settingsDialog.close(); } });
+
+  document.getElementById('rss-add').addEventListener('click', function () {
+    var name = document.getElementById('rss-name').value.trim();
+    var url = document.getElementById('rss-url').value.trim();
+    var status = document.getElementById('rss-status');
+    try {
+      var parsed = new URL(url);
+      if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') { throw new Error('protocol'); }
+    } catch (e) {
+      status.textContent = 'Vul een geldige http- of https-URL in.';
+      return;
+    }
+    if (preferences.requestedFeeds.some(function (x) { return x.url === url; })) {
+      status.textContent = 'Deze bron staat al in je aanvragen.';
+      return;
+    }
+    preferences.requestedFeeds.push({ name: name || url, url: url });
+    document.getElementById('rss-name').value = '';
+    document.getElementById('rss-url').value = '';
+    persist(PREF_KEY, preferences);
+    renderSettings();
+  });
+
+  document.getElementById('settings-save').addEventListener('click', function () {
+    preferences.enabledTopics = Array.prototype.filter.call(interestSettings.querySelectorAll('input'), function (x) { return x.checked; }).map(function (x) { return x.dataset.value; });
+    preferences.hiddenSources = Array.prototype.filter.call(sourceSettings.querySelectorAll('input'), function (x) { return !x.checked; }).map(function (x) { return x.dataset.value; });
+    preferences.customTerms = customTerms.value.split(',').map(function (x) { return x.trim(); }).filter(Boolean).filter(function (x, i, all) { return all.indexOf(x) === i; });
+    persist(PREF_KEY, preferences);
+    settingsDialog.close();
+    shownLimit = PAGE;
+    render();
+  });
+
+  document.getElementById('settings-export').addEventListener('click', function () {
+    var packet = { version: 2, exported: new Date().toISOString(), preferences: preferences };
+    var blob = new Blob([JSON.stringify(packet, null, 2)], { type: 'application/json' });
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob); link.download = 'intune-radar-voorkeuren.json'; link.click();
+    setTimeout(function () { URL.revokeObjectURL(link.href); }, 1000);
+  });
+
+  var settingsFile = document.getElementById('settings-file');
+  document.getElementById('settings-import').addEventListener('click', function () { settingsFile.click(); });
+  settingsFile.addEventListener('change', function () {
+    var file = settingsFile.files && settingsFile.files[0];
+    if (!file) { return; }
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var packet = JSON.parse(reader.result);
+        preferences = normalizePreferences(packet.preferences || packet);
+        persist(PREF_KEY, preferences); renderSettings(); setChannel(preferences.channel); render();
+      } catch (e) {
+        document.getElementById('rss-status').textContent = 'Importeren mislukt: dit is geen geldig voorkeurenbestand.';
+      }
+    };
+    reader.readAsText(file); settingsFile.value = '';
+  });
+
+  document.getElementById('settings-reset').addEventListener('click', function () {
+    preferences = defaultPreferences();
+    persist(PREF_KEY, preferences); renderSettings(); setChannel('personal'); render();
+  });
+
   document.getElementById('filters-toggle').addEventListener('click', function () {
     document.getElementById('side').classList.toggle('open');
   });
@@ -779,7 +1006,8 @@
 
   document.getElementById('tagline').textContent =
     data.generated + ' · ' + data.items.length + ' items uit ' + data.days + ' dagen' +
-    (data.duplicates > 0 ? ' · ' + data.duplicates + ' dubbel gefilterd' : '');
+    (data.duplicates > 0 ? ' · ' + data.duplicates + ' dubbel gefilterd' : '') +
+    ' · agent ' + data.review.reviewed + '/' + data.review.total;
 
   /* ---------- ochtendoverzicht en status ---------- */
 
@@ -805,7 +1033,7 @@
     if (counts.review > 0) {
       level = 'crit';
       headline = counts.review + (counts.review === 1 ? ' actiesignaal moet worden beoordeeld' : ' actiesignalen moeten worden beoordeeld');
-      detail = 'Dit zijn automatische signalen, geen bevestigde tenantimpact. Controleer bron, scope en toepasbaarheid.';
+      detail = 'Deze signalen zijn inhoudelijk beoordeeld, maar bewijzen nog geen tenantimpact. Controleer bron, scope en toepasbaarheid.';
       target = 'todo';
     } else if (counts.followup > 0) {
       level = 'warn';
@@ -895,6 +1123,23 @@
   var filters = { tier: counts.review > 0 ? 'todo' : 'all', q: '', src: '', cats: [] };
   var view = 'urgentie';
   var shownLimit = PAGE;
+
+  var channelBox = document.getElementById('channels');
+  function setChannel(channel) {
+    preferences.channel = ['personal', 'official', 'community', 'all'].indexOf(channel) !== -1 ? channel : 'personal';
+    persist(PREF_KEY, preferences);
+    Array.prototype.forEach.call(channelBox.querySelectorAll('[data-channel]'), function (button) {
+      button.setAttribute('aria-pressed', String(button.dataset.channel === preferences.channel));
+    });
+    shownLimit = PAGE;
+    render();
+  }
+  Array.prototype.forEach.call(channelBox.querySelectorAll('[data-channel]'), function (button) {
+    button.addEventListener('click', function () { setChannel(button.dataset.channel); });
+  });
+  Array.prototype.forEach.call(channelBox.querySelectorAll('[data-channel]'), function (button) {
+    button.setAttribute('aria-pressed', String(button.dataset.channel === preferences.channel));
+  });
 
   var TIERS = [
     { key: 'all',    label: 'Alles',      dot: '',       count: data.items.length },
@@ -1051,6 +1296,19 @@
   /* ---------- filteren ---------- */
 
   function matches(item) {
+    if (preferences.channel === 'official' && item.channel !== 'official' && item.channel !== 'tenant') { return false; }
+    if (preferences.channel === 'community' && item.channel !== 'community') { return false; }
+    if (preferences.channel === 'personal') {
+      if (preferences.hiddenSources.indexOf(item.source) !== -1) { return false; }
+
+      var knownTopics = (data.interests || []).map(function (x) { return x.name; });
+      var itemTopics = item.categories.filter(function (x) { return knownTopics.indexOf(x) !== -1; });
+      var hasEnabledTopic = itemTopics.some(function (x) { return preferences.enabledTopics.indexOf(x) !== -1; });
+      var personalHay = (item.title + ' ' + item.summary + ' ' + item.categories.join(' ')).toLowerCase();
+      var hasCustomTerm = preferences.customTerms.some(function (x) { return personalHay.indexOf(x.toLowerCase()) !== -1; });
+      if (itemTopics.length && !hasEnabledTopic && !hasCustomTerm) { return false; }
+    }
+
     if (filters.tier === 'todo' && (item.tier !== 'action' || triageState(item) !== 'review')) { return false; }
     if (filters.tier === 'followup' && (item.tier !== 'action' || triageState(item) !== 'followup')) { return false; }
     if (filters.tier === 'action' && item.tier !== 'action') { return false; }
@@ -1137,6 +1395,13 @@
           : 'Maandoverzicht of nieuwsbrief: vat andermans wijzigingen samen, wordt daarom nooit rood');
       flags.appendChild(dm);
     }
+    var reviewBadge = document.createElement('span');
+    reviewBadge.className = 'badge ' + (item.agentReviewed ? 'reviewed' : 'unreviewed');
+    reviewBadge.textContent = item.agentReviewed ? 'Door agent beoordeeld' : 'Agentreview ontbreekt';
+    reviewBadge.title = item.agentReviewed
+      ? 'Nederlandse eindredactie en inhoudelijke classificatie door de agent'
+      : 'Dit item toont de oorspronkelijke brontekst en alleen de regelscore';
+    flags.appendChild(reviewBadge);
     if (item.isNew) {
       var nw = document.createElement('span');
       nw.className = 'badge new'; nw.textContent = 'Nieuw';
@@ -1148,6 +1413,7 @@
     a.className = 'title';
     a.href = item.link; a.target = '_blank'; a.rel = 'noopener';
     a.textContent = item.title;
+    if (item.originalTitle && item.originalTitle !== item.title) { a.title = 'Oorspronkelijke titel: ' + item.originalTitle; }
     body.appendChild(a);
 
     var meta = document.createElement('div');
@@ -1164,18 +1430,19 @@
       if (title) { s.title = title; }
       s.textContent = text;
       meta.appendChild(s);
+      return s;
     }
 
     metaPart(item.source, null, 'src');
     if (item.tag) {
       var originClass = item.tag.toLowerCase() === 'microsoft' ? 'origin microsoft' : (item.tag.toLowerCase() === 'tenant' ? 'origin tenant' : 'origin');
-      metaPart(item.tag === 'Microsoft' ? 'Officiële bron' : (item.tag === 'Tenant' ? 'Eigen tenant' : 'Community'), null, originClass);
+      metaPart(item.tag === 'Microsoft' ? 'Officiële bron' : (item.tag === 'Tenant' ? 'Eigen tenant' : 'Vakblog'), null, originClass);
     }
     metaPart(item.dateText);
     if (item.alsoIn && item.alsoIn.length) {
       metaPart('ook op ' + item.alsoIn.length + ' andere bron' + (item.alsoIn.length > 1 ? 'nen' : ''), item.alsoIn.join(', '));
     }
-    metaPart('score ' + item.score, 'Hoe hoger, hoe meer actiewoorden en onderwerpen uit sources.json in dit item zitten');
+    metaPart('regelscore ' + item.score, 'Open de score-uitleg onder de samenvatting', 'scorebtn');
 
     if (item.allDates && item.allDates.length) {
       var extra = item.allDates.filter(function (x) { return !item.keyDate || x.iso !== item.keyDate.iso; });
@@ -1191,6 +1458,32 @@
       p.textContent = item.summary;
       body.appendChild(p);
     }
+
+    var scoreDetails = document.createElement('details');
+    scoreDetails.className = 'scorecard';
+    var scoreSummary = document.createElement('summary');
+    scoreSummary.textContent = 'Waarom regelscore ' + item.score + ' en label ‘' + (item.tier === 'action' ? 'Actie' : (item.tier === 'watch' ? 'Let op' : 'Informatie')) + '’?';
+    scoreDetails.appendChild(scoreSummary);
+    var scoreGrid = document.createElement('div');
+    scoreGrid.className = 'scoregrid';
+    (item.scoreBreakdown || []).forEach(function (part) {
+      var name = document.createElement('span');
+      name.textContent = part.label + ' (' + part.location + ')';
+      var points = document.createElement('span');
+      points.className = 'pts'; points.textContent = (part.points > 0 ? '+' : '') + part.points;
+      scoreGrid.appendChild(name); scoreGrid.appendChild(points);
+    });
+    var totalName = document.createElement('span'); totalName.textContent = 'Totaal'; totalName.style.fontWeight = '700';
+    var totalPoints = document.createElement('span'); totalPoints.className = 'pts'; totalPoints.textContent = item.score;
+    scoreGrid.appendChild(totalName); scoreGrid.appendChild(totalPoints);
+    scoreDetails.appendChild(scoreGrid);
+    var scoreExplain = document.createElement('div');
+    scoreExplain.className = 'score-explain';
+    scoreExplain.textContent = 'De voorselectie gebruikt Let op vanaf ' + data.thresholds.watch + ' en Actie vanaf ' + data.thresholds.action + ' én een concreet actiesignaal. De agent bepaalt daarna het inhoudelijke eindlabel en kan een regelscore corrigeren.' +
+      (item.demote ? ' Dit item is ' + (item.demote === 'reference' ? 'naslag' : (item.demote === 'guide' ? 'een handleiding' : 'een verzamelpost')) + ' en wordt daarom nooit automatisch Actie.' : '') +
+      (item.agentReviewed && item.agentReason ? ' Agentbeoordeling: ' + item.agentReason : ' Geen agentbeoordeling beschikbaar.');
+    scoreDetails.appendChild(scoreExplain);
+    body.appendChild(scoreDetails);
 
     /* Uitleg: letterlijke zinnen uit de bron. Bij een actie-item staat die
        open, want dat is precies waarvoor het item er staat. Bij de rest
@@ -1219,7 +1512,9 @@
 
       var note = document.createElement('div');
       note.className = 'note';
-      note.textContent = 'Letterlijk overgenomen uit de bron - lees het artikel voor de volledige context.';
+      note.textContent = item.agentReviewed
+        ? 'Door de agent in het Nederlands samengevat; lees de bron voor de volledige context.'
+        : 'Niet door de agent beoordeeld; dit is tekst uit de bron en kan in de oorspronkelijke taal staan.';
       inner.appendChild(note);
 
       why.appendChild(inner);

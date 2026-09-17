@@ -20,6 +20,38 @@
     "timeoutSec": 20
   },
 
+  "agentReview": {
+    "enabled": true,
+    "batchSize": 10,
+    "outputPath": "agent-review.json",
+    "minimumConfidence": 0.55
+  },
+
+  "personalization": {
+    "_comment": "Onderwerpen met default:true staan voor nieuwe gebruikers aan. Optionele uitbreidingen staan uit totdat een gebruiker ze in Voorkeuren kiest.",
+    "interests": [
+      { "name": "Autopilot", "default": true },
+      { "name": "Enrollment", "default": true },
+      { "name": "Compliance", "default": true },
+      { "name": "Conditional Access", "default": true },
+      { "name": "Identiteit & MFA", "default": true },
+      { "name": "Defender & Security", "default": true },
+      { "name": "Windows Update", "default": true },
+      { "name": "Apps & Packaging", "default": true },
+      { "name": "Scripting & Graph", "default": true },
+      { "name": "Windows 11", "default": true },
+      { "name": "macOS", "default": true },
+      { "name": "iOS & iPadOS", "default": true },
+      { "name": "Android", "default": true },
+      { "name": "Licensing", "default": true },
+      { "name": "Reporting", "default": true },
+      { "name": "Veeam", "default": false },
+      { "name": "Nutanix", "default": false },
+      { "name": "VMware & Omnissa", "default": false },
+      { "name": "Windows 365 & AVD", "default": false }
+    ]
+  },
+
   "digest": {
     "_comment": "Twee soorten posts worden gedempt: ze mogen in de lijst staan maar worden nooit rood en komen niet in de agenda. Verzamelposts (maandoverzichten, nieuwsbrieven) noemen tien wijzigingen van anderen - de echte post staat er los ook in. Handleidingen noemen woorden als 'retire' en 'mandatory' in het voorbijgaan, zonder dat er iets te doen is.",
     "guideTerms": [
@@ -85,7 +117,11 @@
     "iOS & iPadOS":     [ "ios", "ipados", "iphone", "ipad", "supervised", "vpp", "declarative" ],
     "Android":          [ "android", "work profile", "dedicated device", "knox", "fully managed" ],
     "Licensing":        [ "licens*", "e3", "e5", "intune suite", "add-on", "pricing", "cost" ],
-    "Reporting":        [ "report*", "dashboard", "log analytics", "workbook", "telemetry", "audit log" ]
+    "Reporting":        [ "report*", "dashboard", "log analytics", "workbook", "telemetry", "audit log" ],
+    "Veeam":            [ "veeam", "vbr", "veeam backup", "veeam one" ],
+    "Nutanix":          [ "nutanix", "prism central", "nutanix ahv", "ncp" ],
+    "VMware & Omnissa": [ "vmware", "broadcom", "workspace one", "omnissa", "horizon" ],
+    "Windows 365 & AVD": [ "windows 365", "cloud pc", "azure virtual desktop", "avd", "remote desktop" ]
   },
 
   "keywords": {

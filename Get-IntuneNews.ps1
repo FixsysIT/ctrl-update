@@ -35,6 +35,7 @@
 param(
     [int]    $Days,
     [switch] $SkipMessageCenter,
+    [switch] $SkipAgentReview,
     [switch] $Open,
 
     # Haalt een enkele pagina op, laat zien welke datums eruit komen en stopt.
@@ -160,6 +161,14 @@ if (Test-Path -LiteralPath $StatePath) {
 $isFirstRun = $state.Count -eq 0
 $runStamp   = (Get-Date).ToUniversalTime().ToString('o')
 
+function Get-TextHash {
+    param([string]$Text)
+
+    $bytes = [Text.Encoding]::UTF8.GetBytes($Text)
+    $hash  = [Security.Cryptography.SHA256]::HashData($bytes)
+    return [Convert]::ToHexString($hash).ToLowerInvariant()
+}
+
 #endregion
 
 #region Termen matchen --------------------------------------------------------
@@ -222,7 +231,16 @@ function Get-RelevanceScore {
     $multiplier   = [int]$settings.titleWeightMultiplier
     $score        = $Boost
     $hits         = [System.Collections.Generic.List[string]]::new()
+    $breakdown    = [System.Collections.Generic.List[object]]::new()
     $actionSignal = $false
+
+    if ($Boost -ne 0) {
+        $breakdown.Add([PSCustomObject]@{
+            label = 'Broncorrectie'
+            points = $Boost
+            location = 'bron'
+        })
+    }
 
     foreach ($group in $keywordGroups) {
         $applied = [System.Collections.Generic.List[object]]::new()
@@ -233,8 +251,20 @@ function Get-RelevanceScore {
             if (-not ($inTitle -or $inBody)) { continue }
 
             # Titel weegt zwaarder, maar elke term telt maar een keer mee.
-            if ($inTitle) { $value = $group.Weight * $multiplier } else { $value = $group.Weight }
-            $applied.Add([PSCustomObject]@{ Term = $term.TrimEnd('*'); Value = $value })
+            if ($inTitle) {
+                $value = $group.Weight * $multiplier
+                $location = 'titel'
+            }
+            else {
+                $value = $group.Weight
+                $location = 'tekst'
+            }
+            $applied.Add([PSCustomObject]@{
+                Term = $term.TrimEnd('*')
+                Value = $value
+                Location = $location
+                Group = $group.Name
+            })
         }
 
         if ($applied.Count -eq 0) { continue }
@@ -249,7 +279,14 @@ function Get-RelevanceScore {
             $counted = @($applied)
         }
 
-        foreach ($hit in $counted) { $score += $hit.Value }
+        foreach ($hit in $counted) {
+            $score += $hit.Value
+            $breakdown.Add([PSCustomObject]@{
+                label = [string]$hit.Term
+                points = [int]$hit.Value
+                location = [string]$hit.Location
+            })
+        }
 
         if ($group.Weight -gt 0) {
             foreach ($hit in $counted) { $hits.Add($hit.Term) }
@@ -261,6 +298,7 @@ function Get-RelevanceScore {
         Score        = $score
         Keywords     = @($hits | Select-Object -Unique | Select-Object -First 6)
         ActionSignal = $actionSignal
+        Breakdown    = @($breakdown)
     }
 }
 
@@ -715,7 +753,11 @@ foreach ($feed in $enabledFeeds) {
             $dateSignal = $primary -and $primary.Date -ge $today -and $primary.Kind -in @('deadline', 'retirement', 'start')
 
             $score = $relevance.Score
-            if ($dateSignal) { $score += 3 }
+            $scoreBreakdown = @($relevance.Breakdown)
+            if ($dateSignal) {
+                $score += 3
+                $scoreBreakdown += [PSCustomObject]@{ label = 'Concrete wijzigingsdatum'; points = 3; location = 'datum' }
+            }
 
             # Een maandoverzicht of nieuwsbrief vat andermans wijzigingen samen.
             # Die mag in de lijst, maar niet rood worden en niet in de agenda:
@@ -741,6 +783,7 @@ foreach ($feed in $enabledFeeds) {
                 Published  = $published
                 Summary    = $summary
                 Score      = $score
+                ScoreBreakdown = @($scoreBreakdown)
                 Tier       = $tier
                 Demote     = $demote
                 ActionCtx  = @(Get-ActionContext -Text $fullText -KeyDate $primary -DatePhrase $(if ($primary) { $primary.Phrase } else { $null }))
@@ -750,6 +793,7 @@ foreach ($feed in $enabledFeeds) {
                 KeyDate    = Format-DateBadge $primary
                 AllDates   = @($keyDates | Where-Object { $_.Date -ge $today } | Select-Object -First 4 | ForEach-Object { Format-DateBadge $_ })
                 Kind       = 'feed'
+                Channel    = $(if ($feed.tag -eq 'Microsoft') { 'official' } else { 'community' })
                 FullText   = $fullText
                 Enriched   = $false
                 Boost      = [int]$feed.boost
@@ -829,13 +873,18 @@ if ($enrich.enabled -and $items.Count -gt 0) {
                           $primary.Kind -in @('deadline', 'retirement', 'start')
 
             $score = $relevance.Score
-            if ($dateSignal) { $score += 3 }
+            $scoreBreakdown = @($relevance.Breakdown)
+            if ($dateSignal) {
+                $score += 3
+                $scoreBreakdown += [PSCustomObject]@{ label = 'Concrete wijzigingsdatum'; points = 3; location = 'datum' }
+            }
 
             # De rijkere tekst mag een item alleen omhoog trekken, niet omlaag:
             # een fragment dat al hoog scoorde had die woorden echt.
             if ($score -gt $item.Score) {
                 $item.Score    = $score
                 $item.Keywords = @($relevance.Keywords)
+                $item.ScoreBreakdown = @($scoreBreakdown)
             }
 
             # Na verrijking opnieuw bepalen: een Learn Docs-pagina met een echte
@@ -922,27 +971,42 @@ if ($useMessageCenter) {
 
                     $relevance = Get-RelevanceScore -Title $message.title -Summary $fullText
                     $score     = $relevance.Score
+                    $scoreBreakdown = @($relevance.Breakdown)
                     $signals   = [System.Collections.Generic.List[string]]::new()
 
                     # Message Center scoort vooral op eigen metadata, niet op keywords.
                     switch ($message.category) {
-                        'planForChange'     { $score += $mcScoring.planForChange;     $signals.Add('plan for change') }
-                        'preventOrFixIssue' { $score += $mcScoring.preventOrFixIssue; $signals.Add('prevent or fix') }
+                        'planForChange'     {
+                            $score += $mcScoring.planForChange; $signals.Add('plan for change')
+                            $scoreBreakdown += [PSCustomObject]@{ label = 'Message Center: wijziging plannen'; points = [int]$mcScoring.planForChange; location = 'metadata' }
+                        }
+                        'preventOrFixIssue' {
+                            $score += $mcScoring.preventOrFixIssue; $signals.Add('prevent or fix')
+                            $scoreBreakdown += [PSCustomObject]@{ label = 'Message Center: probleem voorkomen of oplossen'; points = [int]$mcScoring.preventOrFixIssue; location = 'metadata' }
+                        }
                     }
                     if ($message.isMajorChange) {
                         $score += $mcScoring.isMajorChange
                         $signals.Add('major change')
+                        $scoreBreakdown += [PSCustomObject]@{ label = 'Message Center: grote wijziging'; points = [int]$mcScoring.isMajorChange; location = 'metadata' }
                     }
 
                     $deadline = ConvertTo-DateTimeSafe $message.actionRequiredByDateTime
                     if ($deadline) {
                         $score += $mcScoring.actionRequiredByDateTime
                         $signals.Add('action required')
+                        $scoreBreakdown += [PSCustomObject]@{ label = 'Message Center: actiedeadline'; points = [int]$mcScoring.actionRequiredByDateTime; location = 'metadata' }
                     }
 
                     switch ($message.severity) {
-                        'high'     { $score += $mcScoring.severityHigh;     $signals.Add('severity high') }
-                        'critical' { $score += $mcScoring.severityCritical; $signals.Add('severity critical') }
+                        'high'     {
+                            $score += $mcScoring.severityHigh; $signals.Add('severity high')
+                            $scoreBreakdown += [PSCustomObject]@{ label = 'Message Center: hoge ernst'; points = [int]$mcScoring.severityHigh; location = 'metadata' }
+                        }
+                        'critical' {
+                            $score += $mcScoring.severityCritical; $signals.Add('severity critical')
+                            $scoreBreakdown += [PSCustomObject]@{ label = 'Message Center: kritieke ernst'; points = [int]$mcScoring.severityCritical; location = 'metadata' }
+                        }
                     }
 
                     # De harde deadline uit de Graph-metadata wint van elke datum
@@ -969,6 +1033,7 @@ if ($useMessageCenter) {
                         Published  = $published
                         Summary    = $summary
                         Score      = $score
+                        ScoreBreakdown = @($scoreBreakdown)
                         # Message Center-metadata (plan for change, deadline, major change)
                         # is zelf al het actie-signaal - keywords zijn daar bijvangst.
                         Tier       = Get-Tier -Score $score -ActionSignal:($signals.Count -gt 0 -or $relevance.ActionSignal)
@@ -980,6 +1045,7 @@ if ($useMessageCenter) {
                         KeyDate    = Format-DateBadge $primary
                         AllDates   = @($keyDates | Where-Object { $_.Date -ge $today } | Select-Object -First 4 | ForEach-Object { Format-DateBadge $_ })
                         Kind       = 'messagecenter'
+                        Channel    = 'tenant'
                         FullText   = $fullText
                         Enriched   = $true
                         Boost      = 0
@@ -1025,6 +1091,96 @@ $deduped = foreach ($group in ($items | Group-Object Id)) {
 }
 
 $duplicatesRemoved = $items.Count - @($deduped).Count
+
+# De regelscore is snel en uitlegbaar; de agentreview doet daarna de inhoudelijke
+# eindredactie. De inhoudshash maakt de reviewcache veilig: alleen gewijzigde
+# artikelen gaan opnieuw naar Codex.
+$reviewedCount = 0
+$reviewStatus  = 'uitgeschakeld'
+$reviewSettings = $config.agentReview
+
+foreach ($item in $deduped) {
+    $item | Add-Member -NotePropertyName OriginalTitle -NotePropertyValue $item.Title -Force
+    $item | Add-Member -NotePropertyName AgentReviewed -NotePropertyValue $false -Force
+    $item | Add-Member -NotePropertyName AgentConfidence -NotePropertyValue $null -Force
+    $item | Add-Member -NotePropertyName AgentReason -NotePropertyValue '' -Force
+    $item | Add-Member -NotePropertyName ReviewKind -NotePropertyValue '' -Force
+    $hashInput = "$($item.Title)`n$($item.Source)`n$($item.FullText)"
+    $item | Add-Member -NotePropertyName ContentHash -NotePropertyValue (Get-TextHash $hashInput) -Force
+}
+
+if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -gt 0) {
+    $reviewInputPath = Join-Path $PSScriptRoot 'agent-review-input.json'
+    $reviewOutputPath = if ([IO.Path]::IsPathRooted([string]$reviewSettings.outputPath)) {
+        [string]$reviewSettings.outputPath
+    } else {
+        Join-Path $PSScriptRoot ([string]$reviewSettings.outputPath)
+    }
+
+    $reviewInput = [PSCustomObject]@{
+        generated = (Get-Date).ToUniversalTime().ToString('o')
+        items = @($deduped | ForEach-Object {
+            [PSCustomObject]@{
+                id = $_.Id
+                contentHash = $_.ContentHash
+                title = $_.Title
+                source = $_.Source
+                channel = $_.Channel
+                published = $_.Published.ToString('yyyy-MM-dd')
+                text = $_.FullText
+                rulesScore = $_.Score
+                proposedTier = $_.Tier
+                demote = $_.Demote
+                detectedCategories = @($_.Categories)
+                detectedDates = @($_.AllDates)
+            }
+        })
+    }
+    $reviewInput | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $reviewInputPath -Encoding UTF8
+
+    try {
+        & (Join-Path $PSScriptRoot 'Invoke-IntuneNewsReview.ps1') `
+            -InputPath $reviewInputPath -OutputPath $reviewOutputPath -ConfigPath $ConfigPath
+
+        $reviewData = Get-Content -LiteralPath $reviewOutputPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        $reviewById = @{}
+        foreach ($review in @($reviewData.items)) { $reviewById[[string]$review.id] = $review }
+
+        foreach ($item in $deduped) {
+            if (-not $reviewById.ContainsKey([string]$item.Id)) { continue }
+            $review = $reviewById[[string]$item.Id]
+            if ([string]$review.contentHash -ne $item.ContentHash) { continue }
+
+            if (-not [string]::IsNullOrWhiteSpace([string]$review.titleNl)) { $item.Title = [string]$review.titleNl }
+            if (-not [string]::IsNullOrWhiteSpace([string]$review.summaryNl)) { $item.Summary = [string]$review.summaryNl }
+            $item.ActionCtx = @($review.whyNl | Where-Object { $_ } | Select-Object -First 3 | ForEach-Object {
+                [PSCustomObject]@{ text = [string]$_ }
+            })
+            # Ook bij lage zekerheid is de Nederlandse redactie bruikbaar. Alleen
+            # classificatie en urgentie vereisen de ingestelde minimumzekerheid.
+            if ([double]$review.confidence -ge [double]$reviewSettings.minimumConfidence) {
+                $item.Categories = @($review.categories | Where-Object { $_ -in $config.categories.PSObject.Properties.Name } | Select-Object -Unique -First 3)
+
+                $agentTier = [string]$review.tier
+                if ($agentTier -in @('action', 'watch', 'info')) {
+                    if ($item.Demote -and $agentTier -eq 'action') { $agentTier = 'watch' }
+                    $item.Tier = $agentTier
+                }
+            }
+
+            $item.AgentReviewed = $true
+            $item.AgentConfidence = [Math]::Round([double]$review.confidence, 2)
+            $item.AgentReason = [string]$review.reasonNl
+            $item.ReviewKind = [string]$review.kind
+            $reviewedCount++
+        }
+        $reviewStatus = if ($reviewedCount -eq @($deduped).Count) { 'volledig' } else { 'gedeeltelijk' }
+    }
+    catch {
+        $reviewStatus = 'mislukt'
+        Write-Warning "Agentreview mislukt; regelscore en brontekst blijven beschikbaar: $($_.Exception.Message)"
+    }
+}
 
 $tierRank = @{ action = 0; watch = 1; info = 2 }
 
@@ -1109,10 +1265,31 @@ $payload = [PSCustomObject]@{
     categories = $allCategories
     agenda     = $agenda
     feeds      = @($feedStatus)
+    review     = [PSCustomObject]@{
+        status = $reviewStatus
+        reviewed = $reviewedCount
+        total = @($sorted).Count
+    }
+    thresholds = [PSCustomObject]@{
+        watch = [int]$settings.watchThreshold
+        action = [int]$settings.actionThreshold
+        requiresActionSignal = [bool]$settings.requireActionSignal
+    }
+    interests = @($config.personalization.interests)
+    sourceCatalog = @(
+        @($config.feeds | Where-Object { $_.enabled -ne $false } | ForEach-Object {
+            [PSCustomObject]@{
+                name = $_.name
+                channel = $(if ($_.tag -eq 'Microsoft') { 'official' } else { 'community' })
+            }
+        }) +
+        @([PSCustomObject]@{ name = 'Message Center'; channel = 'tenant' })
+    )
     items      = @($sorted | ForEach-Object {
         [PSCustomObject]@{
             id         = $_.Id
             title      = $_.Title
+            originalTitle = $_.OriginalTitle
             link       = $_.Link
             source     = $_.Source
             alsoIn     = @($_.AlsoIn)
@@ -1121,6 +1298,7 @@ $payload = [PSCustomObject]@{
             dateText   = "$($_.Published.Day) $($dutchMonths[$_.Published.Month - 1])"
             summary    = $_.Summary
             score      = $_.Score
+            scoreBreakdown = @($_.ScoreBreakdown)
             tier       = $_.Tier
             keywords   = @($_.Keywords)
             actionCtx  = @($_.ActionCtx)
@@ -1130,6 +1308,11 @@ $payload = [PSCustomObject]@{
             keyDate    = $_.KeyDate
             allDates   = @($_.AllDates)
             kind       = $_.Kind
+            channel    = $_.Channel
+            reviewKind = $_.ReviewKind
+            agentReviewed = [bool]$_.AgentReviewed
+            agentConfidence = $_.AgentConfidence
+            agentReason = $_.AgentReason
             enriched   = [bool]$_.Enriched
             isNew      = [bool]$_.IsNew
         }
@@ -1159,6 +1342,7 @@ $urgent      = @($agenda | Where-Object { $_.date.urgency -eq 'urgent' })
 Write-Host ''
 Write-Host "Intune Nieuws  |  $($sorted.Count) items over $Days dagen" -ForegroundColor Cyan
 Write-Host "  Actie: $($actionItems.Count)   Nieuw: $($newItems.Count)   Agenda: $($agenda.Count)   Dubbel verwijderd: $duplicatesRemoved"
+Write-Host "  Agentreview: $reviewStatus ($reviewedCount/$($sorted.Count))"
 Write-Host "  Dashboard: $OutputPath"
 
 $failed = @($feedStatus | Where-Object { $_.Status -ne 'OK' })
