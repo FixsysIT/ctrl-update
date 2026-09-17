@@ -263,7 +263,12 @@
 
   .layout { display: grid; grid-template-columns: var(--sidebar) minmax(0, 1fr); gap: 28px; align-items: start; }
 
-  .side { position: sticky; top: 16px; }
+  .side {
+    position: sticky; top: 16px;
+    max-height: calc(100vh - 32px); overflow-y: auto; overscroll-behavior: contain;
+    scrollbar-width: thin; scrollbar-color: var(--border-sharp) transparent;
+    padding-right: 7px;
+  }
   .side-block + .side-block { margin-top: 22px; }
   .side h3 {
     margin: 0 0 9px; font-size: 10.5px; font-weight: 780;
@@ -559,7 +564,7 @@
   @media (max-width: 900px) {
     .overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .layout { grid-template-columns: 1fr; gap: 16px; }
-    .side { position: static; }
+    .side { position: static; max-height: none; overflow: visible; padding-right: 0; }
     .side-block.facets-block { display: none; }
     .side.open .side-block.facets-block { display: block; }
     .daybar { top: 50px; }
@@ -617,14 +622,15 @@
         </svg>
       </div>
       <div>
-        <div class="eyebrow">Endpoint-informatie</div>
+        <div class="eyebrow" data-i18n="eyebrow">Endpoint-informatie</div>
         <h1>Intune Radar</h1>
         <div class="tagline" id="tagline"></div>
       </div>
     </div>
     <div class="toolbar">
       <button class="tool filters-toggle" id="filters-toggle">Filters</button>
-      <button class="tool" id="settings-btn">Voorkeuren</button>
+      <button class="tool" id="settings-btn" data-i18n="preferences">Voorkeuren</button>
+      <button class="tool" id="language" title="Taal wijzigen" aria-label="Taal wijzigen">EN</button>
       <button class="tool" id="density" title="Regelhoogte">Compact</button>
       <button class="tool icon-only" id="help-btn" title="Sneltoetsen" aria-label="Sneltoetsen">?</button>
       <button class="tool icon-only" id="theme" title="Licht of donker" aria-label="Licht of donker">&#9680;</button>
@@ -633,16 +639,16 @@
 
   <section class="overview" aria-label="Ochtendoverzicht">
     <button class="metric attention" id="metric-review" type="button" aria-pressed="false">
-      <span class="k">Te beoordelen</span><span class="v" id="metric-review-v">0</span><span class="s">inhoudelijk beoordeelde signalen</span>
+      <span class="k" data-i18n="toReview">Te beoordelen</span><span class="v" id="metric-review-v">0</span><span class="s" data-i18n="reviewedSignals">inhoudelijk beoordeelde signalen</span>
     </button>
     <button class="metric followup" id="metric-followup" type="button" aria-pressed="false">
-      <span class="k">Opvolging nodig</span><span class="v" id="metric-followup-v">0</span><span class="s">door jou bevestigd</span>
+      <span class="k" data-i18n="followup">Opvolging nodig</span><span class="v" id="metric-followup-v">0</span><span class="s" data-i18n="confirmedByYou">door jou bevestigd</span>
     </button>
     <button class="metric signal" id="metric-new" type="button" aria-pressed="false">
-      <span class="k">Nieuwe signalen</span><span class="v" id="metric-new-v">0</span><span class="s">sinds de vorige run</span>
+      <span class="k" data-i18n="newSignals">Nieuwe signalen</span><span class="v" id="metric-new-v">0</span><span class="s" data-i18n="sinceLastRun">sinds de vorige run</span>
     </button>
     <button class="metric health" id="metric-health" type="button" aria-pressed="false">
-      <span class="k">Bronnen</span><span class="v" id="metric-health-v">0/0</span><span class="s" id="metric-health-s">status onbekend</span>
+      <span class="k" data-i18n="sources">Bronnen</span><span class="v" id="metric-health-v">0/0</span><span class="s" id="metric-health-s">status onbekend</span>
     </button>
   </section>
 
@@ -657,7 +663,7 @@
 
   <section class="agenda" id="agenda" hidden>
     <div class="section-head">
-      <h2>Wijzigingskalender</h2>
+      <h2 data-i18n="changeCalendar">Wijzigingskalender</h2>
       <span class="hint" id="agenda-hint"></span>
     </div>
     <div class="agenda-grid" id="agenda-grid"></div>
@@ -667,38 +673,40 @@
 
     <aside class="side" id="side">
       <div class="side-block">
-        <h3>Urgentie</h3>
+        <h3 data-i18n="urgency">Urgentie</h3>
         <div class="facets" id="tiers"></div>
       </div>
       <div class="side-block facets-block">
-        <h3>Categorie</h3>
+        <h3 data-i18n="category">Categorie</h3>
         <div class="facets" id="cats"></div>
       </div>
       <div class="side-block facets-block">
-        <h3>Bron</h3>
-        <select id="src"><option value="">Alle bronnen</option></select>
-        <button class="reset" id="reset">Filters wissen</button>
+        <h3 data-i18n="source">Bron</h3>
+        <select id="src"><option value="" data-i18n="allSources">Alle bronnen</option></select>
+        <button class="reset" id="reset" data-i18n="clearFilters">Filters wissen</button>
       </div>
     </aside>
 
     <main>
       <nav class="channelbar" id="channels" aria-label="Soort bron">
-        <button data-channel="personal" aria-pressed="true">Voor jou</button>
-        <button data-channel="official" aria-pressed="false">Microsoft &amp; tenant</button>
-        <button data-channel="community" aria-pressed="false">Vakblogs</button>
-        <button data-channel="all" aria-pressed="false">Alles</button>
+        <button data-channel="personal" aria-pressed="true" data-i18n="forYou">Voor jou</button>
+        <button data-channel="microsoft" aria-pressed="false" data-i18n="microsoftTenant">Microsoft &amp; tenant</button>
+        <button data-channel="changes" aria-pressed="false" data-i18n="changesNews">Wijzigingen &amp; nieuws</button>
+        <button data-channel="tips" aria-pressed="false" data-i18n="tipsGuides">Praktijktips &amp; gidsen</button>
+        <button data-channel="weekly" aria-pressed="false" data-i18n="weekly">Weekoverzichten</button>
+        <button data-channel="all" aria-pressed="false" data-i18n="all">Alles</button>
       </nav>
       <div class="feedbar">
         <label class="search">
           <svg class="glass" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
             <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>
           </svg>
-          <input type="search" id="q" placeholder="Zoek op onderwerp, product of bron..." aria-label="Zoeken">
+          <input type="search" id="q" placeholder="Zoek op onderwerp, product of bron..." aria-label="Zoeken" data-i18n-placeholder="searchPlaceholder">
           <kbd>/</kbd>
         </label>
         <div class="seg" role="group" aria-label="Volgorde">
-          <button id="v-urgentie" aria-pressed="true">Urgentie</button>
-          <button id="v-tijdlijn"  aria-pressed="false">Tijdlijn</button>
+          <button id="v-urgentie" aria-pressed="true" data-i18n="urgency">Urgentie</button>
+          <button id="v-tijdlijn"  aria-pressed="false" data-i18n="timeline">Tijdlijn</button>
         </div>
         <span class="result-count" id="count"></span>
       </div>
@@ -709,7 +717,7 @@
       <details class="feeds">
         <summary id="feeds-summary">Bronnen</summary>
         <table>
-          <thead><tr><th>Bron</th><th>Status</th><th>Items</th><th>Toelichting</th></tr></thead>
+          <thead><tr><th data-i18n="source">Bron</th><th>Status</th><th>Items</th><th data-i18n="details">Toelichting</th></tr></thead>
           <tbody id="feeds-body"></tbody>
         </table>
       </details>
@@ -718,55 +726,55 @@
 </div>
 
 <dialog class="help" id="help">
-  <div class="hd">Sneltoetsen</div>
+  <div class="hd" data-i18n="shortcuts">Sneltoetsen</div>
   <div class="bd">
     <dl>
-      <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Volgend / vorig item</dd>
-      <dt><kbd>o</kbd></dt><dd>Item openen in nieuw tabblad</dd>
-      <dt><kbd>m</kbd></dt><dd>Gelezen of ongelezen markeren</dd>
-      <dt><kbd>e</kbd></dt><dd>Uitleg open- of dichtklappen</dd>
-      <dt><kbd>/</kbd></dt><dd>Naar het zoekveld</dd>
-      <dt><kbd>a</kbd></dt><dd>Acties die nog beoordeeld moeten worden</dd>
-      <dt><kbd>v</kbd></dt><dd>Bevestigde acties met opvolging</dd>
-      <dt><kbd>r</kbd></dt><dd>Filters wissen</dd>
-      <dt><kbd>Esc</kbd></dt><dd>Zoekveld leegmaken</dd>
+      <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd data-i18n="nextPrevious">Volgend / vorig item</dd>
+      <dt><kbd>o</kbd></dt><dd data-i18n="openItem">Item openen in nieuw tabblad</dd>
+      <dt><kbd>m</kbd></dt><dd data-i18n="markRead">Gelezen of ongelezen markeren</dd>
+      <dt><kbd>e</kbd></dt><dd data-i18n="toggleExplanation">Uitleg open- of dichtklappen</dd>
+      <dt><kbd>/</kbd></dt><dd data-i18n="focusSearch">Naar het zoekveld</dd>
+      <dt><kbd>a</kbd></dt><dd data-i18n="reviewActions">Acties die nog beoordeeld moeten worden</dd>
+      <dt><kbd>v</kbd></dt><dd data-i18n="confirmedActions">Bevestigde acties met opvolging</dd>
+      <dt><kbd>r</kbd></dt><dd data-i18n="clearFilters">Filters wissen</dd>
+      <dt><kbd>Esc</kbd></dt><dd data-i18n="clearSearch">Zoekveld leegmaken</dd>
     </dl>
   </div>
 </dialog>
 
 <dialog class="settings" id="settings">
-  <div class="hd">Persoonlijke voorkeuren</div>
+  <div class="hd" data-i18n="personalPreferences">Persoonlijke voorkeuren</div>
   <div class="bd">
-    <p class="storage-note">Deze voorkeuren, leesstatus en beoordelingen worden alleen in de lokale opslag van deze browser bewaard. Ze worden niet naar een server verstuurd en synchroniseren niet automatisch met een andere browser of computer.</p>
+    <p class="storage-note" data-i18n="storageNote">Deze voorkeuren, leesstatus en beoordelingen worden alleen in de lokale opslag van deze browser bewaard. Ze worden niet naar een server verstuurd en synchroniseren niet automatisch met een andere browser of computer.</p>
 
-    <h3>Onderwerpen voor ‘Voor jou’</h3>
+    <h3 data-i18n="topicsForYou">Onderwerpen voor ‘Voor jou’</h3>
     <div class="settings-grid" id="interest-settings"></div>
 
-    <h3>Bronnen</h3>
-    <p>Vink bronnen uit die je niet in ‘Voor jou’ wilt zien. Via ‘Alles’ blijven ze bereikbaar.</p>
+    <h3 data-i18n="sources">Bronnen</h3>
+    <p data-i18n="sourcePreferenceHelp">Vink bronnen uit die je niet in ‘Voor jou’ wilt zien. Via ‘Alles’ blijven ze bereikbaar.</p>
     <div class="settings-grid" id="source-settings"></div>
 
-    <h3>Eigen trefwoorden</h3>
+    <h3 data-i18n="customKeywords">Eigen trefwoorden</h3>
     <div class="field">
-      <label for="custom-terms">Komma-gescheiden, bijvoorbeeld Veeam, Nutanix, Cloud PC</label>
+      <label for="custom-terms" data-i18n="commaSeparated">Komma-gescheiden, bijvoorbeeld Veeam, Nutanix, Cloud PC</label>
       <textarea id="custom-terms" placeholder="Veeam, Nutanix"></textarea>
     </div>
 
-    <h3>RSS-bron aanvragen</h3>
-    <p>Plak een blog-, categorie- of RSS-URL. De aanvraag wordt lokaal bewaard en kan als JSON worden geëxporteerd. Een beheerder valideert de feed centraal voordat nieuws in de radar verschijnt.</p>
+    <h3 data-i18n="requestRss">RSS-bron aanvragen</h3>
+    <p data-i18n="rssHelp">Plak een blog-, categorie- of RSS-URL. De aanvraag wordt lokaal bewaard en kan als JSON worden geëxporteerd. Een beheerder valideert de feed centraal voordat nieuws in de radar verschijnt.</p>
     <div class="rss-request">
-      <div class="field"><label for="rss-name">Naam</label><input id="rss-name" placeholder="Bijvoorbeeld Veeam Blog"></div>
-      <div class="field"><label for="rss-url">Website- of RSS-URL</label><input id="rss-url" type="url" placeholder="https://..."></div>
-      <button class="rss-add" id="rss-add" type="button">Aanvraag toevoegen</button>
+      <div class="field"><label for="rss-name" data-i18n="name">Naam</label><input id="rss-name" placeholder="Bijvoorbeeld Veeam Blog"></div>
+      <div class="field"><label for="rss-url" data-i18n="websiteRss">Website- of RSS-URL</label><input id="rss-url" type="url" placeholder="https://..."></div>
+      <button class="rss-add" id="rss-add" type="button" data-i18n="addRequest">Aanvraag toevoegen</button>
       <div class="rss-status" id="rss-status"></div>
     </div>
 
     <div class="settings-actions">
-      <button class="primary" id="settings-save" type="button">Opslaan</button>
-      <button id="settings-export" type="button">Exporteren</button>
-      <button id="settings-import" type="button">Importeren</button>
-      <button id="settings-reset" type="button">Standaard herstellen</button>
-      <button id="settings-close" type="button">Sluiten</button>
+      <button class="primary" id="settings-save" type="button" data-i18n="save">Opslaan</button>
+      <button id="settings-export" type="button" data-i18n="export">Exporteren</button>
+      <button id="settings-import" type="button" data-i18n="import">Importeren</button>
+      <button id="settings-reset" type="button" data-i18n="restoreDefaults">Standaard herstellen</button>
+      <button id="settings-close" type="button" data-i18n="close">Sluiten</button>
       <input id="settings-file" type="file" accept="application/json" hidden>
     </div>
   </div>
@@ -784,6 +792,7 @@
   var DENSITY_KEY = 'intuneradar.density';
   var TRIAGE_KEY  = 'intuneradar.triage';
   var PREF_KEY    = 'intuneradar.preferences.v2';
+  var LANG_KEY    = 'intuneradar.language';
   var PAGE        = 30;
 
   function store(key, fallback) {
@@ -810,16 +819,89 @@
   function normalizePreferences(value) {
     var defaults = defaultPreferences();
     value = value && typeof value === 'object' ? value : {};
+    var savedChannel = value.channel === 'official' ? 'microsoft' : (value.channel === 'community' ? 'changes' : value.channel);
     return {
       enabledTopics: Array.isArray(value.enabledTopics) ? value.enabledTopics : defaults.enabledTopics,
       hiddenSources: Array.isArray(value.hiddenSources) ? value.hiddenSources : [],
       customTerms: Array.isArray(value.customTerms) ? value.customTerms : [],
       requestedFeeds: Array.isArray(value.requestedFeeds) ? value.requestedFeeds : [],
-      channel: ['personal', 'official', 'community', 'all'].indexOf(value.channel) !== -1 ? value.channel : 'personal'
+      channel: ['personal', 'microsoft', 'changes', 'tips', 'weekly', 'all'].indexOf(savedChannel) !== -1 ? savedChannel : 'personal'
     };
   }
 
   var preferences = normalizePreferences(store(PREF_KEY, null));
+  var language = store(LANG_KEY, 'nl') === 'en' ? 'en' : 'nl';
+
+  var EN = {
+    eyebrow: 'Endpoint intelligence', preferences: 'Preferences', toReview: 'To review',
+    reviewedSignals: 'content-reviewed signals', followup: 'Follow-up needed', confirmedByYou: 'confirmed by you',
+    newSignals: 'New signals', sinceLastRun: 'since the previous run', sources: 'Sources',
+    changeCalendar: 'Change calendar', urgency: 'Urgency', category: 'Category', source: 'Source',
+    allSources: 'All sources', clearFilters: 'Clear filters', forYou: 'For you',
+    microsoftTenant: 'Microsoft & tenant', changesNews: 'Changes & news', tipsGuides: 'Practical tips & guides',
+    weekly: 'Weekly roundups', all: 'All', searchPlaceholder: 'Search by topic, product or source...', timeline: 'Timeline',
+    shortcuts: 'Keyboard shortcuts', nextPrevious: 'Next / previous item', openItem: 'Open item in a new tab',
+    markRead: 'Mark as read or unread', toggleExplanation: 'Expand or collapse explanation', focusSearch: 'Focus the search field',
+    reviewActions: 'Actions still requiring review', confirmedActions: 'Confirmed actions requiring follow-up', clearSearch: 'Clear search field',
+    personalPreferences: 'Personal preferences',
+    storageNote: 'These preferences, read status and assessments are stored only in this browser. They are not sent to a server and do not automatically sync to another browser or computer.',
+    topicsForYou: 'Topics for “For you”', sourcePreferenceHelp: 'Uncheck sources you do not want in “For you”. They remain available through “All”.',
+    customKeywords: 'Custom keywords', commaSeparated: 'Comma-separated, for example Veeam, Nutanix, Cloud PC',
+    requestRss: 'Request an RSS source', rssHelp: 'Paste a blog, category or RSS URL. The request is stored locally and can be exported as JSON. An administrator validates the feed centrally before its news appears in the radar.',
+    name: 'Name', websiteRss: 'Website or RSS URL', addRequest: 'Add request', save: 'Save', export: 'Export', import: 'Import',
+    restoreDefaults: 'Restore defaults', close: 'Close', details: 'Details'
+  };
+
+  var CATEGORY_EN = {
+    'Identiteit & MFA': 'Identity & MFA', 'Defender & Security': 'Defender & Security',
+    'Windows Update': 'Windows Update', 'Apps & Packaging': 'Apps & Packaging',
+    'Scripting & Graph': 'Scripting & Graph', 'Windows 11': 'Windows 11',
+    'iOS & iPadOS': 'iOS & iPadOS', 'Licensing': 'Licensing', 'Reporting': 'Reporting',
+    'VMware & Omnissa': 'VMware & Omnissa', 'Windows 365 & AVD': 'Windows 365 & AVD',
+    'Autopilot': 'Autopilot', 'Enrollment': 'Enrollment', 'Compliance': 'Compliance',
+    'Conditional Access': 'Conditional Access', 'macOS': 'macOS', 'Android': 'Android',
+    'Veeam': 'Veeam', 'Nutanix': 'Nutanix'
+  };
+
+  function t(key, nl) { return language === 'en' ? (EN[key] || nl) : nl; }
+  function categoryLabel(name) { return language === 'en' ? (CATEGORY_EN[name] || name) : name; }
+  function itemTitle(item) { return language === 'en' ? (item.titleEn || item.originalTitle || item.title) : item.title; }
+  function itemSummary(item) { return language === 'en' ? (item.summaryEn || item.summary) : item.summary; }
+  function itemAction(item) { return language === 'en' ? (item.actionCtxEn || item.actionCtx || []) : (item.actionCtx || []); }
+  function agentReason(item) { return language === 'en' ? (item.agentReasonEn || item.agentReason) : item.agentReason; }
+
+  function applyStaticLanguage() {
+    document.documentElement.lang = language;
+    document.title = language === 'en' ? 'Intune Radar — actions, changes and expert news' : 'Intune Radar — acties, wijzigingen en vaknieuws';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'), function (el) {
+      var key = el.dataset.i18n;
+      if (language === 'en' && EN[key]) { el.textContent = EN[key]; }
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-placeholder]'), function (el) {
+      var key = el.dataset.i18nPlaceholder;
+      if (language === 'en' && EN[key]) { el.placeholder = EN[key]; }
+    });
+    var languageButton = document.getElementById('language');
+    languageButton.textContent = language === 'en' ? 'NL' : 'EN';
+    languageButton.title = language === 'en' ? 'Switch to Dutch' : 'Vertaal alles naar Engels';
+    languageButton.setAttribute('aria-label', languageButton.title);
+    document.getElementById('help-btn').title = language === 'en' ? 'Keyboard shortcuts' : 'Sneltoetsen';
+    document.getElementById('help-btn').setAttribute('aria-label', document.getElementById('help-btn').title);
+    document.getElementById('theme').title = language === 'en' ? 'Light or dark' : 'Licht of donker';
+    document.getElementById('theme').setAttribute('aria-label', document.getElementById('theme').title);
+    document.querySelector('.overview').setAttribute('aria-label', language === 'en' ? 'Morning overview' : 'Ochtendoverzicht');
+    document.getElementById('channels').setAttribute('aria-label', language === 'en' ? 'Content type' : 'Soort bron');
+    document.getElementById('q').setAttribute('aria-label', language === 'en' ? 'Search' : 'Zoeken');
+    document.querySelector('.seg').setAttribute('aria-label', language === 'en' ? 'Order' : 'Volgorde');
+    if (language === 'en') { document.getElementById('rss-name').placeholder = 'For example Veeam Blog'; }
+  }
+  applyStaticLanguage();
+
+  document.getElementById('language').addEventListener('click', function () {
+    language = language === 'en' ? 'nl' : 'en';
+    persist(LANG_KEY, language);
+    window.location.reload();
+  });
 
   function triageState(item) {
     return item.tier === 'action' ? (triage[item.id] || 'review') : '';
@@ -859,8 +941,8 @@
 
   var densityBtn = document.getElementById('density');
   function syncDensity() {
-    densityBtn.textContent = density === 'compact' ? 'Ruim' : 'Compact';
-    densityBtn.title = density === 'compact' ? 'Terug naar ruime weergave' : 'Compacte weergave';
+    densityBtn.textContent = density === 'compact' ? (language === 'en' ? 'Comfortable' : 'Ruim') : 'Compact';
+    densityBtn.title = density === 'compact' ? (language === 'en' ? 'Return to comfortable view' : 'Terug naar ruime weergave') : (language === 'en' ? 'Compact view' : 'Compacte weergave');
   }
   syncDensity();
   densityBtn.addEventListener('click', function () {
@@ -900,20 +982,20 @@
   function renderSettings() {
     interestSettings.textContent = '';
     (data.interests || []).forEach(function (interest, index) {
-      makeSettingCheck(interestSettings, 'interest-' + index, interest.name + (interest.default ? '' : ' (optioneel)'), preferences.enabledTopics.indexOf(interest.name) !== -1, 'interest', interest.name);
+      makeSettingCheck(interestSettings, 'interest-' + index, categoryLabel(interest.name) + (interest.default ? '' : (language === 'en' ? ' (optional)' : ' (optioneel)')), preferences.enabledTopics.indexOf(interest.name) !== -1, 'interest', interest.name);
     });
 
     sourceSettings.textContent = '';
     (data.sourceCatalog || []).slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).forEach(function (source, index) {
-      var suffix = source.channel === 'official' ? ' — Microsoft' : (source.channel === 'tenant' ? ' — eigen tenant' : ' — vakblog');
+      var suffix = source.channel === 'official' ? ' — Microsoft' : (source.channel === 'tenant' ? (language === 'en' ? ' — own tenant' : ' — eigen tenant') : (language === 'en' ? ' — expert blog' : ' — vakblog'));
       makeSettingCheck(sourceSettings, 'source-' + index, source.name + suffix, preferences.hiddenSources.indexOf(source.name) === -1, 'source', source.name);
     });
 
     customTerms.value = preferences.customTerms.join(', ');
     var status = document.getElementById('rss-status');
     status.textContent = preferences.requestedFeeds.length
-      ? preferences.requestedFeeds.length + (preferences.requestedFeeds.length === 1 ? ' bronaanvraag lokaal bewaard: ' : ' bronaanvragen lokaal bewaard: ') + preferences.requestedFeeds.map(function (x) { return x.name || x.url; }).join(', ')
-      : 'Nog geen bronaanvragen.';
+      ? preferences.requestedFeeds.length + (language === 'en' ? (preferences.requestedFeeds.length === 1 ? ' source request stored locally: ' : ' source requests stored locally: ') : (preferences.requestedFeeds.length === 1 ? ' bronaanvraag lokaal bewaard: ' : ' bronaanvragen lokaal bewaard: ')) + preferences.requestedFeeds.map(function (x) { return x.name || x.url; }).join(', ')
+      : (language === 'en' ? 'No source requests yet.' : 'Nog geen bronaanvragen.');
   }
 
   function openSettings() { renderSettings(); settingsDialog.showModal(); }
@@ -929,11 +1011,11 @@
       var parsed = new URL(url);
       if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') { throw new Error('protocol'); }
     } catch (e) {
-      status.textContent = 'Vul een geldige http- of https-URL in.';
+      status.textContent = language === 'en' ? 'Enter a valid http or https URL.' : 'Vul een geldige http- of https-URL in.';
       return;
     }
     if (preferences.requestedFeeds.some(function (x) { return x.url === url; })) {
-      status.textContent = 'Deze bron staat al in je aanvragen.';
+      status.textContent = language === 'en' ? 'This source is already in your requests.' : 'Deze bron staat al in je aanvragen.';
       return;
     }
     preferences.requestedFeeds.push({ name: name || url, url: url });
@@ -973,7 +1055,7 @@
         preferences = normalizePreferences(packet.preferences || packet);
         persist(PREF_KEY, preferences); renderSettings(); setChannel(preferences.channel); render();
       } catch (e) {
-        document.getElementById('rss-status').textContent = 'Importeren mislukt: dit is geen geldig voorkeurenbestand.';
+        document.getElementById('rss-status').textContent = language === 'en' ? 'Import failed: this is not a valid preferences file.' : 'Importeren mislukt: dit is geen geldig voorkeurenbestand.';
       }
     };
     reader.readAsText(file); settingsFile.value = '';
@@ -1005,8 +1087,8 @@
   var counts = calculateCounts();
 
   document.getElementById('tagline').textContent =
-    data.generated + ' · ' + data.items.length + ' items uit ' + data.days + ' dagen' +
-    (data.duplicates > 0 ? ' · ' + data.duplicates + ' dubbel gefilterd' : '') +
+    data.generated + ' · ' + data.items.length + (language === 'en' ? ' items from ' : ' items uit ') + data.days + (language === 'en' ? ' days' : ' dagen') +
+    (data.duplicates > 0 ? ' · ' + data.duplicates + (language === 'en' ? ' duplicates removed' : ' dubbel gefilterd') : '') +
     ' · agent ' + data.review.reviewed + '/' + data.review.total;
 
   /* ---------- ochtendoverzicht en status ---------- */
@@ -1025,7 +1107,9 @@
     document.getElementById('metric-new-v').textContent = counts.nieuw;
     document.getElementById('metric-health-v').textContent = okSources + '/' + monitoredSources.length;
     var failedSources = monitoredSources.length - okSources;
-    document.getElementById('metric-health-s').textContent = failedSources === 0 ? 'alle bronnen bereikbaar' : failedSources + (failedSources === 1 ? ' bron met een probleem' : ' bronnen met problemen');
+    document.getElementById('metric-health-s').textContent = failedSources === 0
+      ? (language === 'en' ? 'all sources available' : 'alle bronnen bereikbaar')
+      : failedSources + (language === 'en' ? (failedSources === 1 ? ' source has an issue' : ' sources have issues') : (failedSources === 1 ? ' bron met een probleem' : ' bronnen met problemen'));
     document.getElementById('metric-health').className = 'metric ' + (okSources === monitoredSources.length ? 'health' : 'attention');
   }
 
@@ -1033,23 +1117,23 @@
     var level, headline, detail, target = '';
     if (counts.review > 0) {
       level = 'crit';
-      headline = counts.review + (counts.review === 1 ? ' actiesignaal moet worden beoordeeld' : ' actiesignalen moeten worden beoordeeld');
-      detail = 'Deze signalen zijn inhoudelijk beoordeeld, maar bewijzen nog geen tenantimpact. Controleer bron, scope en toepasbaarheid.';
+      headline = counts.review + (language === 'en' ? (counts.review === 1 ? ' action signal requires review' : ' action signals require review') : (counts.review === 1 ? ' actiesignaal moet worden beoordeeld' : ' actiesignalen moeten worden beoordeeld'));
+      detail = language === 'en' ? 'These signals were content-reviewed, but do not prove tenant impact. Verify the source, scope and applicability.' : 'Deze signalen zijn inhoudelijk beoordeeld, maar bewijzen nog geen tenantimpact. Controleer bron, scope en toepasbaarheid.';
       target = 'todo';
     } else if (counts.followup > 0) {
       level = 'warn';
-      headline = counts.followup + (counts.followup === 1 ? ' bevestigde actie vraagt opvolging' : ' bevestigde acties vragen opvolging');
-      detail = 'Je hebt deze signalen als relevant aangemerkt. Rond ze af zodra de wijziging is verwerkt.';
+      headline = counts.followup + (language === 'en' ? (counts.followup === 1 ? ' confirmed action needs follow-up' : ' confirmed actions need follow-up') : (counts.followup === 1 ? ' bevestigde actie vraagt opvolging' : ' bevestigde acties vragen opvolging'));
+      detail = language === 'en' ? 'You marked these signals as relevant. Complete them after the change has been handled.' : 'Je hebt deze signalen als relevant aangemerkt. Rond ze af zodra de wijziging is verwerkt.';
       target = 'followup';
     } else if (running.length || urgent.length) {
       level = 'warn';
-      headline = 'Geen open acties, wel een wijziging in de buurt';
-      detail = (running.length ? running.length + ' loopt al. ' : '') + (urgent.length ? urgent.length + ' valt binnen drie weken.' : '');
+      headline = language === 'en' ? 'No open actions, but a change is approaching' : 'Geen open acties, wel een wijziging in de buurt';
+      detail = language === 'en' ? ((running.length ? running.length + ' already in progress. ' : '') + (urgent.length ? urgent.length + ' within three weeks.' : '')) : ((running.length ? running.length + ' loopt al. ' : '') + (urgent.length ? urgent.length + ' valt binnen drie weken.' : ''));
       target = 'dated';
     } else {
       level = 'ok';
-      headline = 'Actielijst is bijgewerkt';
-      detail = counts.watch + ' signalen om in de gaten te houden en ' + counts.nieuw + ' nieuw sinds de vorige run.';
+      headline = language === 'en' ? 'Action list is up to date' : 'Actielijst is bijgewerkt';
+      detail = language === 'en' ? counts.watch + ' signals to monitor and ' + counts.nieuw + ' new since the previous run.' : counts.watch + ' signalen om in de gaten te houden en ' + counts.nieuw + ' nieuw sinds de vorige run.';
     }
 
     statusEl.className = 'status ' + level;
@@ -1057,7 +1141,7 @@
     document.getElementById('status-headline').textContent = headline;
     document.getElementById('status-detail').textContent = detail;
     jump.hidden = !target;
-    jump.textContent = target === 'todo' ? 'Beoordeel nu' : (target === 'followup' ? 'Bekijk opvolging' : 'Bekijk kalender');
+    jump.textContent = target === 'todo' ? (language === 'en' ? 'Review now' : 'Beoordeel nu') : (target === 'followup' ? (language === 'en' ? 'View follow-up' : 'Bekijk opvolging') : (language === 'en' ? 'View calendar' : 'Bekijk kalender'));
     jump.onclick = target ? function () { setTier(target); } : null;
   }
 
@@ -1066,12 +1150,32 @@
 
   /* ---------- agenda ---------- */
 
+  var MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function dateText(date) {
+    if (language !== 'en' || !date || !date.iso) { return date ? date.text : ''; }
+    var p = date.iso.split('-');
+    if (date.approx) { return MONTHS_EN[Number(p[1]) - 1] + ' ' + p[0]; }
+    return Number(p[2]) + ' ' + MONTHS_EN[Number(p[1]) - 1] + ' ' + p[0];
+  }
+  function relativeText(date) {
+    if (language !== 'en') { return date.relative; }
+    var n = Number(date.daysAway);
+    if (date.urgency === 'past') { return Math.abs(n) + ' days ago'; }
+    if (n < 0) { return 'in progress for ' + Math.abs(n) + ' days'; }
+    if (n === 0) { return 'today'; }
+    if (n === 1) { return 'tomorrow'; }
+    return 'in ' + n + ' days';
+  }
+  function dateKindLabel(date) {
+    if (language !== 'en') { return date.label; }
+    return { deadline: 'DEADLINE', retirement: 'RETIRES', start: 'FROM', available: 'AVAILABLE', mentioned: 'MENTIONED' }[date.kind] || date.label;
+  }
+
   if (data.agenda.length) {
     var grid = document.getElementById('agenda-grid');
     document.getElementById('agenda').hidden = false;
     document.getElementById('agenda-hint').textContent =
-      data.agenda.length + (data.agenda.length === 1 ? ' harde afspraak' : ' harde afspraken') +
-      ', oplopend op datum';
+      data.agenda.length + (language === 'en' ? (data.agenda.length === 1 ? ' firm date' : ' firm dates') + ', ascending by date' : (data.agenda.length === 1 ? ' harde afspraak' : ' harde afspraken') + ', oplopend op datum');
 
     data.agenda.forEach(function (entry) {
       var d = entry.date;
@@ -1086,23 +1190,23 @@
       var lab = document.createElement('span');
       lab.className = 'lab';
       lab.appendChild(svg(KIND_ICON[d.kind] || ICON.clock));
-      lab.appendChild(document.createTextNode(d.label));
+      lab.appendChild(document.createTextNode(dateKindLabel(d)));
       top.appendChild(lab);
 
       var datum = document.createElement('span');
       datum.className = 'datum';
-      datum.textContent = d.text;
+      datum.textContent = dateText(d);
       top.appendChild(datum);
       card.appendChild(top);
 
       var t = document.createElement('div');
       t.className = 't';
-      t.textContent = entry.title;
+      t.textContent = language === 'en' ? (entry.titleEn || entry.title) : entry.title;
       card.appendChild(t);
 
       var foot = document.createElement('div');
       foot.className = 'foot';
-      foot.textContent = d.relative + ' · ' + entry.source;
+      foot.textContent = relativeText(d) + ' · ' + entry.source;
       card.appendChild(foot);
 
       /* Balkje onderaan: hoe dichterbij, hoe voller. Loopt het al,
@@ -1121,17 +1225,24 @@
 
   /* ---------- filters ---------- */
 
-  var filters = { tier: counts.review > 0 ? 'todo' : 'all', q: '', src: '', cats: [] };
+  var filters = { tier: preferences.channel === 'personal' && counts.review > 0 ? 'todo' : 'all', q: '', src: '', cats: [] };
   var view = 'urgentie';
   var shownLimit = PAGE;
 
   var channelBox = document.getElementById('channels');
   function setChannel(channel) {
-    preferences.channel = ['personal', 'official', 'community', 'all'].indexOf(channel) !== -1 ? channel : 'personal';
+    preferences.channel = ['personal', 'microsoft', 'changes', 'tips', 'weekly', 'all'].indexOf(channel) !== -1 ? channel : 'personal';
     persist(PREF_KEY, preferences);
     Array.prototype.forEach.call(channelBox.querySelectorAll('[data-channel]'), function (button) {
       button.setAttribute('aria-pressed', String(button.dataset.channel === preferences.channel));
     });
+    filters.tier = 'all';
+    Array.prototype.forEach.call(tierBox.querySelectorAll('[data-tier]'), function (button) {
+      button.setAttribute('aria-pressed', String(button.dataset.tier === 'all'));
+    });
+    document.getElementById('metric-review').setAttribute('aria-pressed', 'false');
+    document.getElementById('metric-followup').setAttribute('aria-pressed', 'false');
+    document.getElementById('metric-new').setAttribute('aria-pressed', 'false');
     shownLimit = PAGE;
     render();
   }
@@ -1143,14 +1254,14 @@
   });
 
   var TIERS = [
-    { key: 'all',    label: 'Alles',      dot: '',       count: data.items.length },
-    { key: 'todo',   label: 'Te beoordelen', dot: 'crit', count: counts.review },
-    { key: 'followup', label: 'Opvolging nodig', dot: 'warn', count: counts.followup },
-    { key: 'action', label: 'Actie',      dot: 'crit',   count: counts.action },
-    { key: 'watch',  label: 'Let op',     dot: 'warn',   count: counts.watch },
-    { key: 'dated',  label: 'Met datum',  dot: 'accent', count: counts.dated },
-    { key: 'new',    label: 'Nieuw',      dot: '',       count: counts.nieuw },
-    { key: 'unread', label: 'Ongelezen',  dot: '',       count: counts.ongelezen }
+    { key: 'all',    label: language === 'en' ? 'All' : 'Alles', dot: '', count: data.items.length },
+    { key: 'todo',   label: language === 'en' ? 'To review' : 'Te beoordelen', dot: 'crit', count: counts.review },
+    { key: 'followup', label: language === 'en' ? 'Follow-up needed' : 'Opvolging nodig', dot: 'warn', count: counts.followup },
+    { key: 'action', label: language === 'en' ? 'Action' : 'Actie', dot: 'crit', count: counts.action },
+    { key: 'watch',  label: language === 'en' ? 'Watch' : 'Let op', dot: 'warn', count: counts.watch },
+    { key: 'dated',  label: language === 'en' ? 'Has date' : 'Met datum', dot: 'accent', count: counts.dated },
+    { key: 'new',    label: language === 'en' ? 'New' : 'Nieuw', dot: '', count: counts.nieuw },
+    { key: 'unread', label: language === 'en' ? 'Unread' : 'Ongelezen', dot: '', count: counts.ongelezen }
   ];
 
   var tierBox = document.getElementById('tiers');
@@ -1210,7 +1321,7 @@
     b.setAttribute('aria-pressed', 'false');
     if (index >= CAT_VISIBLE) { b.dataset.overflow = '1'; b.hidden = true; }
     b.innerHTML = '<span class="dot" style="visibility:hidden"></span><span class="nm"></span><span class="ct"></span>';
-    b.querySelector('.nm').textContent = c.name;
+    b.querySelector('.nm').textContent = categoryLabel(c.name);
     b.querySelector('.ct').textContent = c.count;
     b.addEventListener('click', function () { toggleCat(c.name); });
     catBox.appendChild(b);
@@ -1221,11 +1332,11 @@
     catToggle.className = 'facet';
     catToggle.style.color = 'var(--muted)';
     var expanded = false;
-    catToggle.textContent = '+ ' + (data.categories.length - CAT_VISIBLE) + ' meer';
+    catToggle.textContent = '+ ' + (data.categories.length - CAT_VISIBLE) + (language === 'en' ? ' more' : ' meer');
     catToggle.addEventListener('click', function () {
       expanded = !expanded;
       Array.prototype.forEach.call(catBox.querySelectorAll('[data-overflow]'), function (b) { b.hidden = !expanded; });
-      catToggle.textContent = expanded ? 'Minder tonen' : '+ ' + (data.categories.length - CAT_VISIBLE) + ' meer';
+      catToggle.textContent = expanded ? (language === 'en' ? 'Show less' : 'Minder tonen') : '+ ' + (data.categories.length - CAT_VISIBLE) + (language === 'en' ? ' more' : ' meer');
     });
     catBox.appendChild(catToggle);
   }
@@ -1278,8 +1389,8 @@
 
   /* ---------- datumlabels voor de dagkoppen ---------- */
 
-  var WEEKDAYS = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
-  var MONTHS   = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+  var WEEKDAYS = language === 'en' ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
+  var MONTHS   = language === 'en' ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] : ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
 
   function dayLabel(iso) {
     var parts = iso.split('-');
@@ -1288,8 +1399,8 @@
     var today = new Date(Number(t[0]), Number(t[1]) - 1, Number(t[2]));
     var diff = Math.round((today - d) / 86400000);
 
-    if (diff === 0) { return 'Vandaag'; }
-    if (diff === 1) { return 'Gisteren'; }
+    if (diff === 0) { return language === 'en' ? 'Today' : 'Vandaag'; }
+    if (diff === 1) { return language === 'en' ? 'Yesterday' : 'Gisteren'; }
     if (diff < 7)   { return WEEKDAYS[d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS[d.getMonth()]; }
     return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
   }
@@ -1297,15 +1408,17 @@
   /* ---------- filteren ---------- */
 
   function matches(item) {
-    if (preferences.channel === 'official' && item.channel !== 'official' && item.channel !== 'tenant') { return false; }
-    if (preferences.channel === 'community' && item.channel !== 'community') { return false; }
+    if (preferences.channel === 'microsoft' && item.section !== 'microsoft') { return false; }
+    if (preferences.channel === 'changes' && item.section !== 'changes') { return false; }
+    if (preferences.channel === 'tips' && item.section !== 'tips') { return false; }
+    if (preferences.channel === 'weekly' && item.section !== 'weekly') { return false; }
     if (preferences.channel === 'personal') {
       if (preferences.hiddenSources.indexOf(item.source) !== -1) { return false; }
 
       var knownTopics = (data.interests || []).map(function (x) { return x.name; });
       var itemTopics = item.categories.filter(function (x) { return knownTopics.indexOf(x) !== -1; });
       var hasEnabledTopic = itemTopics.some(function (x) { return preferences.enabledTopics.indexOf(x) !== -1; });
-      var personalHay = (item.title + ' ' + item.summary + ' ' + item.categories.join(' ')).toLowerCase();
+      var personalHay = (item.title + ' ' + item.titleEn + ' ' + item.summary + ' ' + item.summaryEn + ' ' + item.categories.join(' ')).toLowerCase();
       var hasCustomTerm = preferences.customTerms.some(function (x) { return personalHay.indexOf(x.toLowerCase()) !== -1; });
       if (itemTopics.length && !hasEnabledTopic && !hasCustomTerm) { return false; }
     }
@@ -1324,7 +1437,7 @@
       if (!hit) { return false; }
     }
     if (filters.q) {
-      var hay = (item.title + ' ' + item.summary + ' ' + item.keywords.join(' ') + ' ' +
+      var hay = (item.title + ' ' + item.titleEn + ' ' + item.summary + ' ' + item.summaryEn + ' ' + item.keywords.join(' ') + ' ' +
                  item.categories.join(' ') + ' ' + (item.nativeTags || []).join(' ')).toLowerCase();
       if (hay.indexOf(filters.q) === -1) { return false; }
     }
@@ -1359,15 +1472,15 @@
       dh.appendChild(svg(KIND_ICON[d.kind] || ICON.clock));
 
       var lab = document.createElement('span');
-      lab.className = 'lab'; lab.textContent = d.label;
+      lab.className = 'lab'; lab.textContent = dateKindLabel(d);
       dh.appendChild(lab);
 
       var val = document.createElement('span');
-      val.textContent = d.text;
+      val.textContent = dateText(d);
       dh.appendChild(val);
 
       var rel = document.createElement('span');
-      rel.className = 'rel'; rel.textContent = d.relative;
+      rel.className = 'rel'; rel.textContent = relativeText(d);
       dh.appendChild(rel);
 
       flags.appendChild(dh);
@@ -1377,7 +1490,7 @@
       var b = document.createElement('span');
       b.className = 'badge ' + item.tier;
       b.appendChild(svg(item.tier === 'action' ? ICON.crit : ICON.warn));
-      b.appendChild(document.createTextNode(item.tier === 'action' ? 'Actie' : 'Let op'));
+      b.appendChild(document.createTextNode(item.tier === 'action' ? (language === 'en' ? 'Action' : 'Actie') : (language === 'en' ? 'Watch' : 'Let op')));
       flags.appendChild(b);
     }
     if (item.kind === 'messagecenter') {
@@ -1388,24 +1501,24 @@
     if (item.demote) {
       var dm = document.createElement('span');
       dm.className = 'badge demoted';
-      dm.textContent = item.demote === 'guide' ? 'Handleiding' : (item.demote === 'reference' ? 'Naslag' : 'Verzamelpost');
-      dm.title = item.demote === 'guide'
-        ? 'Uitleg of handleiding: noemt woorden als retire en mandatory in het voorbijgaan, wordt daarom nooit rood'
-        : (item.demote === 'reference'
-          ? 'Naslagpagina zonder concrete wijzigingsdatum: nuttig om te lezen, maar geen bevestigde actie'
-          : 'Maandoverzicht of nieuwsbrief: vat andermans wijzigingen samen, wordt daarom nooit rood');
+      dm.textContent = language === 'en'
+        ? (item.demote === 'guide' ? 'Guide' : (item.demote === 'reference' ? 'Reference' : 'Roundup'))
+        : (item.demote === 'guide' ? 'Handleiding' : (item.demote === 'reference' ? 'Naslag' : 'Verzamelpost'));
+      dm.title = language === 'en'
+        ? (item.demote === 'guide' ? 'Explanation or guide; never becomes an automatic action' : (item.demote === 'reference' ? 'Reference page without a concrete change date' : 'Newsletter or roundup of other changes'))
+        : (item.demote === 'guide' ? 'Uitleg of handleiding: noemt woorden als retire en mandatory in het voorbijgaan, wordt daarom nooit rood' : (item.demote === 'reference' ? 'Naslagpagina zonder concrete wijzigingsdatum: nuttig om te lezen, maar geen bevestigde actie' : 'Maandoverzicht of nieuwsbrief: vat andermans wijzigingen samen, wordt daarom nooit rood'));
       flags.appendChild(dm);
     }
     var reviewBadge = document.createElement('span');
     reviewBadge.className = 'badge ' + (item.agentReviewed ? 'reviewed' : 'unreviewed');
-    reviewBadge.textContent = item.agentReviewed ? 'Door agent beoordeeld' : 'Agentreview ontbreekt';
+    reviewBadge.textContent = item.agentReviewed ? (language === 'en' ? 'Agent reviewed' : 'Door agent beoordeeld') : (language === 'en' ? 'Agent review missing' : 'Agentreview ontbreekt');
     reviewBadge.title = item.agentReviewed
-      ? 'Nederlandse eindredactie en inhoudelijke classificatie door de agent'
-      : 'Dit item toont de oorspronkelijke brontekst en alleen de regelscore';
+      ? (language === 'en' ? 'Bilingual editing and content classification by the agent' : 'Nederlandse eindredactie en inhoudelijke classificatie door de agent')
+      : (language === 'en' ? 'This item shows source text and the rule score only' : 'Dit item toont de oorspronkelijke brontekst en alleen de regelscore');
     flags.appendChild(reviewBadge);
     if (item.isNew) {
       var nw = document.createElement('span');
-      nw.className = 'badge new'; nw.textContent = 'Nieuw';
+      nw.className = 'badge new'; nw.textContent = language === 'en' ? 'New' : 'Nieuw';
       flags.appendChild(nw);
     }
     body.appendChild(flags);
@@ -1413,8 +1526,8 @@
     var a = document.createElement('a');
     a.className = 'title';
     a.href = item.link; a.target = '_blank'; a.rel = 'noopener';
-    a.textContent = item.title;
-    if (item.originalTitle && item.originalTitle !== item.title) { a.title = 'Oorspronkelijke titel: ' + item.originalTitle; }
+    a.textContent = itemTitle(item);
+    if (item.originalTitle && item.originalTitle !== itemTitle(item)) { a.title = (language === 'en' ? 'Original title: ' : 'Oorspronkelijke titel: ') + item.originalTitle; }
     body.appendChild(a);
 
     var meta = document.createElement('div');
@@ -1437,66 +1550,71 @@
     metaPart(item.source, null, 'src');
     if (item.tag) {
       var originClass = item.tag.toLowerCase() === 'microsoft' ? 'origin microsoft' : (item.tag.toLowerCase() === 'tenant' ? 'origin tenant' : 'origin');
-      metaPart(item.tag === 'Microsoft' ? 'Officiële bron' : (item.tag === 'Tenant' ? 'Eigen tenant' : 'Vakblog'), null, originClass);
+      metaPart(item.tag === 'Microsoft' ? (language === 'en' ? 'Official source' : 'Officiële bron') : (item.tag === 'Tenant' ? (language === 'en' ? 'Own tenant' : 'Eigen tenant') : (language === 'en' ? 'Expert blog' : 'Vakblog')), null, originClass);
     }
-    metaPart(item.dateText);
+    var publishedParts = item.date.split('-');
+    metaPart(language === 'en' ? Number(publishedParts[2]) + ' ' + MONTHS_EN[Number(publishedParts[1]) - 1] : item.dateText);
     if (item.alsoIn && item.alsoIn.length) {
-      metaPart('ook op ' + item.alsoIn.length + ' andere bron' + (item.alsoIn.length > 1 ? 'nen' : ''), item.alsoIn.join(', '));
+      metaPart(language === 'en' ? 'also on ' + item.alsoIn.length + (item.alsoIn.length === 1 ? ' other source' : ' other sources') : 'ook op ' + item.alsoIn.length + ' andere bron' + (item.alsoIn.length > 1 ? 'nen' : ''), item.alsoIn.join(', '));
     }
-    metaPart('regelscore ' + item.score, 'Open de score-uitleg onder de samenvatting', 'scorebtn');
+    metaPart((language === 'en' ? 'rule score ' : 'regelscore ') + item.score, language === 'en' ? 'Open the score explanation below the summary' : 'Open de score-uitleg onder de samenvatting', 'scorebtn');
 
     if (item.allDates && item.allDates.length) {
       var extra = item.allDates.filter(function (x) { return !item.keyDate || x.iso !== item.keyDate.iso; });
       if (extra.length) {
-        metaPart('ook genoemd: ' + extra.map(function (x) { return x.text; }).join(', '));
+        metaPart((language === 'en' ? 'also mentioned: ' : 'ook genoemd: ') + extra.map(function (x) { return dateText(x); }).join(', '));
       }
     }
     body.appendChild(meta);
 
-    if (item.summary) {
+    if (itemSummary(item)) {
       var p = document.createElement('div');
       p.className = 'summary';
-      p.textContent = item.summary;
+      p.textContent = itemSummary(item);
       body.appendChild(p);
     }
 
     var scoreDetails = document.createElement('details');
     scoreDetails.className = 'scorecard';
     var scoreSummary = document.createElement('summary');
-    scoreSummary.textContent = 'Waarom regelscore ' + item.score + ' en label ‘' + (item.tier === 'action' ? 'Actie' : (item.tier === 'watch' ? 'Let op' : 'Informatie')) + '’?';
+    scoreSummary.textContent = language === 'en'
+      ? 'Why rule score ' + item.score + ' and label “' + (item.tier === 'action' ? 'Action' : (item.tier === 'watch' ? 'Watch' : 'Information')) + '”?'
+      : 'Waarom regelscore ' + item.score + ' en label ‘' + (item.tier === 'action' ? 'Actie' : (item.tier === 'watch' ? 'Let op' : 'Informatie')) + '’?';
     scoreDetails.appendChild(scoreSummary);
     var scoreGrid = document.createElement('div');
     scoreGrid.className = 'scoregrid';
     (item.scoreBreakdown || []).forEach(function (part) {
       var name = document.createElement('span');
-      name.textContent = part.label + ' (' + part.location + ')';
+      var scoreNames = { 'Broncorrectie': 'Source adjustment', 'Concrete wijzigingsdatum': 'Concrete change date', 'Message Center: wijziging plannen': 'Message Center: plan for change', 'Message Center: probleem voorkomen of oplossen': 'Message Center: prevent or fix issue', 'Message Center: grote wijziging': 'Message Center: major change', 'Message Center: actiedeadline': 'Message Center: action deadline', 'Message Center: hoge ernst': 'Message Center: high severity', 'Message Center: kritieke ernst': 'Message Center: critical severity' };
+      var locations = { bron: 'source', titel: 'title', tekst: 'text', datum: 'date', metadata: 'metadata' };
+      name.textContent = (language === 'en' ? (scoreNames[part.label] || part.label) : part.label) + ' (' + (language === 'en' ? (locations[part.location] || part.location) : part.location) + ')';
       var points = document.createElement('span');
       points.className = 'pts'; points.textContent = (part.points > 0 ? '+' : '') + part.points;
       scoreGrid.appendChild(name); scoreGrid.appendChild(points);
     });
-    var totalName = document.createElement('span'); totalName.textContent = 'Totaal'; totalName.style.fontWeight = '700';
+    var totalName = document.createElement('span'); totalName.textContent = language === 'en' ? 'Total' : 'Totaal'; totalName.style.fontWeight = '700';
     var totalPoints = document.createElement('span'); totalPoints.className = 'pts'; totalPoints.textContent = item.score;
     scoreGrid.appendChild(totalName); scoreGrid.appendChild(totalPoints);
     scoreDetails.appendChild(scoreGrid);
     var scoreExplain = document.createElement('div');
     scoreExplain.className = 'score-explain';
-    scoreExplain.textContent = 'De voorselectie gebruikt Let op vanaf ' + data.thresholds.watch + ' en Actie vanaf ' + data.thresholds.action + ' én een concreet actiesignaal. De agent bepaalt daarna het inhoudelijke eindlabel en kan een regelscore corrigeren.' +
-      (item.demote ? ' Dit item is ' + (item.demote === 'reference' ? 'naslag' : (item.demote === 'guide' ? 'een handleiding' : 'een verzamelpost')) + ' en wordt daarom nooit automatisch Actie.' : '') +
-      (item.agentReviewed && item.agentReason ? ' Agentbeoordeling: ' + item.agentReason : ' Geen agentbeoordeling beschikbaar.');
+    scoreExplain.textContent = language === 'en'
+      ? 'Preselection uses Watch from ' + data.thresholds.watch + ' and Action from ' + data.thresholds.action + ' plus a concrete action signal. The agent then assigns the content-based final label and may correct a rule score.' + (item.demote ? ' This item is ' + (item.demote === 'reference' ? 'reference material' : (item.demote === 'guide' ? 'a guide' : 'a roundup')) + ' and therefore never becomes an automatic Action.' : '') + (item.agentReviewed && agentReason(item) ? ' Agent assessment: ' + agentReason(item) : ' No agent assessment available.')
+      : 'De voorselectie gebruikt Let op vanaf ' + data.thresholds.watch + ' en Actie vanaf ' + data.thresholds.action + ' én een concreet actiesignaal. De agent bepaalt daarna het inhoudelijke eindlabel en kan een regelscore corrigeren.' + (item.demote ? ' Dit item is ' + (item.demote === 'reference' ? 'naslag' : (item.demote === 'guide' ? 'een handleiding' : 'een verzamelpost')) + ' en wordt daarom nooit automatisch Actie.' : '') + (item.agentReviewed && agentReason(item) ? ' Agentbeoordeling: ' + agentReason(item) : ' Geen agentbeoordeling beschikbaar.');
     scoreDetails.appendChild(scoreExplain);
     body.appendChild(scoreDetails);
 
     /* Uitleg: letterlijke zinnen uit de bron. Bij een actie-item staat die
        open, want dat is precies waarvoor het item er staat. Bij de rest
        dichtgeklapt, zodat de lijst scanbaar blijft. */
-    if (item.actionCtx && item.actionCtx.length && item.tier !== 'info') {
+    if (itemAction(item).length && item.tier !== 'info') {
       var why = document.createElement('details');
       why.className = 'why' + (item.tier === 'action' ? ' hot' : '');
       why.open = item.tier === 'action';
 
       var sum = document.createElement('summary');
       sum.appendChild(svg(item.tier === 'action' ? ICON.crit : ICON.warn));
-      sum.appendChild(document.createTextNode(item.tier === 'action' ? 'Waarom dit actie is' : 'Waar het om gaat'));
+      sum.appendChild(document.createTextNode(item.tier === 'action' ? (language === 'en' ? 'Why this is an action' : 'Waarom dit actie is') : (language === 'en' ? 'What this is about' : 'Waar het om gaat')));
       sum.appendChild(svg(ICON.chev));
       why.appendChild(sum);
 
@@ -1504,7 +1622,7 @@
       inner.className = 'inner';
 
       var ul = document.createElement('ul');
-      item.actionCtx.forEach(function (c) {
+      itemAction(item).forEach(function (c) {
         var li = document.createElement('li');
         li.textContent = c.text;
         ul.appendChild(li);
@@ -1514,8 +1632,8 @@
       var note = document.createElement('div');
       note.className = 'note';
       note.textContent = item.agentReviewed
-        ? 'Door de agent in het Nederlands samengevat; lees de bron voor de volledige context.'
-        : 'Niet door de agent beoordeeld; dit is tekst uit de bron en kan in de oorspronkelijke taal staan.';
+        ? (language === 'en' ? 'Summarized in English by the agent; read the source for full context.' : 'Door de agent in het Nederlands samengevat; lees de bron voor de volledige context.')
+        : (language === 'en' ? 'Not reviewed by the agent; this is source text and may use another language.' : 'Niet door de agent beoordeeld; dit is tekst uit de bron en kan in de oorspronkelijke taal staan.');
       inner.appendChild(note);
 
       why.appendChild(inner);
@@ -1528,7 +1646,7 @@
 
       item.categories.forEach(function (c) {
         var cb = document.createElement('button');
-        cb.className = 'cat'; cb.textContent = c; cb.title = 'Filter op ' + c;
+        cb.className = 'cat'; cb.textContent = categoryLabel(c); cb.title = (language === 'en' ? 'Filter by ' : 'Filter op ') + categoryLabel(c);
         cb.addEventListener('click', function () { toggleCat(c); });
         tags.appendChild(cb);
       });
@@ -1538,7 +1656,7 @@
       (item.nativeTags || []).forEach(function (t) {
         if (item.categories.indexOf(t) !== -1) { return; }
         var nb = document.createElement('button');
-        nb.className = 'cat native'; nb.textContent = t; nb.title = 'Zoek op "' + t + '"';
+        nb.className = 'cat native'; nb.textContent = t; nb.title = (language === 'en' ? 'Search for "' : 'Zoek op "') + t + '"';
         nb.addEventListener('click', function () {
           searchBox.value = t; filters.q = t.toLowerCase(); shownLimit = PAGE; render();
           window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1550,7 +1668,7 @@
         var kw = document.createElement('span');
         kw.className = 'kw';
         kw.textContent = item.keywords.join(' · ');
-        kw.title = 'Trefwoorden uit sources.json die dit item lieten scoren';
+        kw.title = language === 'en' ? 'Keywords from sources.json that contributed to this score' : 'Trefwoorden uit sources.json die dit item lieten scoren';
         tags.appendChild(kw);
       }
       body.appendChild(tags);
@@ -1562,17 +1680,17 @@
 
       var workflowLabel = document.createElement('label');
       workflowLabel.setAttribute('for', 'triage-' + Math.abs(hashCode(item.id)));
-      workflowLabel.textContent = 'Beoordeling';
+      workflowLabel.textContent = language === 'en' ? 'Assessment' : 'Beoordeling';
       workflow.appendChild(workflowLabel);
 
       var workflowSelect = document.createElement('select');
       workflowSelect.id = 'triage-' + Math.abs(hashCode(item.id));
-      workflowSelect.setAttribute('aria-label', 'Beoordeling voor ' + item.title);
+      workflowSelect.setAttribute('aria-label', (language === 'en' ? 'Assessment for ' : 'Beoordeling voor ') + itemTitle(item));
       [
-        { value: 'review', label: 'Te beoordelen' },
-        { value: 'followup', label: 'Opvolging nodig' },
-        { value: 'done', label: 'Afgehandeld' },
-        { value: 'skip', label: 'Niet van toepassing' }
+        { value: 'review', label: language === 'en' ? 'To review' : 'Te beoordelen' },
+        { value: 'followup', label: language === 'en' ? 'Follow-up needed' : 'Opvolging nodig' },
+        { value: 'done', label: language === 'en' ? 'Completed' : 'Afgehandeld' },
+        { value: 'skip', label: language === 'en' ? 'Not applicable' : 'Niet van toepassing' }
       ].forEach(function (choice) {
         var option = document.createElement('option');
         option.value = choice.value; option.textContent = choice.label;
@@ -1592,7 +1710,7 @@
 
       var trust = document.createElement('span');
       trust.className = 'trust';
-      trust.textContent = 'Check scope, pilot, stopcriterium en herstelpad; test bij toegangswijzigingen ook aanmelden en hersteltoegang.';
+      trust.textContent = language === 'en' ? 'Check scope, pilot, stop criteria and recovery path; for access changes, also test sign-in and recovery access.' : 'Check scope, pilot, stopcriterium en herstelpad; test bij toegangswijzigingen ook aanmelden en hersteltoegang.';
       workflow.appendChild(trust);
       body.appendChild(workflow);
     }
@@ -1602,7 +1720,7 @@
     var tools = document.createElement('div');
     tools.className = 'rowtools';
     var markBtn = document.createElement('button');
-    markBtn.textContent = read[item.id] ? 'ongelezen' : 'gelezen';
+    markBtn.textContent = read[item.id] ? (language === 'en' ? 'unread' : 'ongelezen') : (language === 'en' ? 'read' : 'gelezen');
     markBtn.addEventListener('click', function (e) {
       e.stopPropagation();
       toggleRead(item.id);
@@ -1673,17 +1791,17 @@
     } else {
       var e = document.createElement('div');
       e.className = 'empty';
-      e.textContent = 'Niets dat aan dit filter voldoet.';
+      e.textContent = language === 'en' ? 'Nothing matches this filter.' : 'Niets dat aan dit filter voldoet.';
       list.appendChild(e);
     }
 
     var rest = visible.length - page.length;
     moreBtn.hidden = rest <= 0;
-    moreBtn.textContent = 'Nog ' + rest + (rest === 1 ? ' item tonen' : ' items tonen');
+    moreBtn.textContent = language === 'en' ? 'Show ' + rest + ' more ' + (rest === 1 ? 'item' : 'items') : 'Nog ' + rest + (rest === 1 ? ' item tonen' : ' items tonen');
 
     countEl.textContent = visible.length === data.items.length
       ? data.items.length + ' items'
-      : visible.length + ' van ' + data.items.length;
+      : visible.length + (language === 'en' ? ' of ' : ' van ') + data.items.length;
 
     cursor = -1;
   }
@@ -1768,15 +1886,25 @@
     }
     var tr = document.createElement('tr');
     tr.innerHTML = '<td></td><td></td><td class="n"></td><td class="n"></td>';
-    tr.children[0].textContent = f.Source;
-    tr.children[1].textContent = f.Status;
+    tr.children[0].textContent = language === 'en' && f.Source === 'Artikelen verrijkt' ? 'Articles enriched' : f.Source;
+    tr.children[1].textContent = language === 'en' ? ({ 'OVERGESLAGEN': 'SKIPPED', 'FOUT': 'ERROR', 'OK': 'OK' }[f.Status] || f.Status) : f.Status;
     if (f.Status !== 'OK') { tr.children[1].className = 'bad'; }
     tr.children[2].textContent = f.Items;
-    tr.children[3].textContent = f.Detail || '';
+    var feedDetail = f.Detail || '';
+    if (language === 'en' && f.Source === 'Message Center' && f.Status === 'OVERGESLAGEN') {
+      feedDetail = 'Run used -SkipMessageCenter; connect Graph with ServiceMessage.Read.All for tenant messages';
+    } else if (language === 'en' && f.Source === 'Artikelen verrijkt') {
+      var enrichment = /^(\d+) verrijkt van (\d+) kandidaten \((\d+) leverden niet meer tekst, (\d+) niet op te halen\)$/.exec(feedDetail);
+      if (enrichment) {
+        feedDetail = enrichment[1] + ' enriched from ' + enrichment[2] + ' candidates (' + enrichment[3] + ' added no extra text, ' + enrichment[4] + ' could not be retrieved)';
+      }
+    }
+    tr.children[3].textContent = feedDetail;
     tbody.appendChild(tr);
   });
-  document.getElementById('feeds-summary').textContent =
-    'Bronnen (' + sourceTotal + (broken ? ', ' + broken + ' met problemen of overgeslagen' : ', alles OK') + ')';
+  document.getElementById('feeds-summary').textContent = language === 'en'
+    ? 'Sources (' + sourceTotal + (broken ? ', ' + broken + ' with issues or skipped' : ', all OK') + ')'
+    : 'Bronnen (' + sourceTotal + (broken ? ', ' + broken + ' met problemen of overgeslagen' : ', alles OK') + ')';
 
   render();
 })();

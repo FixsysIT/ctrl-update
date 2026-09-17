@@ -215,6 +215,15 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 - Een RSS-aanvraag uit de browser wordt geëxporteerd en daarna centraal ontdekt en gevalideerd. De statische
   browserpagina is bewust geen open RSS-proxy.
 
+## V11 - Tweetalig, inhoudsroutes en blijvende praktijktips
+
+- EN/NL wisselt zowel de interface als alle agentredactie; productnamen blijven onvertaald.
+- Microsoft/tenant, wijzigingen, praktijktips en weekoverzichten zijn aparte routes binnen dezelfde dataset.
+- De agentclassificatie bepaalt de route per artikel; de naam van de website alleen is niet genoeg.
+- `curatedArticles` bewaart uitzonderlijk nuttige handleidingen buiten het nieuwsvenster.
+- Op desktop heeft de linker filterkolom een eigen viewport-scroll, zodat categorieën bereikbaar blijven
+  zonder eerst de lange rechter nieuwslijst naar beneden te hoeven scrollen.
+
 ---
 
 ## Bestanden

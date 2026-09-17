@@ -815,6 +815,69 @@ Write-Progress -Activity 'Feeds ophalen' -Completed
 
 #endregion
 
+#region Samengestelde praktijktips -------------------------------------------
+
+# Sommige uitzonderlijk bruikbare handleidingen verdienen een vaste plek in de
+# radar, ook als ze buiten het gewone nieuwsvenster vallen. Ze blijven gewone
+# bronlinks: de agent vat ze samen, maar de oorspronkelijke auteur blijft leidend.
+foreach ($curated in @($config.curatedArticles)) {
+    try {
+        $page = Invoke-WebRequest -Uri $curated.url `
+                                  -Headers @{
+                                      'User-Agent' = $settings.userAgent
+                                      'Accept' = 'text/html,application/xhtml+xml,*/*;q=0.8'
+                                      'Accept-Language' = 'en-US,en;q=0.9'
+                                  } `
+                                  -TimeoutSec ([int]$settings.timeoutSec) `
+                                  -MaximumRedirection 5 -UseBasicParsing
+
+        $raw = [regex]::Replace($page.Content, '(?is)<(nav|header|footer|aside|form)\b.*?</\1>', ' ')
+        $articleMatch = [regex]::Match($raw, '(?is)<article\b[^>]*>(.*?)</article>')
+        if ($articleMatch.Success) { $raw = $articleMatch.Groups[1].Value }
+
+        $fullText = ConvertFrom-HtmlText $raw ([int]$settings.scoreTextLength)
+        $summary = ConvertFrom-HtmlText $raw ([int]$settings.summaryLength)
+        $published = ConvertTo-DateTimeSafe ([string]$curated.published)
+        if (-not $published) { $published = (Get-Date).ToUniversalTime() }
+        $title = [string]$curated.title
+        $relevance = Get-RelevanceScore -Title $title -Summary $fullText
+        $keyDates = @(Get-KeyDates "$title. $fullText" |
+                      Where-Object { [Math]::Abs(($_.Date - $published.Date).TotalDays) -gt 1 })
+        $primary = Select-PrimaryDate $keyDates
+        $dateSignal = $primary -and $primary.Date -ge $today -and $primary.Kind -in @('deadline', 'retirement', 'start')
+        $score = $relevance.Score
+        $scoreBreakdown = @($relevance.Breakdown)
+        if ($dateSignal) {
+            $score += 3
+            $scoreBreakdown += [PSCustomObject]@{ label = 'Concrete wijzigingsdatum'; points = 3; location = 'datum' }
+        }
+        $demote = Get-DemoteKind $title
+        if (-not $demote) { $demote = 'guide' }
+        $tier = Get-Tier -Score $score -ActionSignal:($relevance.ActionSignal -or $dateSignal)
+        if ($tier -eq 'action') { $tier = 'watch' }
+        $id = [string]$curated.url
+
+        $items.Add([PSCustomObject]@{
+            Id = $id; Title = $title; Link = [string]$curated.url
+            Source = [string]$curated.source; Tag = [string]$curated.tag
+            Published = $published; Summary = $summary; Score = $score
+            ScoreBreakdown = @($scoreBreakdown); Tier = $tier; Demote = $demote
+            ActionCtx = @(Get-ActionContext -Text $fullText -KeyDate $primary -DatePhrase $(if ($primary) { $primary.Phrase } else { $null }))
+            Keywords = @($relevance.Keywords)
+            Categories = @(Get-Categories -Title "$title $(@($curated.nativeTags) -join ' ')" -Text $fullText)
+            NativeTags = @($curated.nativeTags); KeyDate = Format-DateBadge $primary
+            AllDates = @($keyDates | Where-Object { $_.Date -ge $today } | Select-Object -First 4 | ForEach-Object { Format-DateBadge $_ })
+            Kind = 'feed'; Channel = 'community'; FullText = $fullText; Enriched = $true
+            Boost = 0; Deadline = $null; IsNew = -not $state.ContainsKey($id); Curated = $true
+        })
+    }
+    catch {
+        Write-Warning "Samengestelde tip '$($curated.title)' niet opgehaald: $($_.Exception.Message)"
+    }
+}
+
+#endregion
+
 #region Artikelen verrijken ---------------------------------------------------
 
 # Veel feeds leveren maar een fragment van 150 tekens. Daar staat nooit een
@@ -1107,9 +1170,13 @@ $reviewSettings = $config.agentReview
 
 foreach ($item in $deduped) {
     $item | Add-Member -NotePropertyName OriginalTitle -NotePropertyValue $item.Title -Force
+    $item | Add-Member -NotePropertyName EnglishTitle -NotePropertyValue $item.Title -Force
+    $item | Add-Member -NotePropertyName EnglishSummary -NotePropertyValue $item.Summary -Force
+    $item | Add-Member -NotePropertyName EnglishActionCtx -NotePropertyValue @($item.ActionCtx) -Force
     $item | Add-Member -NotePropertyName AgentReviewed -NotePropertyValue $false -Force
     $item | Add-Member -NotePropertyName AgentConfidence -NotePropertyValue $null -Force
     $item | Add-Member -NotePropertyName AgentReason -NotePropertyValue '' -Force
+    $item | Add-Member -NotePropertyName AgentReasonEn -NotePropertyValue '' -Force
     $item | Add-Member -NotePropertyName ReviewKind -NotePropertyValue '' -Force
     $hashInput = "$($item.Title)`n$($item.Source)`n$($item.FullText)"
     $item | Add-Member -NotePropertyName ContentHash -NotePropertyValue (Get-TextHash $hashInput) -Force
@@ -1159,7 +1226,12 @@ if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -g
 
             if (-not [string]::IsNullOrWhiteSpace([string]$review.titleNl)) { $item.Title = [string]$review.titleNl }
             if (-not [string]::IsNullOrWhiteSpace([string]$review.summaryNl)) { $item.Summary = [string]$review.summaryNl }
+            if (-not [string]::IsNullOrWhiteSpace([string]$review.titleEn)) { $item.EnglishTitle = [string]$review.titleEn }
+            if (-not [string]::IsNullOrWhiteSpace([string]$review.summaryEn)) { $item.EnglishSummary = [string]$review.summaryEn }
             $item.ActionCtx = @($review.whyNl | Where-Object { $_ } | Select-Object -First 3 | ForEach-Object {
+                [PSCustomObject]@{ text = [string]$_ }
+            })
+            $item.EnglishActionCtx = @($review.whyEn | Where-Object { $_ } | Select-Object -First 3 | ForEach-Object {
                 [PSCustomObject]@{ text = [string]$_ }
             })
             # Ook bij lage zekerheid is de Nederlandse redactie bruikbaar. Alleen
@@ -1177,6 +1249,7 @@ if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -g
             $item.AgentReviewed = $true
             $item.AgentConfidence = [Math]::Round([double]$review.confidence, 2)
             $item.AgentReason = [string]$review.reasonNl
+            $item.AgentReasonEn = [string]$review.reasonEn
             $item.ReviewKind = [string]$review.kind
             $reviewedCount++
         }
@@ -1186,6 +1259,17 @@ if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -g
         $reviewStatus = 'mislukt'
         Write-Warning "Agentreview mislukt; regelscore en brontekst blijven beschikbaar: $($_.Exception.Message)"
     }
+}
+
+# Officiële bronnen, inhoudelijke wijzigingen, praktijktips en periodieke
+# overzichten krijgen elk hun eigen leesroute. De oorspronkelijke bronsoort
+# blijft daarnaast beschikbaar voor filtering en herkomst.
+foreach ($item in $deduped) {
+    if ($item.Channel -in @('official', 'tenant')) { $section = 'microsoft' }
+    elseif ($item.Demote -eq 'digest') { $section = 'weekly' }
+    elseif ($item.ReviewKind -in @('handleiding', 'naslag') -or $item.Demote -in @('guide', 'reference')) { $section = 'tips' }
+    else { $section = 'changes' }
+    $item | Add-Member -NotePropertyName Section -NotePropertyValue $section -Force
 }
 
 $tierRank = @{ action = 0; watch = 1; info = 2 }
@@ -1246,11 +1330,13 @@ $agenda = @($agendaCandidates |
         [PSCustomObject]@{
             id        = $_.Id
             title     = $_.Title
+            titleEn   = $_.EnglishTitle
             link      = $_.Link
             source    = $_.Source
             tier      = $_.Tier
             date      = $_.KeyDate
             actionCtx = @($_.ActionCtx)
+            actionCtxEn = @($_.EnglishActionCtx)
         }
     })
 
@@ -1303,6 +1389,7 @@ $payload = [PSCustomObject]@{
         [PSCustomObject]@{
             id         = $_.Id
             title      = $_.Title
+            titleEn    = $_.EnglishTitle
             originalTitle = $_.OriginalTitle
             link       = $_.Link
             source     = $_.Source
@@ -1311,11 +1398,13 @@ $payload = [PSCustomObject]@{
             date       = $_.Published.ToString('yyyy-MM-dd')
             dateText   = "$($_.Published.Day) $($dutchMonths[$_.Published.Month - 1])"
             summary    = $_.Summary
+            summaryEn  = $_.EnglishSummary
             score      = $_.Score
             scoreBreakdown = @($_.ScoreBreakdown)
             tier       = $_.Tier
             keywords   = @($_.Keywords)
             actionCtx  = @($_.ActionCtx)
+            actionCtxEn = @($_.EnglishActionCtx)
             demote     = $_.Demote
             categories = @($_.Categories)
             nativeTags = @($_.NativeTags)
@@ -1327,6 +1416,8 @@ $payload = [PSCustomObject]@{
             agentReviewed = [bool]$_.AgentReviewed
             agentConfidence = $_.AgentConfidence
             agentReason = $_.AgentReason
+            agentReasonEn = $_.AgentReasonEn
+            section    = $_.Section
             enriched   = [bool]$_.Enriched
             isNew      = [bool]$_.IsNew
         }

@@ -48,7 +48,11 @@ $resultById = @{}
 $pending = [System.Collections.Generic.List[object]]::new()
 foreach ($item in $wanted) {
     $id = [string]$item.id
-    if ($cacheById.ContainsKey($id) -and [string]$cacheById[$id].contentHash -eq [string]$item.contentHash) {
+    if ($cacheById.ContainsKey($id) -and
+        [string]$cacheById[$id].contentHash -eq [string]$item.contentHash -and
+        -not [string]::IsNullOrWhiteSpace([string]$cacheById[$id].titleEn) -and
+        -not [string]::IsNullOrWhiteSpace([string]$cacheById[$id].summaryEn) -and
+        -not [string]::IsNullOrWhiteSpace([string]$cacheById[$id].reasonEn)) {
         $resultById[$id] = $cacheById[$id]
     }
     else {
@@ -75,14 +79,16 @@ Lever voor elk item exact een object terug met hetzelfde id en contentHash.
 - titleNl: natuurlijke, zakelijke Nederlandse titel. Productnamen, feature-namen en Message Center-id's niet vertalen.
 - summaryNl: maximaal twee korte Nederlandse zinnen die zeggen wat er werkelijk verandert of wordt uitgelegd.
 - whyNl: nul tot drie korte Nederlandse punten. Alleen concrete impact, vereiste beheeractie en harde datum. Geen reclame of algemene intro.
+- titleEn, summaryEn en whyEn: dezelfde inhoud in natuurlijk, zakelijk Engels; vertaal product- en feature-namen niet.
 - categories: maximaal drie uit deze vaste lijst: $categoryText
 - kind: wijziging, nieuws, analyse, handleiding of naslag.
 - tier: action alleen bij een concrete beheeractie, verplichte migratie, deadline, retirement of operationeel probleem; watch bij relevante ontwikkeling die aandacht verdient; info bij nieuws, analyse, handleiding of naslag zonder concrete actie.
 - confidence: 0 tot 1, lager als de brontekst onvoldoende bewijs bevat.
 - reasonNl: een korte Nederlandse toelichting op de gekozen tier.
+- reasonEn: dezelfde korte toelichting in het Engels.
 
 De regelscore en voorgestelde tier zijn aanwijzingen, geen feiten. Corrigeer foutpositieven. Een hoge trefwoordscore maakt naslag niet automatisch actie.
-Schrijf volledig in het Nederlands, helder en zonder Markdown. Geef alleen JSON volgens het schema.
+Schrijf de *Nl-velden volledig in het Nederlands en de *En-velden volledig in het Engels, helder en zonder Markdown. Geef alleen JSON volgens het schema.
 
 ITEMS:
 $itemsJson

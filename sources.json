@@ -102,6 +102,17 @@
     { "name": "System Center Dudes - Autopilot", "url": "https://www.systemcenterdudes.com/category/autopilot/feed/", "boost": 0, "tag": "Community" }
   ],
 
+  "curatedArticles": [
+    {
+      "title": "How to Configure Intune Remote Help (Step-by-Step Guide)",
+      "url": "https://www.systemcenterdudes.com/how-to-configure-intune-remote-help-step-by-step-guide/",
+      "source": "System Center Dudes - Intune",
+      "published": "2026-06-30",
+      "tag": "Community",
+      "nativeTags": [ "Intune", "Remote Help" ]
+    }
+  ],
+
   "categories": {
     "Autopilot":        [ "autopilot", "device preparation", "device association", "enrollment status page", "esp", "pre-provision*", "white glove" ],
     "Enrollment":       [ "enrollment", "enroll*", "apple business manager", "abm", "android enterprise", "co-management", "comanagement", "entra join", "hybrid join", "bulk enrollment" ],

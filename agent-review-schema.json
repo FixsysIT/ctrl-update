@@ -9,18 +9,22 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "contentHash", "titleNl", "summaryNl", "whyNl", "categories", "kind", "tier", "confidence", "reasonNl"],
+        "required": ["id", "contentHash", "titleNl", "summaryNl", "whyNl", "titleEn", "summaryEn", "whyEn", "categories", "kind", "tier", "confidence", "reasonNl", "reasonEn"],
         "properties": {
           "id": { "type": "string" },
           "contentHash": { "type": "string" },
           "titleNl": { "type": "string" },
           "summaryNl": { "type": "string" },
           "whyNl": { "type": "array", "maxItems": 3, "items": { "type": "string" } },
+          "titleEn": { "type": "string" },
+          "summaryEn": { "type": "string" },
+          "whyEn": { "type": "array", "maxItems": 3, "items": { "type": "string" } },
           "categories": { "type": "array", "minItems": 1, "maxItems": 3, "items": { "type": "string" } },
           "kind": { "type": "string", "enum": ["wijziging", "nieuws", "analyse", "handleiding", "naslag"] },
           "tier": { "type": "string", "enum": ["action", "watch", "info"] },
           "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
-          "reasonNl": { "type": "string" }
+          "reasonNl": { "type": "string" },
+          "reasonEn": { "type": "string" }
         }
       }
     }
