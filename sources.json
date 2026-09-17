@@ -99,7 +99,9 @@
     { "name": "scloud.work",                       "url": "https://scloud.work/feed/",                                   "boost": 0, "tag": "Community" },
     { "name": "Oliver Kieselbach",                 "url": "https://oliverkieselbach.com/feed/",                          "boost": 0, "tag": "Community" },
     { "name": "SysAndDeploy (Damien Van Robaeys)", "url": "https://www.systanddeploy.com/feeds/posts/default",           "boost": 0, "tag": "Community" },
-    { "name": "System Center Dudes - Autopilot", "url": "https://www.systemcenterdudes.com/category/autopilot/feed/", "boost": 0, "tag": "Community" }
+    { "name": "System Center Dudes - Autopilot", "url": "https://www.systemcenterdudes.com/category/autopilot/feed/", "boost": 0, "tag": "Community" },
+    { "name": "IntuneWeekly",                      "url": "https://ugurkocde.github.io/IntuneWeekly/rss.xml",                 "boost": 0, "tag": "Community" },
+    { "name": "OpenIntuneBaseline Releases",       "url": "https://github.com/SkipToTheEndpoint/OpenIntuneBaseline/releases.atom", "boost": 2, "tag": "Community" }
   ],
 
   "curatedArticles": [
