@@ -1018,14 +1018,15 @@
   var jump = document.getElementById('status-jump');
 
   function syncOverview() {
-    var okSources = data.feeds.filter(function (f) { return f.Status === 'OK'; }).length;
+    var monitoredSources = data.feeds.filter(function (f) { return f.kind !== 'processing'; });
+    var okSources = monitoredSources.filter(function (f) { return f.Status === 'OK'; }).length;
     document.getElementById('metric-review-v').textContent = counts.review;
     document.getElementById('metric-followup-v').textContent = counts.followup;
     document.getElementById('metric-new-v').textContent = counts.nieuw;
-    document.getElementById('metric-health-v').textContent = okSources + '/' + data.feeds.length;
-    var failedSources = data.feeds.length - okSources;
+    document.getElementById('metric-health-v').textContent = okSources + '/' + monitoredSources.length;
+    var failedSources = monitoredSources.length - okSources;
     document.getElementById('metric-health-s').textContent = failedSources === 0 ? 'alle bronnen bereikbaar' : failedSources + (failedSources === 1 ? ' bron met een probleem' : ' bronnen met problemen');
-    document.getElementById('metric-health').className = 'metric ' + (okSources === data.feeds.length ? 'health' : 'attention');
+    document.getElementById('metric-health').className = 'metric ' + (okSources === monitoredSources.length ? 'health' : 'attention');
   }
 
   function renderStatus() {
@@ -1759,8 +1760,12 @@
 
   var tbody = document.getElementById('feeds-body');
   var broken = 0;
+  var sourceTotal = 0;
   data.feeds.forEach(function (f) {
-    if (f.Status !== 'OK') { broken++; }
+    if (f.kind !== 'processing') {
+      sourceTotal++;
+      if (f.Status !== 'OK') { broken++; }
+    }
     var tr = document.createElement('tr');
     tr.innerHTML = '<td></td><td></td><td class="n"></td><td class="n"></td>';
     tr.children[0].textContent = f.Source;
@@ -1771,7 +1776,7 @@
     tbody.appendChild(tr);
   });
   document.getElementById('feeds-summary').textContent =
-    'Bronnen (' + data.feeds.length + (broken ? ', ' + broken + ' met problemen' : ', alles OK') + ')';
+    'Bronnen (' + sourceTotal + (broken ? ', ' + broken + ' met problemen of overgeslagen' : ', alles OK') + ')';
 
   render();
 })();

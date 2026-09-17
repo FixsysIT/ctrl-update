@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-17T17:30:56.3422593Z",
+  "generated": "2026-09-17T17:36:23.2040010Z",
   "items": [
     {
       "id": "https://andrewstaylor.com/2026/09/04/intune-newsletter-4th-september-2026/",
@@ -623,6 +623,26 @@
       "reasonNl": "De aanbevolen koers is relevant voor toekomstige provisioning, maar er is geen verplichte migratie of einddatum aangekondigd."
     },
     {
+      "id": "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/replace-vpn-access-with-identity-driven-security/ba-p/4529309",
+      "contentHash": "fa39e6968201a462b848ee9a47b7884ffe9b29395b394008189a8b862798e9ff",
+      "titleNl": "VPN-toegang gefaseerd vervangen door Microsoft Entra Private Access",
+      "summaryNl": "Deze handleiding beschrijft een gefaseerde overstap van traditionele VPN-toegang naar identiteitsgestuurde toegang per applicatie met Microsoft Entra Private Access. De aanpak omvat inventarisatie, versterking van Zero Trust-controles, een pilot, monitoring en stapsgewijze uitfasering van VPN-afhankelijkheden.",
+      "whyNl": [
+        "Inventariseer eerst welke applicaties, bestandsshares en interne webbronnen van de VPN afhankelijk zijn.",
+        "Controleer Conditional Access, MFA, apparaatcompliance, noodaccounts en uitzonderingen vóór de pilot.",
+        "Test terugvalscenario’s en faseer VPN-toegang pas uit nadat applicaties en toegang zijn gevalideerd."
+      ],
+      "categories": [
+        "Identiteit & MFA",
+        "Conditional Access",
+        "Compliance"
+      ],
+      "kind": "handleiding",
+      "tier": "info",
+      "confidence": 0.98,
+      "reasonNl": "Dit is een praktische migratiehandleiding zonder aangekondigde verplichting, retirement of harde deadline."
+    },
+    {
       "id": "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/simplify-employee-identity-lifecycle-with-hibob-and-microsoft/ba-p/4554510",
       "contentHash": "62f679e1fdcdf811ba0fead7e236cc0a3481f59906ae9548a96d02b9967d6ae5",
       "titleNl": "HiBob-integratie met Microsoft Entra algemeen beschikbaar",
@@ -806,6 +826,25 @@
       "tier": "watch",
       "confidence": 0.98,
       "reasonNl": "Dit is een relevante actieve fraudecampagne, maar de aangeleverde tekst bevat geen verplichte beheeractie of deadline."
+    },
+    {
+      "id": "https://www.microsoft.com/en-us/security/blog/2026/09/17/improving-email-security-outcomes-with-real-world-microsoft-defender-insights/",
+      "contentHash": "63586e8ad8705b54e88e59058d7f4a68f536b8dab19be88ce722beb71dfeebde",
+      "titleNl": "Microsoft deelt nieuwe benchmarkresultaten voor e-mailbeveiliging met Defender",
+      "summaryNl": "Microsoft vergelijkt de prestaties van Defender met andere e-mailbeveiligingsoplossingen over mei tot en met juli 2026. De resultaten laten ook zien hoe benchmarkgegevens worden gebruikt voor aanpassingen aan filtering en detectie.",
+      "whyNl": [
+        "Volgens Microsoft miste Defender 221 ernstige dreigingen per 1.000 beschermde gebruikers, 55,4% minder dan de eerstvolgende SEG-leverancier.",
+        "Defender detecteerde tijdens de benchmark gemiddeld 92% van de schadelijke berichten die pas na bezorging werden onderschept.",
+        "De cijfers zijn afkomstig uit Microsoft Defender-data en vormen geen onafhankelijke benchmark."
+      ],
+      "categories": [
+        "Defender & Security",
+        "Reporting"
+      ],
+      "kind": "analyse",
+      "tier": "info",
+      "confidence": 0.98,
+      "reasonNl": "Het artikel rapporteert benchmarkresultaten en productontwikkeling, maar bevat geen vereiste beheeractie of deadline."
     }
   ]
 }

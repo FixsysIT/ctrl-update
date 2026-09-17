@@ -1073,6 +1073,12 @@ if ($useMessageCenter) {
         }
     }
 }
+elseif ($config.messageCenter.enabled -and $SkipMessageCenter) {
+    $feedStatus.Add([PSCustomObject]@{
+        Source = 'Message Center'; Status = 'OVERGESLAGEN'; Items = 0
+        Detail = "Run uitgevoerd met -SkipMessageCenter; verbind Graph met ServiceMessage.Read.All voor tenantberichten"
+    })
+}
 
 #endregion
 
@@ -1264,7 +1270,15 @@ $payload = [PSCustomObject]@{
     duplicates = $duplicatesRemoved
     categories = $allCategories
     agenda     = $agenda
-    feeds      = @($feedStatus)
+    feeds      = @($feedStatus | ForEach-Object {
+        [PSCustomObject]@{
+            Source = $_.Source
+            Status = $_.Status
+            Items = $_.Items
+            Detail = $_.Detail
+            kind = $(if ($_.Source -eq 'Artikelen verrijkt') { 'processing' } else { 'source' })
+        }
+    })
     review     = [PSCustomObject]@{
         status = $reviewStatus
         reviewed = $reviewedCount
