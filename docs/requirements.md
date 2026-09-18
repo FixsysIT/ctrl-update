@@ -44,7 +44,8 @@ Een wijziging die al is ingegaan staat bovenaan met `loopt al X dagen` in rood. 
 Een item wordt alleen `Actie` als het allebei waar is:
 1. score >= `actionThreshold`, en
 2. er staat een actiewoord in (breaking change, retirement, deprecated, action required, enforced,
-   mandatory, no opt out) of er is een harde datum in de toekomst.
+   mandatory, no opt out), er is een harde datum in de toekomst, of de bron beschrijft een bevestigde
+   brede productiestoring of nood-/out-of-bandupdate die beheerders moeten beoordelen of uitrollen.
 
 Een hoge score op losse onderwerpen is niet genoeg. Anders komt een certificerings-docpagina bovenaan
 en wordt de rode lijst genegeerd.
@@ -211,7 +212,7 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 - Parsing, schema-validatie, agentreview en de netwerkloze repositorytest zijn verplichte publicatiepoorten.
 - Een mislukte run commit en publiceert niets; de laatst geslaagde GitHub Pages-versie blijft online.
 - De kop toont de laatste succesvolle publicatie en een zichtbare waarschuwing na 26 uur zonder succes.
-- Teams ontvangt alleen nieuwe of gepromoveerde Actie-items, gewijzigde harde actiedatums, nieuwe bronstoringen en mislukte refreshes. Let op-, Info-, blog- en weekitems veroorzaken geen melding.
+- Teams ontvangt alleen nieuwe of gepromoveerde Actie-items, gewijzigde harde actiedatums, nieuwe bronstoringen en mislukte refreshes. Let op-, Info-, blog- en weekitems veroorzaken geen melding. Een bevestigd breed incident of een nood-/out-of-bandupdate wordt als `Kritieke waarschuwing` gemarkeerd.
 - Per run wordt maximaal één Adaptive Card gestuurd. De bestaande dataset is de nulmeting en veroorzaakt geen eerste spamgolf; ongewijzigde signalen worden niet opnieuw gemeld.
 
 ## V10 - Agent-eindredactie, kanalen en persoonlijke radar

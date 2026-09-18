@@ -764,6 +764,16 @@ foreach ($feed in $enabledFeeds) {
             $fullText = ConvertFrom-HtmlText $body ([int]$settings.scoreTextLength)
             $summary  = ConvertFrom-HtmlText $body ([int]$settings.summaryLength)
 
+            # Brede nieuwsfeeds mogen een eigen onderwerpfilter hebben. Zo levert
+            # BleepingComputer wel Microsoft- en endpointincidenten, maar geen
+            # ongerelateerde malware-, crypto- of consumentennieuwsstroom.
+            $includeTerms = @($feed.includeTerms | Where-Object { $_ })
+            if ($includeTerms.Count -gt 0) {
+                $filterText = "$title $fullText"
+                $matchesFeedScope = @($includeTerms | Where-Object { Test-Term -Text $filterText -Term ([string]$_) }).Count -gt 0
+                if (-not $matchesFeedScope) { continue }
+            }
+
             # De bron levert vaak zijn eigen rubrieken mee (Autopilot, Windows 11).
             # Die zijn betrouwbaarder dan wat wij uit de tekst afleiden.
             $nativeCategories = @(Get-CategoryTerms $entry.category)
@@ -821,7 +831,7 @@ foreach ($feed in $enabledFeeds) {
                 KeyDate    = Format-DateBadge $primary
                 AllDates   = @($keyDates | Where-Object { $_.Date -ge $today } | Select-Object -First 4 | ForEach-Object { Format-DateBadge $_ })
                 Kind       = 'feed'
-                Channel    = $(if ($feed.tag -eq 'Microsoft') { 'official' } else { 'community' })
+                Channel    = $(if ($feed.tag -eq 'Microsoft') { 'official' } elseif ($feed.tag -eq 'News') { 'news' } else { 'community' })
                 FullText   = $fullText
                 Enriched   = $false
                 Boost      = [int]$feed.boost
@@ -1439,7 +1449,7 @@ $payload = [PSCustomObject]@{
         @($config.feeds | Where-Object { $_.enabled -ne $false } | ForEach-Object {
             [PSCustomObject]@{
                 name = $_.name
-                channel = $(if ($_.tag -eq 'Microsoft') { 'official' } else { 'community' })
+                channel = $(if ($_.tag -eq 'Microsoft') { 'official' } elseif ($_.tag -eq 'News') { 'news' } else { 'community' })
             }
         }) +
         @([PSCustomObject]@{ name = 'Message Center'; channel = 'tenant' })

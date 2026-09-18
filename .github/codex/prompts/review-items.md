@@ -10,7 +10,7 @@ Lever voor ieder aangeleverd item exact één resultaat terug met hetzelfde `id`
 - `titleEn`, `summaryEn` en `whyEn`: dezelfde inhoud in natuurlijk zakelijk Engels.
 - `categories`: maximaal drie categorieën die exact voorkomen in `config/sources.json`.
 - `kind`: `wijziging`, `nieuws`, `analyse`, `handleiding` of `naslag`.
-- `tier`: `action` alleen bij concrete beheeractie, verplichte migratie, deadline, retirement of operationeel probleem; `watch` bij een relevante ontwikkeling; anders `info`.
+- `tier`: `action` bij concrete beheeractie, verplichte migratie, deadline, retirement, een bevestigde brede productiestoring of een nood-/out-of-bandupdate die beheerders moeten beoordelen of uitrollen. Kies `watch` bij een relevante ontwikkeling of nog onbevestigde beperkte meldingen; anders `info`.
 - `confidence`: getal van 0 tot en met 1; lager wanneer de brontekst onvoldoende bewijs bevat.
 - `reasonNl` en `reasonEn`: één korte toelichting op de gekozen tier in respectievelijk Nederlands en Engels.
 

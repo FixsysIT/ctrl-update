@@ -84,6 +84,18 @@ if ($duplicateUrls.Count -eq 0 -and $duplicateNames.Count -eq 0) {
     Write-Pass "$($feeds.Count) unieke feedbronnen"
 }
 
+$bleepingComputer = @($feeds | Where-Object name -eq 'BleepingComputer - Microsoft & Windows')[0]
+$incidentGroup = $config.keywords.incident
+if (-not $bleepingComputer -or [string]$bleepingComputer.url -ne 'https://www.bleepingcomputer.com/feed/' -or
+    [string]$bleepingComputer.tag -ne 'News' -or @($bleepingComputer.includeTerms).Count -lt 8) {
+    Add-Failure 'BleepingComputer ontbreekt of heeft geen afgebakend Microsoft/Windows-bronfilter'
+}
+if (-not $incidentGroup -or -not [bool]$incidentGroup.isActionSignal -or
+    [int]$incidentGroup.weight * [int]$config.settings.titleWeightMultiplier -lt [int]$config.settings.actionThreshold -or
+    'emergency update' -notin @($incidentGroup.terms) -or 'out-of-band' -notin @($incidentGroup.terms)) {
+    Add-Failure 'Kritieke incidenten bereiken niet betrouwbaar de Actie-drempel'
+}
+
 $allowedCategories = @($config.categories.PSObject.Properties.Name)
 $reviewPath = Join-Path $projectRoot 'data/review-cache.json'
 $reviewCache = Get-Content -LiteralPath $reviewPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -152,6 +164,9 @@ if ($updater -notmatch '\$priorityRank\s*=\s*@\{\s*action\s*=\s*0;\s*watch\s*=\s
 }
 if ($template -notmatch "a\.tier === 'action'" -or $template -notmatch 'a\.date !== b\.date') {
     Add-Failure 'Browserweergave borgt de prioriteit- en datumsortering niet'
+}
+if ($template -notmatch 'Nieuwsbron' -or $updater -notmatch 'includeTerms' -or $updater -notmatch '\$feed\.tag -eq ''News''') {
+    Add-Failure 'Nieuwsbronnen zijn niet herkenbaar of niet bron-specifiek gefilterd'
 }
 if ($updater -notmatch '\$UsePreparedSnapshot' -or
     $updater -notmatch 'prepared-publication\.json' -or
@@ -222,6 +237,21 @@ else {
     $notificationStateAfter = Get-Content -LiteralPath $notificationStatePath -Raw -Encoding UTF8
     if ($notificationStateAfter -ne $notificationStateBefore) {
         Add-Failure 'PreviewOnly heeft de productie-nulmeting onbedoeld gewijzigd'
+    }
+
+    $promotedItem.keywords = @('out-of-band')
+    $criticalJson = $notificationPayload | ConvertTo-Json -Depth 30 -Compress
+    "<script id=`"payload`" type=`"application/json`">$criticalJson</script>" |
+        Set-Content -LiteralPath $notificationPublishedPath -Encoding UTF8
+    $criticalPreviewText = & $notificationScript -PublishedPath $notificationPublishedPath -StatePath $notificationStatePath -PreviewOnly | Out-String
+    try { $criticalPreview = $criticalPreviewText | ConvertFrom-Json -AsHashtable }
+    catch { $criticalPreview = $null; Add-Failure "Kritieke Teams-preview is ongeldig: $($_.Exception.Message)" }
+    if ($criticalPreview) {
+        $criticalCardText = @($criticalPreview.attachments[0].content.body | ForEach-Object { [string]$_.text }) -join "`n"
+        if ($criticalCardText -notmatch 'KRITIEKE WAARSCHUWING' -or
+            $criticalCardText -notmatch '1 kritieke waarschuwing') {
+            Add-Failure 'Incidentactie wordt niet als kritieke Teams-waarschuwing weergegeven'
+        }
     }
 }
 if ($failures.Count -eq 0) { Write-Pass 'Teams-meldingen zijn actiegericht, kaartgeldig en zonder eerste spamgolf' }

@@ -3,7 +3,7 @@
 [![Publiceer site](https://github.com/FixsysIT/ctrl-update/actions/workflows/pages.yml/badge.svg)](https://github.com/FixsysIT/ctrl-update/actions/workflows/pages.yml)
 [![Controleer repository](https://github.com/FixsysIT/ctrl-update/actions/workflows/quality.yml/badge.svg)](https://github.com/FixsysIT/ctrl-update/actions/workflows/quality.yml)
 
-CTRL UPDATE bundelt officiële Microsoft-updates, Message Center-berichten en zorgvuldig gekozen vakblogs in één actiegericht overzicht voor endpoint- en identitybeheerders.
+CTRL UPDATE bundelt officiële Microsoft-updates, Message Center-berichten, relevante nieuwsbronnen en zorgvuldig gekozen vakblogs in één actiegericht overzicht voor endpoint- en identitybeheerders.
 
 **Productie:** [news.intunetools.com](https://news.intunetools.com/)
 
@@ -64,6 +64,8 @@ Een gebruiker kan vanuit de radar voorkeuren en aangevraagde feeds exporteren. I
 
 Feedconfiguratie, trefwoorden en drempels staan in `config/sources.json`. Tijdloze, uitzonderlijk nuttige artikelen kunnen in `curatedArticles` worden vastgezet.
 
+Brede nieuwsfeeds kunnen met `includeTerms` tot het relevante Microsoft-, Windows- en endpointdomein worden beperkt. BleepingComputer wordt zo als afzonderlijke nieuwsbron verwerkt zonder dat ongerelateerd consumenten-, crypto- of algemeen malwarenieuws de radar vult.
+
 ## Projectstructuur
 
 ```text
@@ -83,7 +85,7 @@ dist/         exact wat GitHub Pages publiceert
 
 GitHub Actions voert `.github/workflows/refresh.yml` dagelijks om 06:30 en 14:00 uit in `Europe/Amsterdam` (zomer- en wintertijd worden automatisch gevolgd). De workflow haalt de openbare bronnen op, laat alleen nieuwe of gewijzigde items door de officiële Codex GitHub Action beoordelen, valideert het resultaat en pusht uitsluitend gewijzigde cache-, state- en publicatiebestanden. Als een stap faalt wordt niets gepubliceerd en blijft de laatst geslaagde versie online.
 
-De site toont bovenaan de laatste succesvolle publicatie en waarschuwt wanneer de data ouder is dan 26 uur. Teams ontvangt maximaal één Adaptive Card per run en uitsluitend bij een nieuw of gepromoveerd Actie-item, een gewijzigde harde actiedatum, een nieuwe bronstoring of een mislukte refresh. De versiebeheerbare nulmeting in `data/notification-state.json` voorkomt een eerste spamgolf en herhaalde meldingen.
+De site toont bovenaan de laatste succesvolle publicatie en waarschuwt wanneer de data ouder is dan 26 uur. Teams ontvangt maximaal één Adaptive Card per run en uitsluitend bij een nieuw of gepromoveerd Actie-item, een gewijzigde harde actiedatum, een nieuwe bronstoring of een mislukte refresh. Bevestigde brede productiestoringen en nood-/out-of-bandupdates worden op zo'n kaart nadrukkelijk als `Kritieke waarschuwing` gemarkeerd. De versiebeheerbare nulmeting in `data/notification-state.json` voorkomt een eerste spamgolf en herhaalde meldingen.
 
 De repository gebruikt hiervoor één verplichte en één optionele Actions-secret:
 

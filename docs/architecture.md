@@ -42,12 +42,12 @@ dist/index.html -> GitHub Pages -> news.intunetools.com
 4. die items via `openai/codex-action@v1` met een strikt JSON-schema beoordelen;
 5. het resultaat atomair met de bestaande inhoudshash-cache samenvoegen;
 6. de definitieve pagina uit exact dezelfde momentopname genereren en alle kwaliteitscontroles uitvoeren;
-7. alleen nieuwe Actie-signalen, gewijzigde harde actiedatums en nieuwe bronstoringen als één Adaptive Card naar Teams sturen;
+7. alleen nieuwe Actie-signalen, gewijzigde harde actiedatums en nieuwe bronstoringen als één Adaptive Card naar Teams sturen; brede incidenten en nood-/out-of-bandupdates krijgen daarin de aanduiding `Kritieke waarschuwing`;
 8. alleen gewijzigde data, meldingsstatus en `dist/index.html` naar `main` pushen.
 
 `OPENAI_API_KEY` en de optionele `TEAMS_WEBHOOK_URL` bestaan uitsluitend als GitHub Actions-secrets. De OpenAI-sleutel gaat direct naar de officiële Codex-action; de webhook alleen naar het meldingsscript. De Codex-stap draait read-only en behandelt alle artikeltekst als onbetrouwbare data. Een mislukte run pusht niets, zodat de vorige productieversie online blijft. Een ontbrekende of ongeldige webhook schakelt alleen de meldingen uit en blokkeert de nieuwsactualisatie niet.
 
-`data/notification-state.json` is de auditeerbare nulmeting voor meldingen. Alle huidige items en bronstatussen worden bewaard, maar alleen de overgang naar `action`, een nieuw `action`-item, een gewijzigde harde datum of een nieuwe status `FOUT` veroorzaakt een kaart. Bij een mislukte webhookpost wordt de nulmeting niet bijgewerkt, zodat de melding bij de volgende run opnieuw kan worden geprobeerd.
+`data/notification-state.json` is de auditeerbare nulmeting voor meldingen. Alle huidige items en bronstatussen worden bewaard, maar alleen de overgang naar `action`, een nieuw `action`-item, een gewijzigde harde datum of een nieuwe status `FOUT` veroorzaakt een kaart. Een actie met een gecontroleerd incident-signaal wordt als kritieke waarschuwing gepresenteerd. Bij een mislukte webhookpost wordt de nulmeting niet bijgewerkt, zodat de melding bij de volgende run opnieuw kan worden geprobeerd.
 
 De daaropvolgende Pages-workflow valideert de commit opnieuw en publiceert uitsluitend `dist/`. Er mag maar één schrijvende refresh-runner actief zijn; lokale of tweede cloudtaken veroorzaken anders dubbele commits en mergeconflicten.
 

@@ -235,6 +235,11 @@ if (-not $previousState -or $InitializeOnly) {
 $events = [System.Collections.Generic.List[object]]::new()
 $previousItems = if ($previousState.items) { $previousState.items } else { @{} }
 $previousFeeds = if ($previousState.feeds) { $previousState.feeds } else { @{} }
+$criticalIncidentTerms = @(
+    'emergency update', 'out-of-band', 'known issue', 'breaks', 'failure',
+    'unresponsive', 'widespread', 'service disruption', 'workaround', 'mitigation',
+    'hotfix', 'zero-day', 'actively exploited'
+)
 
 foreach ($item in @($payload.items)) {
     if ([string]$item.tier -ne 'action') { continue }
@@ -249,9 +254,12 @@ foreach ($item in @($payload.items)) {
         Sort-Object -Unique)
     $previousHardDates = @($previous.hardDates | ForEach-Object { [string]$_ } | Sort-Object -Unique)
 
+    $itemKeywords = @($item.keywords | ForEach-Object { ([string]$_).ToLowerInvariant() })
+    $isCriticalIncident = @($itemKeywords | Where-Object { $_ -in $criticalIncidentTerms }).Count -gt 0
+
     $eventType = $null
-    if (-not $previous) { $eventType = 'Nieuwe actie' }
-    elseif ([string]$previous.tier -ne 'action') { $eventType = 'Naar Actie gepromoveerd' }
+    if (-not $previous) { $eventType = $(if ($isCriticalIncident) { 'Kritieke waarschuwing' } else { 'Nieuwe actie' }) }
+    elseif ([string]$previous.tier -ne 'action') { $eventType = $(if ($isCriticalIncident) { 'Kritieke waarschuwing' } else { 'Naar Actie gepromoveerd' }) }
     elseif ([string]$previous.dateIso -ne $currentDate -or
             [string]$previous.dateKind -ne $currentKind -or
             ($previousHardDates -join '|') -ne ($currentHardDates -join '|')) {
@@ -267,6 +275,7 @@ foreach ($item in @($payload.items)) {
             source  = [string]$item.source
             date    = $(if ($item.keyDate) { [string]$item.keyDate.text } else { $null })
             link    = [string]$item.link
+            critical = $isCriticalIncident
         })
     }
 }
@@ -284,6 +293,7 @@ foreach ($feed in @($payload.feeds)) {
             source  = $source
             date    = $null
             link    = $SiteUrl
+            critical = $false
         })
     }
 }
@@ -295,14 +305,17 @@ if ($events.Count -eq 0) {
 }
 
 $actionCount = @($events | Where-Object kind -eq 'action').Count
+$criticalCount = @($events | Where-Object { $_.kind -eq 'action' -and $_.critical }).Count
+$regularActionCount = $actionCount - $criticalCount
 $sourceCount = @($events | Where-Object kind -eq 'source').Count
 $summaryParts = @()
-if ($actionCount) { $summaryParts += "$actionCount actie$($(if ($actionCount -eq 1) { '' } else { 's' }))" }
+if ($criticalCount) { $summaryParts += "$criticalCount kritieke waarschuwing$($(if ($criticalCount -eq 1) { '' } else { 'en' }))" }
+if ($regularActionCount) { $summaryParts += "$regularActionCount actie$($(if ($regularActionCount -eq 1) { '' } else { 's' }))" }
 if ($sourceCount) { $summaryParts += "$sourceCount bronstoring$($(if ($sourceCount -eq 1) { '' } else { 'en' }))" }
 
 $body = [System.Collections.Generic.List[object]]::new()
 $body.Add((New-TextBlock -Text 'CTRL UPDATE' -Weight Bolder -Size Medium))
-$body.Add((New-TextBlock -Text 'Aandacht vereist' -Weight Bolder -Color Attention -Size Large))
+$body.Add((New-TextBlock -Text $(if ($criticalCount) { 'Kritieke waarschuwing' } else { 'Aandacht vereist' }) -Weight Bolder -Color Attention -Size Large))
 $body.Add((New-TextBlock -Text ($summaryParts -join ' · ') -Color Default))
 
 $visibleEvents = @($events | Select-Object -First 8)

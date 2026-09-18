@@ -913,7 +913,7 @@
 
     sourceSettings.textContent = '';
     (data.sourceCatalog || []).slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).forEach(function (source, index) {
-      var suffix = source.channel === 'official' ? ' — Microsoft' : (source.channel === 'tenant' ? (language === 'en' ? ' — own tenant' : ' — eigen tenant') : (language === 'en' ? ' — expert blog' : ' — vakblog'));
+      var suffix = source.channel === 'official' ? ' — Microsoft' : (source.channel === 'tenant' ? (language === 'en' ? ' — own tenant' : ' — eigen tenant') : (source.channel === 'news' ? (language === 'en' ? ' — news source' : ' — nieuwsbron') : (language === 'en' ? ' — expert blog' : ' — vakblog')));
       makeSettingCheck(sourceSettings, 'source-' + index, source.name + suffix, preferences.hiddenSources.indexOf(source.name) === -1, 'source', source.name);
     });
 
@@ -1419,7 +1419,7 @@
     metaPart(item.source, null, 'src');
     if (item.tag) {
       var originClass = item.tag.toLowerCase() === 'microsoft' ? 'origin microsoft' : (item.tag.toLowerCase() === 'tenant' ? 'origin tenant' : 'origin');
-      metaPart(item.tag === 'Microsoft' ? (language === 'en' ? 'Official source' : 'Officiële bron') : (item.tag === 'Tenant' ? (language === 'en' ? 'Own tenant' : 'Eigen tenant') : (language === 'en' ? 'Expert blog' : 'Vakblog')), null, originClass);
+      metaPart(item.tag === 'Microsoft' ? (language === 'en' ? 'Official source' : 'Officiële bron') : (item.tag === 'Tenant' ? (language === 'en' ? 'Own tenant' : 'Eigen tenant') : (item.tag === 'News' ? (language === 'en' ? 'News source' : 'Nieuwsbron') : (language === 'en' ? 'Expert blog' : 'Vakblog'))), null, originClass);
     }
     var publishedParts = item.date.split('-');
     metaPart(language === 'en' ? Number(publishedParts[2]) + ' ' + MONTHS_EN[Number(publishedParts[1]) - 1] : item.dateText);

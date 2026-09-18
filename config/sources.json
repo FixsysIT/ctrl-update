@@ -82,6 +82,17 @@
     { "name": "Intune Customer Success",           "url": "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=IntuneCustomerSuccess",   "boost": 4,  "tag": "Microsoft" },
     { "name": "Microsoft Entra Blog",              "url": "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=microsoft-entra-blog",    "boost": 4,  "tag": "Microsoft" },
     { "name": "Microsoft Security Blog",           "url": "https://www.microsoft.com/en-us/security/blog/feed/",                                           "boost": 3,  "tag": "Microsoft" },
+    {
+      "name": "BleepingComputer - Microsoft & Windows",
+      "url": "https://www.bleepingcomputer.com/feed/",
+      "boost": 2,
+      "tag": "News",
+      "includeTerms": [
+        "microsoft", "windows", "intune", "entra", "defender", "microsoft 365",
+        "office", "outlook", "teams", "edge", "active directory", "remote desktop",
+        "rdp", "rds", "azure virtual desktop", "hyper-v", "wsus", "patch tuesday"
+      ]
+    },
     { "name": "Learn Docs - Entra what's new",     "url": "https://learn.microsoft.com/api/search/rss?search=%22Microsoft+Entra%22+%22What%27s+new%22&locale=en-us", "boost": -2, "tag": "Microsoft" },
     { "name": "Learn Docs - Intune",               "url": "https://learn.microsoft.com/api/search/rss?search=%22Microsoft+Intune%22&locale=en-us",          "boost": -4, "tag": "Microsoft" },
 
@@ -148,6 +159,16 @@
         "no longer available", "mandatory", "enforc*", "required by", "must migrate",
         "plan for change", "sunset", "discontinu*", "migrate before", "cutoff",
         "no opt out", "opt out", "blocking prompt"
+      ]
+    },
+    "incident": {
+      "weight": 7,
+      "maxTerms": 3,
+      "isActionSignal": true,
+      "terms": [
+        "emergency update", "out-of-band", "known issue", "breaks", "failure*",
+        "unresponsive", "widespread", "service disruption", "workaround", "mitigation",
+        "hotfix", "zero-day", "actively exploited"
       ]
     },
     "topic": {
