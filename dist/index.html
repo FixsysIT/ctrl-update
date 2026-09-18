@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CTRL UPDATE — acties, wijzigingen en vaknieuws</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='none' stroke='%233641d6' stroke-width='9'/><circle cx='50' cy='50' r='15' fill='%233641d6'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='8' y='8' width='84' height='84' rx='18' fill='%232454e6'/><text x='50' y='62' font-family='Arial' font-size='34' font-weight='700' text-anchor='middle' fill='white'>CU</text></svg>">
 <style>
   /* ============================================================
      Tokens. Kleur draagt nooit alleen betekenis: elke urgentie
@@ -13,7 +13,7 @@
      voor wie kleur slecht onderscheidt.
      ============================================================ */
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
 
     --bg:           #f3f6fa;
     --bg-soft:      #e8edf4;
@@ -50,40 +50,8 @@
     --sidebar: 236px;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg:           #0a0a0c;
-      --bg-soft:      #17171a;
-      --panel:        #131316;
-      --panel-alt:    #161619;
-      --border:       #26262a;
-      --border-sharp: #3b3b41;
-      --text:         #f4f4f2;
-      --text-soft:    #b3b2af;
-      --muted:        #85837e;
-      --faint:        #5f5d59;
-      --accent:       #8da7ff;
-      --accent-soft:  #17213e;
-      --ink:          #080f20;
-      --ink-soft:     #111e39;
-
-      --crit:      #ff7d69;
-      --crit-soft: #291310;
-      --warn:      #e3a748;
-      --warn-soft: #251b0b;
-      --ok:        #58c391;
-      --ok-soft:   #0d2118;
-      --sched:      #7f9ee0;
-      --sched-soft: #121a2b;
-      --neutral:      #85837e;
-      --neutral-soft: #1b1b1e;
-
-      --shadow:    0 1px 2px rgba(0,0,0,.45), 0 10px 26px -20px rgba(0,0,0,.9);
-      --shadow-lg: 0 2px 6px rgba(0,0,0,.5), 0 18px 40px -26px rgba(0,0,0,1);
-    }
-  }
-
   :root[data-theme="dark"] {
+    color-scheme: dark;
     --bg:           #0a0a0c;
     --bg-soft:      #17171a;
     --panel:        #131316;
@@ -140,24 +108,16 @@
     align-items: center; gap: 24px; padding: 25px 0 19px;
     margin-bottom: 15px; border-bottom: 1px solid var(--border);
   }
-  .brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
-  .logo {
-    width: 43px; height: 43px; border-radius: 13px; flex: none;
-    background: linear-gradient(145deg, var(--ink-soft), var(--ink)); color: #fff; display: grid; place-items: center;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), 0 10px 24px -13px rgba(11,23,48,.78);
+  .brand { display: flex; align-items: stretch; gap: 12px; min-width: 0; }
+  .brand::before {
+    content: ""; width: 3px; flex: none; border-radius: 999px;
+    background: var(--accent);
   }
-  .logo svg { filter: drop-shadow(0 1px 1px rgba(0,0,0,.18)); }
   .brand-copy { min-width: 0; }
-  .brand-title { display: flex; align-items: center; gap: 8px; }
-  .brand h1 { margin: 0; font-size: 24px; font-weight: 760; letter-spacing: -0.04em; line-height: 1.05; }
-  .internal-mark {
-    padding: 2px 6px; border: 1px solid var(--border-sharp); border-radius: 999px;
-    color: var(--muted); font-size: 8.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
-  }
-  .brand .eyebrow { color: var(--accent); font-size: 9.5px; font-weight: 820; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 4px; }
-  .brand .tagline { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+  .brand h1 { margin: 0; font-size: 24px; font-weight: 750; letter-spacing: -0.035em; line-height: 1.05; }
+  .brand .tagline { color: var(--muted); font-size: 12.5px; margin-top: 6px; }
 
-  .mast-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 7px; min-width: 0; }
+  .mast-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; min-width: 0; }
 
   .freshness {
     display: flex; justify-content: flex-end; flex-wrap: wrap;
@@ -621,20 +581,9 @@
 
   <header class="masthead">
     <div class="brand">
-      <div class="logo">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <circle cx="12" cy="12" r="8.6"></circle>
-          <circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"></circle>
-          <path d="M12 3.4v2.4M12 18.2v2.4M3.4 12h2.4M18.2 12h2.4"></path>
-        </svg>
-      </div>
       <div class="brand-copy">
-        <div class="eyebrow" data-i18n="eyebrow">Endpoint-informatie</div>
-        <div class="brand-title">
-          <h1>CTRL UPDATE</h1>
-          <span class="internal-mark" data-i18n="internal">Intern</span>
-        </div>
-        <div class="tagline" id="tagline"></div>
+        <h1>CTRL UPDATE</h1>
+        <div class="tagline" id="tagline">IT-wijzigingen, acties en vaknieuws</div>
       </div>
     </div>
     <div class="mast-actions">
@@ -822,7 +771,7 @@
   var language = store(LANG_KEY, 'nl') === 'en' ? 'en' : 'nl';
 
   var EN = {
-    eyebrow: 'Endpoint intelligence', internal: 'Internal', preferences: 'Preferences', toReview: 'To review',
+    preferences: 'Preferences', toReview: 'To review',
     reviewedSignals: 'content-reviewed signals', followup: 'Follow-up needed', confirmedByYou: 'confirmed by you',
     newSignals: 'New signals', sinceLastRun: 'since the previous run', sources: 'Sources',
     changeCalendar: 'Change calendar', urgency: 'Urgency', category: 'Category', source: 'Source',
@@ -926,12 +875,11 @@
 
   /* ---------- voorkeuren ---------- */
 
-  var savedTheme = store(THEME_KEY, null);
-  if (savedTheme) { document.documentElement.setAttribute('data-theme', savedTheme); }
+  var savedTheme = store(THEME_KEY, 'light');
+  document.documentElement.setAttribute('data-theme', savedTheme === 'dark' ? 'dark' : 'light');
 
   document.getElementById('theme').addEventListener('click', function () {
-    var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    var now  = document.documentElement.getAttribute('data-theme') || (systemDark ? 'dark' : 'light');
+    var now  = document.documentElement.getAttribute('data-theme') || 'light';
     var next = now === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
     persist(THEME_KEY, next);
@@ -1093,10 +1041,9 @@
 
   renderFreshness();
 
-  document.getElementById('tagline').textContent =
-    data.items.length + (language === 'en' ? ' items from ' : ' items uit ') + data.days + (language === 'en' ? ' days' : ' dagen') +
-    (data.duplicates > 0 ? ' · ' + data.duplicates + (language === 'en' ? ' duplicates removed' : ' dubbel gefilterd') : '') +
-    ' · agent ' + data.review.reviewed + '/' + data.review.total;
+  document.getElementById('tagline').textContent = language === 'en'
+    ? 'IT changes, actions and expert news'
+    : 'IT-wijzigingen, acties en vaknieuws';
 
   /* ---------- ochtendoverzicht ---------- */
 

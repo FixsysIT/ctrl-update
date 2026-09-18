@@ -135,6 +135,14 @@ foreach ($requiredUi in @('id="source-status"', 'id="feeds-body"', 'id="fresh-st
         Add-Failure "Centrale update- en bronstatus mist: $requiredUi"
     }
 }
+foreach ($unprofessionalHeader in @('Endpoint intelligence', 'Endpoint-informatie', 'internal-mark', "' · agent '")) {
+    if ($template -match [regex]::Escape($unprofessionalHeader)) {
+        Add-Failure "Technische of AI-achtige koptekst is teruggekeerd: $unprofessionalHeader"
+    }
+}
+if ($template -notmatch "store\(THEME_KEY, 'light'\)" -or $template -match 'prefers-color-scheme:\s*dark') {
+    Add-Failure 'Lichte modus is niet de vaste standaard voor nieuwe bezoekers'
+}
 if ($updater -notmatch '\$priorityRank\s*=\s*@\{\s*action\s*=\s*0;\s*watch\s*=\s*1;\s*info\s*=\s*1\s*\}' -or
     $updater -notmatch '(?s)\$priorityRank\[\$_\.Tier\].*?\$_\.Published.*?\$_\.Score') {
     Add-Failure 'Bronitems worden niet volgens actie-eerst, daarna nieuwste-eerst opgebouwd'
