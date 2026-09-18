@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-18T11:49:16.8387132+00:00",
+  "updatedAt": "2026-09-18T13:21:05.8755656+00:00",
   "items": {
     "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-broken-copy-and-paste-for-excel-2016-users/": {
       "tier": "action",
@@ -62,8 +62,20 @@
       "dateKind": "start",
       "hardDates": []
     },
+    "https://www.bleepingcomputer.com/news/security/microsoft-fixes-bug-behind-defender-antivirus-is-turned-off-alerts/": {
+      "tier": "info",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
     "https://andrewstaylor.com/2026/09/18/intune-newsletter-18th-september-2026/": {
       "tier": "info",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/public-preview-of-self-service-onboarding-for-new-microsoft/ba-p/4557199": {
+      "tier": "watch",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
@@ -116,6 +128,12 @@
       "dateKind": null,
       "hardDates": []
     },
+    "https://techcommunity.microsoft.com/t5/intune-customer-success/moving-from-windows-autopilot-to-windows-autopilot-device/ba-p/4557269": {
+      "tier": "watch",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
     "https://www.bleepingcomputer.com/news/microsoft/windows-11-kb5124008-update-breaks-domain-trust-for-some-users/": {
       "tier": "watch",
       "dateIso": null,
@@ -128,12 +146,6 @@
       "dateKind": null,
       "hardDates": []
     },
-    "https://www.bleepingcomputer.com/news/security/malware-bypasses-browser-checks-to-force-install-chrome-edge-extensions/": {
-      "tier": "watch",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
     "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/known-issues": {
       "tier": "info",
       "dateIso": null,
@@ -141,7 +153,7 @@
       "hardDates": []
     },
     "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq": {
-      "tier": "info",
+      "tier": "watch",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
@@ -196,8 +208,8 @@
     },
     "https://ourcloudnetwork.com/microsoft-outlook-adds-meeting-organiser-transfers/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-outlook-adds-meeting-organiser-transfers": {
       "tier": "watch",
-      "dateIso": null,
-      "dateKind": null,
+      "dateIso": "2026-09-01",
+      "dateKind": "start",
       "hardDates": []
     },
     "https://learn.microsoft.com/en-us/entra/id-governance/licensing-fundamentals": {
@@ -344,12 +356,6 @@
       "dateKind": null,
       "hardDates": []
     },
-    "https://ourcloudnetwork.com/microsoft-graph-hints-at-external-tenant-reporting/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-graph-hints-at-external-tenant-reporting": {
-      "tier": "watch",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
     "https://www.systemcenterdudes.com/how-to-configure-intune-remote-help-step-by-step-guide/": {
       "tier": "info",
       "dateIso": null,
@@ -383,6 +389,7 @@
     "IntuneWeekly": "OK",
     "OpenIntuneBaseline Releases": "OK",
     "Artikelen verrijkt": "OK",
-    "Message Center": "OVERGESLAGEN"
+    "Message Center": "OVERGESLAGEN",
+    "Microsoft 365 Service Health": "OVERGESLAGEN"
   }
 }

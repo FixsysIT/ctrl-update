@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-18T13:00:33.8130267Z",
+  "generated": "2026-09-18T13:21:04.3109526Z",
   "items": [
     {
       "id": "https://andrewstaylor.com/2026/09/11/intune-newsletter-11th-september-2026/",
@@ -256,12 +256,12 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/fundamentals/what-is-entra",
-      "contentHash": "282a43ebec96bb01a5803cd1413d5f0b2037ab358af6f322da681ebd7bce555f",
+      "contentHash": "38e7836ef957b55a742a333ac4d843fc6a86cfd2299446749ac53373c9690b95",
       "titleNl": "Wat is Microsoft Entra?",
-      "summaryNl": "Naslag over de Microsoft Entra-productfamilie voor identity, toegang, governance en beveiliging. Het beschrijft onder meer Entra ID, Private Access, ID Governance en Agent ID.",
+      "summaryNl": "Naslag over Microsoft Entra als productfamilie voor identiteits- en netwerktoegang binnen een Zero Trust-strategie.",
       "whyNl": [],
       "titleEn": "What is Microsoft Entra?",
-      "summaryEn": "Reference material on the Microsoft Entra product family for identity, access, governance, and security. It describes Entra ID, Private Access, ID Governance, and Agent ID among other products.",
+      "summaryEn": "Reference documentation on Microsoft Entra as a family of identity and network access products for a Zero Trust strategy.",
       "whyEn": [],
       "categories": [
         "Identiteit & MFA"
@@ -269,8 +269,8 @@
       "kind": "naslag",
       "tier": "info",
       "confidence": 0.98,
-      "reasonNl": "Dit is productnaslag en bevat geen aangekondigde wijziging of vereiste actie.",
-      "reasonEn": "This is product reference material and contains no announced change or required action."
+      "reasonNl": "Dit is algemene productdocumentatie zonder aangekondigde wijziging of beheeractie.",
+      "reasonEn": "This is general product documentation with no announced change or administrative action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/id-governance/licensing-fundamentals",
@@ -831,6 +831,30 @@
       "reasonEn": "Microsoft recommends a relevant phased transition, but states no mandatory migration or deadline."
     },
     {
+      "id": "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/public-preview-of-self-service-onboarding-for-new-microsoft/ba-p/4557199",
+      "contentHash": "8367a1c728211d03fa25a3efd78c0ca0df9ee623231430a8c4b50aa497f2f0e2",
+      "titleNl": "Public preview van self-service onboarding voor nieuwe Microsoft Entra App Gallery-applicaties",
+      "summaryNl": "Microsoft introduceert een public preview waarmee uitgevers nieuwe App Gallery-applicaties kunnen valideren, indienen en volgen via het Microsoft Entra admin center. De preview ondersteunt geen wijzigingen aan of verwijdering van bestaande vermeldingen.",
+      "whyNl": [
+        "Uitgevers kunnen SSO- en provisioningintegraties vóór indiening valideren.",
+        "Gebruik voor bestaande App Gallery-vermeldingen het huidige wijzigings- of verwijderproces."
+      ],
+      "titleEn": "Public preview of self-service onboarding for new Microsoft Entra App Gallery applications",
+      "summaryEn": "Microsoft is introducing a public preview that lets publishers validate, submit, and track new App Gallery applications through the Microsoft Entra admin center. The preview does not support updates to or removal of existing listings.",
+      "whyEn": [
+        "Publishers can validate SSO and provisioning integrations before submission.",
+        "Continue using the existing update or removal process for current App Gallery listings."
+      ],
+      "categories": [
+        "Identiteit & MFA"
+      ],
+      "kind": "nieuws",
+      "tier": "watch",
+      "confidence": 0.97,
+      "reasonNl": "Dit is een relevante public preview, maar zonder verplichte beheeractie of deadline.",
+      "reasonEn": "This is a relevant public preview, but it has no mandatory administrative action or deadline."
+    },
+    {
       "id": "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/replace-vpn-access-with-identity-driven-security/ba-p/4529309",
       "contentHash": "fa39e6968201a462b848ee9a47b7884ffe9b29395b394008189a8b862798e9ff",
       "titleNl": "VPN-toegang gefaseerd vervangen met Microsoft Entra Private Access",
@@ -1090,18 +1114,18 @@
     },
     {
       "id": "https://www.bleepingcomputer.com/news/microsoft/windows-11-24h2-home-and-pro-reach-end-of-support-in-october/",
-      "contentHash": "15fcea5f77f283ad14c4e99b3ca8118c629a1f6e89d28323cd8f7334aa029b70",
-      "titleNl": "Ondersteuning voor Windows 11 24H2 Home en Pro stopt in oktober",
-      "summaryNl": "Windows 11 24H2 Home en Pro ontvangen vanaf 13 oktober 2026 geen maandelijkse beveiligings- of niet-beveiligingsupdates meer. Enterprise en Education blijven volgens de tekst ondersteund tot oktober 2027.",
+      "contentHash": "adfde190cf8e7a0df626c4d236af408023e95e446e0b52e3e1e673c93ff1c773",
+      "titleNl": "Windows 11 24H2 Home en Pro bereiken einde van updates op 13 oktober 2026",
+      "summaryNl": "Windows 11 versie 24H2 Home en Pro ontvangen na 13 oktober 2026 geen maandelijkse beveiligings- en niet-beveiligingsupdates meer. Windows 11 24H2 Enterprise en Education blijven volgens het artikel ondersteund tot oktober 2027.",
       "whyNl": [
-        "Migreer apparaten met Windows 11 24H2 Home of Pro naar Windows 11 25H2.",
-        "13 oktober 2026: einde van updates voor Windows 11 24H2 Home en Pro."
+        "Plan een upgrade van Windows 11 24H2 Home- en Pro-apparaten.",
+        "13 oktober 2026: deze edities ontvangen geen maandelijkse updates meer."
       ],
-      "titleEn": "Windows 11 24H2 Home and Pro support ends in October",
-      "summaryEn": "Windows 11 24H2 Home and Pro will no longer receive monthly security or non-security updates from October 13, 2026. According to the text, Enterprise and Education remain supported until October 2027.",
+      "titleEn": "Windows 11 24H2 Home and Pro reach end of updates on October 13, 2026",
+      "summaryEn": "Windows 11 version 24H2 Home and Pro will no longer receive monthly security and non-security updates after October 13, 2026. According to the article, Windows 11 24H2 Enterprise and Education remain supported until October 2027.",
       "whyEn": [
-        "Migrate devices running Windows 11 24H2 Home or Pro to Windows 11 25H2.",
-        "October 13, 2026: end of updates for Windows 11 24H2 Home and Pro."
+        "Plan upgrades for devices running Windows 11 24H2 Home and Pro.",
+        "October 13, 2026: these editions will no longer receive monthly updates."
       ],
       "categories": [
         "Windows 11",
@@ -1109,9 +1133,9 @@
       ],
       "kind": "wijziging",
       "tier": "action",
-      "confidence": 0.94,
-      "reasonNl": "Er is een harde end-of-supportdatum die migratieplanning vereist.",
-      "reasonEn": "There is a firm end-of-support date that requires migration planning."
+      "confidence": 0.9,
+      "reasonNl": "De gemelde end-of-supportdatum vereist planning voor getroffen Home- en Pro-apparaten.",
+      "reasonEn": "The reported end-of-support date requires planning for affected Home and Pro devices."
     },
     {
       "id": "https://www.bleepingcomputer.com/news/microsoft/windows-11-kb5124008-update-breaks-domain-trust-for-some-users/",
