@@ -1,32 +1,6 @@
 {
-  "generated": "2026-09-18T08:30:50.6088056Z",
+  "generated": "2026-09-18T11:21:56.4321571Z",
   "items": [
-    {
-      "id": "https://andrewstaylor.com/2026/09/04/intune-newsletter-4th-september-2026/",
-      "contentHash": "bf86595602309c83150ef315d922b13056417714f2520459969e2d7856c19f3e",
-      "titleNl": "Intune-nieuwsbrief van 4 september 2026",
-      "summaryNl": "Dit weekoverzicht bundelt community- en Microsoft-content over onder meer Windows 365, AVD, Android Enterprise, Autopilot en Windows-beveiliging. Het meldt ook dat MemberOf-regels in dynamische Entra-groepen vanaf november 2026 niet meer werken.",
-      "whyNl": [
-        "Inventariseer en vervang MemberOf-regels in dynamische Entra-groepen vóór november 2026.",
-        "De nieuwsbrief verwijst naar scripts en handleidingen voor onder meer Device Association, Point-in-time restore en token protection."
-      ],
-      "titleEn": "Intune newsletter for 4 September 2026",
-      "summaryEn": "This weekly roundup covers community and Microsoft content about Windows 365, AVD, Android Enterprise, Autopilot, and Windows security. It also reports that MemberOf rules in dynamic Entra groups will stop working in November 2026.",
-      "whyEn": [
-        "Inventory and replace MemberOf rules in dynamic Entra groups before November 2026.",
-        "The newsletter links to scripts and guides for Device Association, Point-in-time restore, and token protection, among other topics."
-      ],
-      "categories": [
-        "Identiteit & MFA",
-        "Autopilot",
-        "Windows 365 & AVD"
-      ],
-      "kind": "nieuws",
-      "tier": "action",
-      "confidence": 0.93,
-      "reasonNl": "De aangekondigde uitfasering van MemberOf-regels vereist vóór november 2026 een concrete beheeractie.",
-      "reasonEn": "The announced retirement of MemberOf rules requires a concrete administrative action before November 2026."
-    },
     {
       "id": "https://andrewstaylor.com/2026/09/11/intune-newsletter-11th-september-2026/",
       "contentHash": "3073280942b2f2525af011a32133d38c2e06d041900aa28df3a12f40574e5fde",
@@ -52,6 +26,26 @@
       "confidence": 0.86,
       "reasonNl": "Er worden relevante vervangingen en uitfaseringen genoemd, maar zonder harde deadline of voldoende details voor een directe beheeractie.",
       "reasonEn": "Relevant replacements and retirements are mentioned, but without a firm deadline or enough detail for immediate administrative action."
+    },
+    {
+      "id": "https://andrewstaylor.com/2026/09/18/intune-newsletter-18th-september-2026/",
+      "contentHash": "2ccd1bc9803be8e498743372f53b86a54c3793eac5399a0ac1dd3ac914e022f4",
+      "titleNl": "Intune-nieuwsbrief van 18 september 2026",
+      "summaryNl": "Wekelijkse verzameling met links naar community- en Microsoft-content over onder meer Autopilot Device Preparation, token protection en EPM.",
+      "whyNl": [],
+      "titleEn": "Intune newsletter, 18 September 2026",
+      "summaryEn": "Weekly collection of links to community and Microsoft content covering Autopilot Device Preparation, token protection, and EPM among other topics.",
+      "whyEn": [],
+      "categories": [
+        "Autopilot",
+        "Identiteit & MFA",
+        "Defender & Security"
+      ],
+      "kind": "nieuws",
+      "tier": "info",
+      "confidence": 0.96,
+      "reasonNl": "Dit is een verzamelnieuwsbrief en bevat geen zelfstandige, concrete beheerwijziging.",
+      "reasonEn": "This is a roundup newsletter and contains no standalone, concrete administrative change."
     },
     {
       "id": "https://intunestuff.com/2026/09/07/device-association/",
@@ -244,21 +238,21 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/overview",
-      "contentHash": "09b6c319542788db36bfc1bca3b256fd4df25a0ae50de75e11b51d2f6682e9a2",
+      "contentHash": "fb26d9ff75bd000e18abc46dad2b7544120417bcda5b3b8675f81a0e3dc486fb",
       "titleNl": "Wat is er nieuw in .NET 11",
-      "summaryNl": ".NET 11 RC 1 introduceert runtime-, bibliotheek- en prestatieverbeteringen. Algemene beschikbaarheid wordt in november 2026 verwacht.",
+      "summaryNl": "Overzicht van nieuwe functies in de .NET 11-runtime, libraries en SDK, met verwijzingen naar gerelateerde onderdelen zoals ASP.NET Core.",
       "whyNl": [],
       "titleEn": "What's new in .NET 11",
-      "summaryEn": ".NET 11 RC 1 introduces runtime, library, and performance improvements. General availability is expected in November 2026.",
+      "summaryEn": "Overview of new features in the .NET 11 runtime, libraries, and SDK, with links to related areas such as ASP.NET Core.",
       "whyEn": [],
       "categories": [
         "Scripting & Graph"
       ],
       "kind": "naslag",
       "tier": "info",
-      "confidence": 0.8,
-      "reasonNl": "Dit is algemene technische naslag zonder concrete beheeractie.",
-      "reasonEn": "This is general technical reference material with no concrete administrative action."
+      "confidence": 0.95,
+      "reasonNl": "Het artikel is een algemeen technisch overzicht zonder beheeractie of operationele impact.",
+      "reasonEn": "The article is a general technical overview with no administrative action or operational impact."
     },
     {
       "id": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15",
@@ -348,6 +342,48 @@
       "reasonEn": "The article documents existing behavior and contains no mandatory change or deadline."
     },
     {
+      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-install-roadmap",
+      "contentHash": "d40143165c78e1e87b4e8538eff11dbe1f124d62113d2a478a2760c8a37055dc",
+      "titleNl": "Installatieroutekaart voor Microsoft Entra Connect en Microsoft Entra Connect Health",
+      "summaryNl": "Naslag voor het installeren, configureren en beheren van Microsoft Entra Connect. Het beschrijft onder meer installatieopties, synchronisatiefuncties en operationele aandachtspunten.",
+      "whyNl": [],
+      "titleEn": "Installation roadmap for Microsoft Entra Connect and Microsoft Entra Connect Health",
+      "summaryEn": "Reference guidance for installing, configuring, and operating Microsoft Entra Connect. It covers installation options, synchronization features, and operational considerations.",
+      "whyEn": [],
+      "categories": [
+        "Identiteit & MFA",
+        "Conditional Access"
+      ],
+      "kind": "handleiding",
+      "tier": "info",
+      "confidence": 0.97,
+      "reasonNl": "Dit is bestaande installatie- en configuratiedocumentatie zonder aangekondigde wijziging.",
+      "reasonEn": "This is installation and configuration guidance without an announced change."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq",
+      "contentHash": "f3b5afa49dbd80012ecb02ed10f7afc162cdae3e317b0cfdea2d92781162b1a2",
+      "titleNl": "Veelgestelde vragen over Microsoft Entra seamless single sign-on",
+      "summaryNl": "De FAQ beschrijft compatibiliteit, werking en beheer van Microsoft Entra seamless single sign-on. Voor ingeschakelde forests wordt aanbevolen de Kerberos-ontsleutelingssleutel van het AZUREADSSO-account minstens elke 30 dagen te roteren.",
+      "whyNl": [
+        "Roteer voor iedere forest met Seamless SSO de Kerberos-ontsleutelingssleutel van het AZUREADSSO-account minstens elke 30 dagen."
+      ],
+      "titleEn": "Frequently asked questions about Microsoft Entra seamless single sign-on",
+      "summaryEn": "The FAQ describes compatibility, operation, and administration of Microsoft Entra seamless single sign-on. For enabled forests, it recommends rotating the Kerberos decryption key for the AZUREADSSO account at least every 30 days.",
+      "whyEn": [
+        "For every forest using Seamless SSO, rotate the Kerberos decryption key for the AZUREADSSO account at least every 30 days."
+      ],
+      "categories": [
+        "Identiteit & MFA",
+        "Scripting & Graph"
+      ],
+      "kind": "naslag",
+      "tier": "action",
+      "confidence": 0.96,
+      "reasonNl": "De documentatie bevat een concrete terugkerende beheeractie voor omgevingen met Seamless SSO.",
+      "reasonEn": "The documentation contains a concrete recurring administrative action for environments using Seamless SSO."
+    },
+    {
       "id": "https://learn.microsoft.com/en-us/entra/verified-id/",
       "contentHash": "280239b883a622839993265497e0a339c12cebfc2757cbb24dfaf545148ca9bc",
       "titleNl": "Documentatie voor Microsoft Entra Verified ID",
@@ -368,29 +404,21 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/intune/app-management/ref-protected-apps",
-      "contentHash": "2cae43f688ad7c93d1396c6e1d1680e626cc791c3a9996a2eb6293945a7db562",
+      "contentHash": "e7be64d1896ce99bf1a7fe6a7373ea86fd636bb120bd64e1ed14329219ab2da6",
       "titleNl": "Ondersteunde Microsoft Intune-apps",
-      "summaryNl": "Dit naslagartikel vermeldt Microsoft- en partnerapps die Intune App Protection Policy ondersteunen. Per app en platform staat aangegeven welke kern-, configuratie- en geavanceerde instellingen beschikbaar zijn.",
-      "whyNl": [
-        "Controleer de tabel voordat u geavanceerde appbeveiligings- of appconfiguratie-instellingen inzet.",
-        "Ondersteuning voor sommige instellingen is afhankelijk van een minimale appversie."
-      ],
+      "summaryNl": "Naslaglijst van partner- en Microsoft-apps die vaak met Microsoft Intune worden gebruikt.",
+      "whyNl": [],
       "titleEn": "Supported Microsoft Intune apps",
-      "summaryEn": "This reference article lists Microsoft and partner apps that support Intune App Protection Policy. It identifies the available core, configuration, and advanced settings for each app and platform.",
-      "whyEn": [
-        "Check the table before deploying advanced app protection or app configuration settings.",
-        "Support for some settings depends on a minimum app version."
-      ],
+      "summaryEn": "Reference list of partner and Microsoft apps commonly used with Microsoft Intune.",
+      "whyEn": [],
       "categories": [
-        "Apps & Packaging",
-        "iOS & iPadOS",
-        "Android"
+        "Apps & Packaging"
       ],
       "kind": "naslag",
       "tier": "info",
-      "confidence": 0.99,
-      "reasonNl": "De pagina is compatibiliteitsnaslag en kondigt geen verplichte wijziging aan.",
-      "reasonEn": "The page is compatibility reference material and announces no mandatory change."
+      "confidence": 0.98,
+      "reasonNl": "Het artikel biedt uitsluitend een referentielijst en noemt geen wijziging of beheeractie.",
+      "reasonEn": "The article only provides a reference list and states no change or administrative action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/intune/cloud-pki/",
