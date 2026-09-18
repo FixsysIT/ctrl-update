@@ -34,12 +34,22 @@ dist/index.html -> GitHub Pages -> news.intunetools.com
 
 ## Automatisering
 
-De Pages-workflow publiceert uitsluitend gevalideerde wijzigingen aan `dist/`. Het ophalen en inhoudelijk reviewen gebeurt op een vertrouwde runner met een aangemelde Codex CLI; credentials worden nooit in de repository opgeslagen. Na een succesvolle generatie commit en pusht die runner alleen de gewijzigde data en publicatie-output.
+`.github/workflows/refresh.yml` draait iedere vier uur volledig op een GitHub-hosted Linux-runner:
 
-Voor volledig cloud-native ophalen is een afzonderlijk API-credential als GitHub Actions-secret nodig. Activeer niet tegelijkertijd twee schrijvende refresh-runners: dat veroorzaakt onnodige commits en mergeconflicten.
+1. openbare bronnen ophalen en een lokale reviewinput maken;
+2. alleen nieuwe of inhoudelijk gewijzigde items selecteren;
+3. die items via `openai/codex-action@v1` met een strikt JSON-schema beoordelen;
+4. het resultaat atomair met de bestaande inhoudshash-cache samenvoegen;
+5. de definitieve pagina genereren en alle kwaliteitscontroles uitvoeren;
+6. alleen gewijzigde data en `dist/index.html` naar `main` pushen.
+
+`OPENAI_API_KEY` bestaat uitsluitend als GitHub Actions-secret en wordt direct aan de officiële Codex-action doorgegeven. De repositoryscripts ontvangen de sleutel niet. De Codex-stap draait read-only en behandelt alle artikeltekst als onbetrouwbare data. Een mislukte run pusht niets, zodat de vorige productieversie online blijft.
+
+De daaropvolgende Pages-workflow valideert de commit opnieuw en publiceert uitsluitend `dist/`. Er mag maar één schrijvende refresh-runner actief zijn; lokale of tweede cloudtaken veroorzaken anders dubbele commits en mergeconflicten.
 
 ## Foutgedrag
 
 - Een mislukte bron wordt zichtbaar in de bronstatus, zonder de overige bronnen te blokkeren.
 - Een mislukte agentreview mag nooit stilzwijgend als volledig beoordeeld worden gepubliceerd.
 - Een mislukte kwaliteitscontrole of Pages-deployment laat de vorige productieversie intact.
+- Een ontbrekende of ongeldige API-secret laat de refresh vroeg falen zonder de website te wijzigen.

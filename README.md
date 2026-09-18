@@ -79,12 +79,24 @@ dist/         exact wat GitHub Pages publiceert
 
 `dist/index.html` is bewust versiebeheerbaar: iedere online versie correspondeert daardoor met een concrete commit en kan eenvoudig worden teruggedraaid.
 
+## Automatische refresh
+
+GitHub Actions voert `.github/workflows/refresh.yml` iedere vier uur uit. De workflow haalt de openbare bronnen op, laat alleen nieuwe of gewijzigde items door de officiële Codex GitHub Action beoordelen, valideert het resultaat en pusht uitsluitend gewijzigde cache-, state- en publicatiebestanden.
+
+De repository moet hiervoor één Actions-secret bevatten:
+
+```text
+OPENAI_API_KEY
+```
+
+De sleutel wordt alleen rechtstreeks aan `openai/codex-action` aangeboden en nooit als algemene jobvariabele, bestand of repository-inhoud opgeslagen. Message Center is niet onderdeel van deze publieke cloudrun omdat daarvoor tenantgebonden Microsoft Graph-authenticatie en afzonderlijk beheer van least-privilege credentials nodig zijn.
+
 ## Valideren
 
 ```powershell
 ./scripts/Test-CtrlUpdate.ps1
 ```
 
-Deze controle parseert alle PowerShell en JSON, controleert bronduplicaten, valideert het reviewcacheformaat en verifieert dat de publicatie volledig gegenereerd is. GitHub voert dezelfde controle uit vóór iedere Pages-deployment.
+Deze controle parseert alle PowerShell en JSON, controleert bronduplicaten, valideert het reviewcacheformaat en verifieert dat de publicatie en cloudrefresh volledig geconfigureerd zijn. GitHub voert dezelfde controle uit vóór iedere Pages-deployment.
 
 Meer achtergrond staat in [de architectuur](docs/architecture.md) en [de functionele eisen](docs/requirements.md).

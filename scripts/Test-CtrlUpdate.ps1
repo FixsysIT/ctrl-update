@@ -27,7 +27,10 @@ $requiredFiles = @(
     'schemas/review.schema.json',
     'src/index.template.html',
     'dist/index.html',
-    '.github/workflows/pages.yml'
+    '.github/workflows/pages.yml',
+    '.github/workflows/quality.yml',
+    '.github/workflows/refresh.yml',
+    '.github/codex/prompts/review-items.md'
 )
 
 foreach ($relativePath in $requiredFiles) {
@@ -108,6 +111,67 @@ if ($published -notmatch '<script id="payload" type="application/json">') {
 }
 if ($published -notmatch '<!doctype html>') { Add-Failure 'dist/index.html is geen volledige HTML-publicatie' }
 if ($failures.Count -eq 0) { Write-Pass 'Publicatie-output compleet' }
+
+$refreshWorkflow = Get-Content -LiteralPath (Join-Path $projectRoot '.github/workflows/refresh.yml') -Raw -Encoding UTF8
+foreach ($requiredFragment in @('schedule:', 'openai/codex-action@v1', 'OPENAI_API_KEY', '-RequireAgentReview')) {
+    if ($refreshWorkflow -notmatch [regex]::Escape($requiredFragment)) {
+        Add-Failure "Refresh-workflow mist verplichte configuratie: $requiredFragment"
+    }
+}
+if ($failures.Count -eq 0) { Write-Pass 'Cloudrefresh bevat planning, veilige Codex-action en reviewgate' }
+
+$testDirectory = Join-Path $projectRoot '.tmp/test-review-pipeline'
+$null = New-Item -ItemType Directory -Path $testDirectory -Force
+$testInputPath = Join-Path $testDirectory 'input.json'
+$testCachePath = Join-Path $testDirectory 'cache.json'
+$testPendingPath = Join-Path $testDirectory 'pending.json'
+$testResultPath = Join-Path $testDirectory 'result.json'
+
+function New-TestReview {
+    param([string] $Id, [string] $Hash)
+    [PSCustomObject]@{
+        id = $Id; contentHash = $Hash
+        titleNl = "Nederlandse titel $Id"; summaryNl = 'Nederlandse samenvatting.'; whyNl = @()
+        titleEn = "English title $Id"; summaryEn = 'English summary.'; whyEn = @()
+        categories = @($allowedCategories[0]); kind = 'nieuws'; tier = 'info'; confidence = 0.9
+        reasonNl = 'Geen concrete beheeractie.'; reasonEn = 'No concrete administrative action.'
+    }
+}
+
+try {
+    [PSCustomObject]@{ items = @(
+        [PSCustomObject]@{ id = 'fixture-1'; contentHash = 'hash-1' },
+        [PSCustomObject]@{ id = 'fixture-2'; contentHash = 'hash-2' }
+    ) } | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $testInputPath -Encoding UTF8
+    [PSCustomObject]@{ generated = '2026-01-01T00:00:00Z'; items = @(
+        (New-TestReview -Id 'fixture-1' -Hash 'hash-1')
+    ) } | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $testCachePath -Encoding UTF8
+
+    $pendingCount = & (Join-Path $PSScriptRoot 'New-CtrlUpdateReviewBatch.ps1') `
+        -InputPath $testInputPath -CachePath $testCachePath -OutputPath $testPendingPath
+    if ($pendingCount -ne 1) { Add-Failure "Reviewbatchfixture verwachtte 1 item maar vond $pendingCount" }
+
+    [PSCustomObject]@{ items = @(
+        (New-TestReview -Id 'fixture-2' -Hash 'hash-2')
+    ) } | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $testResultPath -Encoding UTF8
+
+    & (Join-Path $PSScriptRoot 'Merge-CtrlUpdateReview.ps1') `
+        -InputPath $testInputPath -PendingPath $testPendingPath -ResultPath $testResultPath `
+        -CachePath $testCachePath -ConfigPath $configPath
+
+    $mergedFixture = Get-Content -LiteralPath $testCachePath -Raw -Encoding UTF8 | ConvertFrom-Json
+    if (@($mergedFixture.items).Count -ne 2) { Add-Failure 'Reviewmergefixture bevat niet exact twee items' }
+    elseif ($failures.Count -eq 0) { Write-Pass 'Cloudreviewselectie en atomaire cachemerge geldig' }
+}
+catch {
+    Add-Failure "Cloudreviewpijplijntest mislukt: $($_.Exception.Message)"
+}
+finally {
+    foreach ($path in @($testInputPath, $testCachePath, $testPendingPath, $testResultPath)) {
+        Remove-Item -LiteralPath $path -Force -ErrorAction SilentlyContinue
+    }
+    Remove-Item -LiteralPath $testDirectory -Force -ErrorAction SilentlyContinue
+}
 
 if ($failures.Count -gt 0) {
     throw "Kwaliteitscontrole mislukt met $($failures.Count) fout(en)."

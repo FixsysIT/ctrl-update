@@ -232,6 +232,8 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 |---|---|
 | `scripts/Update-CtrlUpdate.ps1` | Ophalen, scoren, datums herkennen, dashboard schrijven |
 | `scripts/Invoke-CtrlUpdateReview.ps1` | Nederlandse Codex-eindredactie met cache en schema-validatie |
+| `scripts/New-CtrlUpdateReviewBatch.ps1` | Selecteert nieuwe of gewijzigde items voor cloudreview |
+| `scripts/Merge-CtrlUpdateReview.ps1` | Valideert en combineert cloudreview atomair met de cache |
 | `scripts/Add-CtrlUpdateSource.ps1` | Bron toevoegen vanaf een gewone URL |
 | `scripts/Import-CtrlUpdatePreferences.ps1` | Geëxporteerde RSS-aanvragen valideren en importeren |
 | `scripts/Test-CtrlUpdate.ps1` | Netwerkloze repository- en publicatiecontroles |

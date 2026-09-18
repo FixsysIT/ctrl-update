@@ -2,6 +2,7 @@
 .openai/
 data/review-input.json
 data/*.tmp
+.tmp/
 *.log
 .DS_Store
 Thumbs.db

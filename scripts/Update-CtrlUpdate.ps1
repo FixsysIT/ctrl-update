@@ -36,6 +36,8 @@ param(
     [int]    $Days,
     [switch] $SkipMessageCenter,
     [switch] $SkipAgentReview,
+    [switch] $PrepareAgentReviewOnly,
+    [switch] $UseReviewCacheOnly,
     [switch] $RequireAgentReview,
     [switch] $Open,
 
@@ -1221,9 +1223,16 @@ if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -g
     }
     $reviewInput | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $reviewInputPath -Encoding UTF8
 
+    if ($PrepareAgentReviewOnly) {
+        Write-Host "Reviewinput voorbereid: $(@($reviewInput.items).Count) items in $reviewInputPath" -ForegroundColor Cyan
+        return
+    }
+
     try {
-        & (Join-Path $PSScriptRoot 'Invoke-CtrlUpdateReview.ps1') `
-            -InputPath $reviewInputPath -OutputPath $reviewOutputPath -ConfigPath $ConfigPath
+        if (-not $UseReviewCacheOnly) {
+            & (Join-Path $PSScriptRoot 'Invoke-CtrlUpdateReview.ps1') `
+                -InputPath $reviewInputPath -OutputPath $reviewOutputPath -ConfigPath $ConfigPath
+        }
 
         $reviewData = Get-Content -LiteralPath $reviewOutputPath -Raw -Encoding UTF8 | ConvertFrom-Json
         $reviewById = @{}

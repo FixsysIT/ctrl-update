@@ -1,0 +1,88 @@
+name: Ververs CTRL UPDATE
+
+on:
+  schedule:
+    - cron: "17 */4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ctrl-update-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Bronnen, agentreview en publicatie
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Repository ophalen
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: OpenAI-secret controleren
+        shell: pwsh
+        env:
+          OPENAI_KEY_PRESENT: ${{ secrets.OPENAI_API_KEY != '' }}
+        run: |
+          if ($env:OPENAI_KEY_PRESENT -ne 'true') {
+            throw 'Repository-secret OPENAI_API_KEY ontbreekt. De bestaande productieversie blijft online.'
+          }
+
+      - name: Bronnen ophalen en reviewinput voorbereiden
+        shell: pwsh
+        run: ./scripts/Update-CtrlUpdate.ps1 -SkipMessageCenter -PrepareAgentReviewOnly
+
+      - name: Nieuwe en gewijzigde items selecteren
+        id: pending
+        shell: pwsh
+        run: |
+          $count = ./scripts/New-CtrlUpdateReviewBatch.ps1
+          "count=$count" >> $env:GITHUB_OUTPUT
+          "required=$($count -gt 0)".ToLowerInvariant() >> $env:GITHUB_OUTPUT
+
+      - name: Nieuwe en gewijzigde items inhoudelijk beoordelen
+        if: steps.pending.outputs.required == 'true'
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/codex/prompts/review-items.md
+          output-file: .tmp/review-result.json
+          codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
+          effort: high
+          sandbox: read-only
+          safety-strategy: drop-sudo
+
+      - name: Agentreview valideren en samenvoegen
+        if: steps.pending.outputs.required == 'true'
+        shell: pwsh
+        run: ./scripts/Merge-CtrlUpdateReview.ps1
+
+      - name: Definitieve publicatie genereren
+        shell: pwsh
+        run: ./scripts/Update-CtrlUpdate.ps1 -SkipMessageCenter -UseReviewCacheOnly -RequireAgentReview
+
+      - name: Repository controleren
+        shell: pwsh
+        run: ./scripts/Test-CtrlUpdate.ps1
+
+      - name: Gewijzigde data publiceren
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add data/review-cache.json data/state.json dist/index.html
+          if git diff --cached --quiet; then
+            echo "Geen inhoudelijke wijzigingen."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Automatische nieuwsupdate"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
