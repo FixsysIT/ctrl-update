@@ -239,8 +239,24 @@ else {
         Add-Failure 'PreviewOnly heeft de productie-nulmeting onbedoeld gewijzigd'
     }
 
-    $promotedItem.keywords = @('out-of-band')
-    $criticalJson = $notificationPayload | ConvertTo-Json -Depth 30 -Compress
+    # Gebruik een volledig synthetisch nieuw actie-item. Dat maakt deze controle
+    # deterministisch op Windows en Linux en voorkomt afhankelijkheid van welke
+    # bestaande publicatie toevallig als promotiekandidaat werd gekozen.
+    $criticalPayload = [ordered]@{
+        items = @([ordered]@{
+            id = 'ctrl-update-critical-notification-fixture'
+            tier = 'action'
+            title = 'Emergency update voor brede productiestoring'
+            summary = 'Beheerders moeten de noodupdate beoordelen en gecontroleerd uitrollen.'
+            source = 'Gecontroleerde nieuwsbron'
+            link = 'https://example.invalid/critical-warning'
+            keywords = @('out-of-band')
+            keyDate = $null
+            allDates = @()
+        })
+        feeds = @()
+    }
+    $criticalJson = $criticalPayload | ConvertTo-Json -Depth 30 -Compress
     "<script id=`"payload`" type=`"application/json`">$criticalJson</script>" |
         Set-Content -LiteralPath $notificationPublishedPath -Encoding UTF8
     $criticalPreviewText = & $notificationScript -PublishedPath $notificationPublishedPath -StatePath $notificationStatePath -PreviewOnly | Out-String
