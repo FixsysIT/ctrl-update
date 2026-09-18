@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-18T11:21:56.4321571Z",
+  "generated": "2026-09-18T11:44:24.3189287Z",
   "items": [
     {
       "id": "https://andrewstaylor.com/2026/09/11/intune-newsletter-11th-september-2026/",
@@ -256,21 +256,21 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15",
-      "contentHash": "fbaa0a71ef898dad13948935c3d54ac3ff859b49a1b54eaf5e359a77412b7cb6",
-      "titleNl": "Wat is er nieuw in C# 15",
-      "summaryNl": "C# 15 is een preview met onder meer union types, gesloten hiërarchieën en extension indexers. De functies zijn beschikbaar via .NET 11-previewversies en Visual Studio 2026 Insiders.",
+      "contentHash": "de0830ec88995ab68f734357980005381b0b99b7e0bf0fef7519774832e10bdf",
+      "titleNl": "Nieuwe functies in C# 15",
+      "summaryNl": "Dit naslagartikel beschrijft nieuwe C# 15-functies, waaronder union types en extension indexers.",
       "whyNl": [],
       "titleEn": "What's new in C# 15",
-      "summaryEn": "C# 15 is a preview featuring union types, closed hierarchies, and extension indexers. The features are available through .NET 11 preview releases and Visual Studio 2026 Insiders.",
+      "summaryEn": "This reference article describes new C# 15 features, including union types and extension indexers.",
       "whyEn": [],
       "categories": [
         "Scripting & Graph"
       ],
       "kind": "naslag",
       "tier": "info",
-      "confidence": 0.86,
-      "reasonNl": "Dit is documentatie over een previewtaalversie zonder vereiste beheeractie.",
-      "reasonEn": "This is documentation for a preview language release with no required administrative action."
+      "confidence": 0.9,
+      "reasonNl": "Dit is documentatie over programmeertaalfuncties zonder beheeractie.",
+      "reasonEn": "This is documentation about programming language features with no administrative action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/fundamentals/what-is-entra",
@@ -293,28 +293,22 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/id-governance/licensing-fundamentals",
-      "contentHash": "1266305be5ee806ed434a87f259d987b433cac3cde303a27cc966be8724fcd73",
-      "titleNl": "Licentiegrondslagen voor Microsoft Entra ID Governance",
-      "summaryNl": "Dit naslagartikel zet de beschikbare Microsoft Entra ID Governance-licenties en hun vereisten uiteen. De benodigde licentie hangt af van de gebruikte governancefuncties en het bestaande basisabonnement.",
-      "whyNl": [
-        "Controleer per gebruikt governanceproduct of de vereiste P1- of P2-serviceplannen actief zijn.",
-        "Sommige gekoppelde scenario's kunnen aanvullende licenties vereisen."
-      ],
+      "contentHash": "fb16780bfaf3e1d663d1a1e55dc2fed939dfb87be498edcbe270f94c9749f089",
+      "titleNl": "Basisprincipes van licenties voor Microsoft Entra ID Governance",
+      "summaryNl": "Dit artikel is bedoeld als introductie tot licenties voor Microsoft Entra ID Governance. De aangeleverde tekst noemt governance voor agent- en service-principalidentiteiten.",
+      "whyNl": [],
       "titleEn": "Microsoft Entra ID Governance licensing fundamentals",
-      "summaryEn": "This reference article outlines the available Microsoft Entra ID Governance licenses and their prerequisites. The required license depends on the governance features in use and the existing base subscription.",
-      "whyEn": [
-        "Check whether the required P1 or P2 service plans are active for each governance product in use.",
-        "Some connected scenarios can require additional licenses."
-      ],
+      "summaryEn": "This article is an introduction to Microsoft Entra ID Governance licensing. The supplied text mentions governance for agent and service principal identities.",
+      "whyEn": [],
       "categories": [
         "Licensing",
         "Identiteit & MFA"
       ],
       "kind": "naslag",
       "tier": "info",
-      "confidence": 0.99,
-      "reasonNl": "Dit is licentienaslag zonder nieuwe verplichting, migratie of deadline.",
-      "reasonEn": "This is licensing reference material with no new requirement, migration, or deadline."
+      "confidence": 0.66,
+      "reasonNl": "De beperkte brontekst wijst op algemene licentiedocumentatie, zonder actie of wijziging.",
+      "reasonEn": "The limited source text indicates general licensing documentation, with no action or change."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/identity/authentication/concept-sspr-policy",
@@ -340,25 +334,6 @@
       "confidence": 0.99,
       "reasonNl": "Het artikel documenteert bestaand gedrag en bevat geen verplichte wijziging of deadline.",
       "reasonEn": "The article documents existing behavior and contains no mandatory change or deadline."
-    },
-    {
-      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-install-roadmap",
-      "contentHash": "d40143165c78e1e87b4e8538eff11dbe1f124d62113d2a478a2760c8a37055dc",
-      "titleNl": "Installatieroutekaart voor Microsoft Entra Connect en Microsoft Entra Connect Health",
-      "summaryNl": "Naslag voor het installeren, configureren en beheren van Microsoft Entra Connect. Het beschrijft onder meer installatieopties, synchronisatiefuncties en operationele aandachtspunten.",
-      "whyNl": [],
-      "titleEn": "Installation roadmap for Microsoft Entra Connect and Microsoft Entra Connect Health",
-      "summaryEn": "Reference guidance for installing, configuring, and operating Microsoft Entra Connect. It covers installation options, synchronization features, and operational considerations.",
-      "whyEn": [],
-      "categories": [
-        "Identiteit & MFA",
-        "Conditional Access"
-      ],
-      "kind": "handleiding",
-      "tier": "info",
-      "confidence": 0.97,
-      "reasonNl": "Dit is bestaande installatie- en configuratiedocumentatie zonder aangekondigde wijziging.",
-      "reasonEn": "This is installation and configuration guidance without an announced change."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq",
@@ -528,31 +503,21 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/known-issues",
-      "contentHash": "e131e654ae16f7db7880f723377bbc28b3921a6d8db6ab9b63784c73fd2d5b31",
+      "contentHash": "5829690857b34aee43c1fc008ceb87d259ba960c3b79017535274a62f30e93ea",
       "titleNl": "Bekende problemen met Microsoft Intune",
-      "summaryNl": "Microsoft meldt meerdere actieve bekende problemen in Intune, onder meer rond Microsoft Store-apps, Company Portal en instellingenbeleid. De pagina bevat ook opgeloste problemen en bijbehorende herstelmaatregelen.",
-      "whyNl": [
-        "Regionale selectie voor Microsoft Store-apps is tijdelijk niet beschikbaar; Intune gebruikt bij zoeken en toevoegen de Amerikaanse catalogus.",
-        "Bij meerdere toegestane OS-buildbereiken toont Company Portal slechts het eerste bereik in de herstelmelding, terwijl het compliancebeleid wel correct wordt afgedwongen.",
-        "Voor apparaten die niet voldoen, moet de OS-build binnen een geconfigureerd toegestaan bereik worden bijgewerkt."
-      ],
+      "summaryNl": "Dit naslagartikel bundelt bekende Intune-problemen, workarounds en bijgewerkte oplossingen.",
+      "whyNl": [],
       "titleEn": "Known issues with Microsoft Intune",
-      "summaryEn": "Microsoft reports several active known issues in Intune, including issues with Microsoft Store apps, Company Portal, and settings policies. The page also includes resolved issues and related remediation measures.",
-      "whyEn": [
-        "Regional selection for Microsoft Store apps is temporarily unavailable; Intune uses the United States catalog when searching for and adding apps.",
-        "When multiple allowed OS build ranges are configured, Company Portal shows only the first range in its remediation message, while the compliance policy is still enforced correctly.",
-        "For noncompliant devices, update the OS build to a configured acceptable range."
-      ],
+      "summaryEn": "This reference article collects known Intune issues, workarounds, and updated fixes.",
+      "whyEn": [],
       "categories": [
-        "Apps & Packaging",
-        "Compliance",
-        "Enrollment"
+        "Reporting"
       ],
-      "kind": "nieuws",
-      "tier": "action",
-      "confidence": 0.95,
-      "reasonNl": "Actieve operationele problemen kunnen appbeheer en complianceherstel beïnvloeden en vragen in specifieke gevallen om beheeractie.",
-      "reasonEn": "Active operational issues can affect app management and compliance remediation and require administrative action in specific cases."
+      "kind": "naslag",
+      "tier": "info",
+      "confidence": 0.86,
+      "reasonNl": "Het betreft een algemene overzichtspagina zonder gemelde actuele storing.",
+      "reasonEn": "This is a general overview page without a reported current incident."
     },
     {
       "id": "https://msendpointmgr.com/2026/09/05/1phonemirror-levels-up-webcam-stats-better-screenshots-and-signed/",
@@ -584,30 +549,21 @@
     },
     {
       "id": "https://ourcloudnetwork.com/microsoft-adds-basic-permissions-for-groups-in-graph/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-adds-basic-permissions-for-groups-in-graph",
-      "contentHash": "18f8c5d87f653bc23a41ccf3d0a790034df438199df67c06daefd18616b6dc13",
-      "titleNl": "Microsoft Graph krijgt beperktere machtigingen voor groepsgegevens",
-      "summaryNl": "Microsoft Graph heeft drie nieuwe machtigingen voor basisgegevens van groepen, groepslidmaatschap en preferredDataLocation. Applicaties kunnen daarmee brede Group.Read.All- of Group.ReadWrite.All-toegang in specifieke scenario's vervangen.",
-      "whyNl": [
-        "Group.ReadBasic.All leest basiseigenschappen van groepen en GroupMember.ReadBasic.All leest groepslidmaatschap.",
-        "Group-PreferredDataLocation.ReadWrite.All kan preferredDataLocation beheren zonder volledige schrijftoegang tot alle groepen.",
-        "Alle drie de machtigingen hebben gedelegeerde en applicatievarianten en vereisen beheerderstoestemming."
-      ],
-      "titleEn": "Microsoft Graph gains narrower permissions for group data",
-      "summaryEn": "Microsoft Graph has added three permissions for basic group data, group membership, and preferredDataLocation. Applications can use them to replace broad Group.Read.All or Group.ReadWrite.All access in specific scenarios.",
-      "whyEn": [
-        "Group.ReadBasic.All reads basic group properties, while GroupMember.ReadBasic.All reads group membership.",
-        "Group-PreferredDataLocation.ReadWrite.All can manage preferredDataLocation without full write access to all groups.",
-        "All three permissions have delegated and application variants and require administrator consent."
-      ],
+      "contentHash": "4f346a05f73fdf6dd6bbd47854d7cc18796dfc8e68e6fa1b7753ea6c5566d316",
+      "titleNl": "Microsoft voegt basisrechten voor groepen toe aan Graph",
+      "summaryNl": "Microsoft Graph krijgt nieuwe rechten voor basisgegevens van groepen, het lezen van lidmaatschappen en het bijwerken van de voorkeurslocatie voor gegevens. Daardoor kan de afhankelijkheid van Group.Read.All afnemen.",
+      "whyNl": [],
+      "titleEn": "Microsoft adds basic group permissions to Graph",
+      "summaryEn": "Microsoft Graph is gaining new permissions for basic group data, membership reads, and preferred data location updates. This can reduce reliance on Group.Read.All.",
+      "whyEn": [],
       "categories": [
-        "Scripting & Graph",
-        "Identiteit & MFA"
+        "Scripting & Graph"
       ],
       "kind": "nieuws",
-      "tier": "info",
-      "confidence": 0.94,
-      "reasonNl": "De nieuwe machtigingen bieden een optionele verbetering van least privilege; bestaande toestemmingen hoeven niet verplicht te worden gewijzigd.",
-      "reasonEn": "The new permissions provide an optional least-privilege improvement; existing grants do not have to be changed."
+      "tier": "watch",
+      "confidence": 0.75,
+      "reasonNl": "De wijziging is relevant voor Graph-applicaties, maar de tekst noemt geen verplichte actie.",
+      "reasonEn": "The change is relevant to Graph applications, but the text states no required action."
     },
     {
       "id": "https://ourcloudnetwork.com/microsoft-closes-a-data-access-gap-for-graph-api-permission/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-closes-a-data-access-gap-for-graph-api-permission",
@@ -717,29 +673,21 @@
     },
     {
       "id": "https://ourcloudnetwork.com/microsoft-outlook-adds-meeting-organiser-transfers/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-outlook-adds-meeting-organiser-transfers",
-      "contentHash": "f1db3ff91884f578915397eb689182c02be0f4e49a1e909c375526140a327a67",
-      "titleNl": "MC1472028: Outlook kan vergaderingen overdragen aan een andere organisator",
-      "summaryNl": "Outlook-gebruikers kunnen geschikte vergaderingen en terugkerende reeksen overdragen aan een andere organisator binnen dezelfde tenant. De eerste fase wordt van eind september tot eind oktober 2026 uitgerold en ondersteunt nog geen onlinevergaderingen.",
-      "whyNl": [
-        "De nieuwe organisator moet het overdrachtsverzoek accepteren voordat het eigendom verandert.",
-        "Externe en on-premises deelnemers ontvangen een annulering en een nieuwe uitnodiging waarop zij opnieuw moeten reageren.",
-        "De eerste fase geldt voor niet-onlinevergaderingen in Outlook on the web, new Outlook for Windows en de Teams Microsoft 365 calendar."
-      ],
-      "titleEn": "MC1472028: Outlook can transfer meetings to another organizer",
-      "summaryEn": "Outlook users will be able to transfer eligible meetings and recurring series to another organizer in the same tenant. The first phase rolls out from late September through late October 2026 and does not yet support online meetings.",
-      "whyEn": [
-        "The new organizer must accept the transfer request before ownership changes.",
-        "External and on-premises attendees receive a cancellation and a replacement invitation that requires a new response.",
-        "The first phase covers non-online meetings in Outlook on the web, new Outlook for Windows, and the Teams Microsoft 365 calendar."
-      ],
+      "contentHash": "1bc60786fb7c3edee89867140373bb3338b7a78e03b567318a83f37b165cb623",
+      "titleNl": "Outlook krijgt overdracht van vergaderorganisator",
+      "summaryNl": "Outlook gaat gebruikers toestaan het eigenaarschap van vergaderingen over te dragen. Voor Teams-vergaderingen volgt dit in een latere releasefase.",
+      "whyNl": [],
+      "titleEn": "Outlook gains meeting organizer transfer",
+      "summaryEn": "Outlook will allow users to transfer meeting ownership. Teams meetings will follow in a later release phase.",
+      "whyEn": [],
       "categories": [
         "Apps & Packaging"
       ],
       "kind": "nieuws",
-      "tier": "info",
-      "confidence": 0.94,
-      "reasonNl": "De functie wordt automatisch beschikbaar en vereist geen concrete beheeractie; Teams-vergaderingen vallen nog buiten de eerste fase.",
-      "reasonEn": "The feature becomes available automatically and requires no specific administrative action; Teams meetings are not included in the first phase."
+      "tier": "watch",
+      "confidence": 0.8,
+      "reasonNl": "Dit is een relevante productontwikkeling zonder beheeractie of datum.",
+      "reasonEn": "This is a relevant product development without an administrative action or date."
     },
     {
       "id": "https://patchmypc.com/blog/autopilot-device-preparation-vs-device-association-vs-autopilot/",
@@ -1055,6 +1003,144 @@
       "confidence": 0.32,
       "reasonNl": "De brontekst onderbouwt geen verplichte upgrade, beheeractie of deadline.",
       "reasonEn": "The source text does not substantiate a mandatory upgrade, administrative action, or deadline."
+    },
+    {
+      "id": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-broken-copy-and-paste-for-excel-2016-users/",
+      "contentHash": "e016219a47696c481536be7abf9dbdc34f098ba649e654cdce00ee21a11e9541",
+      "titleNl": "Microsoft herstelt kopiëren en plakken in Excel 2016",
+      "summaryNl": "KB5002914 kan kopiëren, plakken, automatisch aanvullen en het slepen van formules in Excel verstoren. KB5002665 verhelpt bepaalde mislukte plakbewerkingen voor de MSI-editie van Office 2016.",
+      "whyNl": [
+        "Beoordeel KB5002665 voor getroffen MSI-installaties van Office 2016.",
+        "De oplossing geldt niet voor Office 2016 Click-to-Run of andere getroffen Excel-versies."
+      ],
+      "titleEn": "Microsoft fixes copy and paste in Excel 2016",
+      "summaryEn": "KB5002914 can disrupt copy, paste, autofill, and formula dragging in Excel. KB5002665 fixes certain failed paste operations for the MSI edition of Office 2016.",
+      "whyEn": [
+        "Assess KB5002665 for affected Office 2016 MSI installations.",
+        "The fix does not apply to Office 2016 Click-to-Run or other affected Excel versions."
+      ],
+      "categories": [
+        "Apps & Packaging",
+        "Windows Update"
+      ],
+      "kind": "wijziging",
+      "tier": "action",
+      "confidence": 0.88,
+      "reasonNl": "Microsoft heeft een concrete update uitgebracht voor een bevestigd probleem dat beheerders moeten beoordelen.",
+      "reasonEn": "Microsoft has released a specific update for a confirmed issue that administrators should assess."
+    },
+    {
+      "id": "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-workaround-for-windows-domain-login-authentication-issues/",
+      "contentHash": "ceff60463d3024160b170aa946b5b5db2562a15e2367ad9237c289d75315b94c",
+      "titleNl": "Microsoft deelt workaround voor domeinaanmeldingsproblemen in Windows",
+      "summaryNl": "De beveiligingsupdates van september 2026 kunnen domeinvertrouwens- en aanmeldingsproblemen veroorzaken op Windows 11-apparaten met Machine Identity Isolation in enforcement mode. Microsoft adviseert de functie uit te schakelen buiten omgevingen met domain controllers op Windows Server 2025 DFL of hoger.",
+      "whyNl": [
+        "Schakel Machine Identity Isolation uit op eerder geconfigureerde apparaten die niet met Windows Server 2025 DFL of hoger zijn verbonden.",
+        "Gebruik dezelfde beheermethode als waarmee de functie is ingeschakeld."
+      ],
+      "titleEn": "Microsoft shares workaround for Windows domain sign-in issues",
+      "summaryEn": "September 2026 security updates can cause domain trust and sign-in issues on Windows 11 devices with Machine Identity Isolation in enforcement mode. Microsoft advises disabling the feature outside environments with domain controllers at Windows Server 2025 DFL or later.",
+      "whyEn": [
+        "Disable Machine Identity Isolation on previously configured devices not connected to Windows Server 2025 DFL or later.",
+        "Use the same management method that was used to enable the feature."
+      ],
+      "categories": [
+        "Windows 11",
+        "Identiteit & MFA",
+        "Windows Update"
+      ],
+      "kind": "wijziging",
+      "tier": "action",
+      "confidence": 0.93,
+      "reasonNl": "Microsoft bevestigt het probleem en geeft een concrete beheermaatregel.",
+      "reasonEn": "Microsoft confirms the issue and provides a concrete administrative mitigation."
+    },
+    {
+      "id": "https://www.bleepingcomputer.com/news/microsoft/windows-11-24h2-home-and-pro-reach-end-of-support-in-october/",
+      "contentHash": "15fcea5f77f283ad14c4e99b3ca8118c629a1f6e89d28323cd8f7334aa029b70",
+      "titleNl": "Ondersteuning voor Windows 11 24H2 Home en Pro stopt in oktober",
+      "summaryNl": "Windows 11 24H2 Home en Pro ontvangen vanaf 13 oktober 2026 geen maandelijkse beveiligings- of niet-beveiligingsupdates meer. Enterprise en Education blijven volgens de tekst ondersteund tot oktober 2027.",
+      "whyNl": [
+        "Migreer apparaten met Windows 11 24H2 Home of Pro naar Windows 11 25H2.",
+        "13 oktober 2026: einde van updates voor Windows 11 24H2 Home en Pro."
+      ],
+      "titleEn": "Windows 11 24H2 Home and Pro support ends in October",
+      "summaryEn": "Windows 11 24H2 Home and Pro will no longer receive monthly security or non-security updates from October 13, 2026. According to the text, Enterprise and Education remain supported until October 2027.",
+      "whyEn": [
+        "Migrate devices running Windows 11 24H2 Home or Pro to Windows 11 25H2.",
+        "October 13, 2026: end of updates for Windows 11 24H2 Home and Pro."
+      ],
+      "categories": [
+        "Windows 11",
+        "Windows Update"
+      ],
+      "kind": "wijziging",
+      "tier": "action",
+      "confidence": 0.94,
+      "reasonNl": "Er is een harde end-of-supportdatum die migratieplanning vereist.",
+      "reasonEn": "There is a firm end-of-support date that requires migration planning."
+    },
+    {
+      "id": "https://www.bleepingcomputer.com/news/microsoft/windows-11-kb5124008-update-breaks-domain-trust-for-some-users/",
+      "contentHash": "e0192a2e0fa738f2ac1bfd2ae622f2ef769f0637825f3a7105d344b43bc6ec3c",
+      "titleNl": "KB5124008 veroorzaakt mogelijk problemen met domeinvertrouwen in Windows 11",
+      "summaryNl": "Er zijn meldingen dat KB5124008 domeinvertrouwensrelaties en aanmeldingen op sommige Windows 11-systemen verstoort. Microsoft onderzoekt de meldingen en heeft in deze tekst nog geen officiële workaround bevestigd.",
+      "whyNl": [],
+      "titleEn": "KB5124008 may cause Windows 11 domain trust issues",
+      "summaryEn": "Reports indicate that KB5124008 disrupts domain trust relationships and sign-ins on some Windows 11 systems. Microsoft is investigating the reports and has not confirmed an official workaround in this text.",
+      "whyEn": [],
+      "categories": [
+        "Windows 11",
+        "Identiteit & MFA",
+        "Windows Update"
+      ],
+      "kind": "nieuws",
+      "tier": "watch",
+      "confidence": 0.86,
+      "reasonNl": "De verstoring is relevant, maar oorzaak en officiële workaround waren nog niet bevestigd.",
+      "reasonEn": "The disruption is relevant, but the cause and an official workaround had not yet been confirmed."
+    },
+    {
+      "id": "https://www.bleepingcomputer.com/news/security/iranian-hackers-use-chosen-brick-windows-malware-to-spy-on-targets/",
+      "contentHash": "1213255c7d94c25ddde4b81596709b8d8b060bf5968db6f2a1f820cb9f572236",
+      "titleNl": "Iraanse aanvallers gebruiken CHOSEN BRICK-malware voor spionage",
+      "summaryNl": "Overheidsinstanties waarschuwen voor CHOSEN BRICK-malware die dissidenten, activisten en journalisten viseert. De malware kan gegevens stelen, schermafbeeldingen en audio opnemen en Microsoft Defender-uitsluitingen toevoegen.",
+      "whyNl": [
+        "Onderzoek verdachte Registry Run-vermeldingen en de in het advies genoemde indicators of compromise."
+      ],
+      "titleEn": "Iranian attackers use CHOSEN BRICK malware for espionage",
+      "summaryEn": "Government agencies warn of CHOSEN BRICK malware targeting dissidents, activists, and journalists. The malware can steal data, capture screenshots and audio, and add Microsoft Defender exclusions.",
+      "whyEn": [
+        "Investigate suspicious Registry Run entries and the indicators of compromise cited in the advisory."
+      ],
+      "categories": [
+        "Defender & Security",
+        "Windows 11"
+      ],
+      "kind": "nieuws",
+      "tier": "watch",
+      "confidence": 0.82,
+      "reasonNl": "Dit is relevante dreigingsinformatie, maar de gemelde campagne richt zich op specifieke doelwitten.",
+      "reasonEn": "This is relevant threat intelligence, but the reported campaign targets specific victims."
+    },
+    {
+      "id": "https://www.bleepingcomputer.com/news/security/malware-bypasses-browser-checks-to-force-install-chrome-edge-extensions/",
+      "contentHash": "72a1e343f2ff3ff5fe3c62f8c5df2024cb9a7915672122c493954c6a00482bfa",
+      "titleNl": "Malware omzeilt browsercontroles om Chrome- en Edge-extensies te installeren",
+      "summaryNl": "De KREMLIN-toolkit kan schadelijke extensies ongemerkt installeren in Chrome en Edge en browsergegevens stelen. Elastic meldde 1.515 geïnfecteerde systemen, vrijwel allemaal in Brazilië.",
+      "whyNl": [],
+      "titleEn": "Malware bypasses browser checks to install Chrome and Edge extensions",
+      "summaryEn": "The KREMLIN toolkit can silently install malicious extensions in Chrome and Edge and steal browser data. Elastic reported 1,515 infected systems, almost all in Brazil.",
+      "whyEn": [],
+      "categories": [
+        "Defender & Security",
+        "Apps & Packaging"
+      ],
+      "kind": "nieuws",
+      "tier": "watch",
+      "confidence": 0.84,
+      "reasonNl": "Dit is relevante dreigingsinformatie met beperkte, geografisch geconcentreerde meldingen.",
+      "reasonEn": "This is relevant threat intelligence with limited, geographically concentrated reports."
     },
     {
       "id": "https://www.microsoft.com/en-us/security/blog/2026/09/04/secure-edge-ai-customer-owned-environments/",
