@@ -119,6 +119,7 @@ jobs:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           prompt-file: .github/codex/prompts/review-items.md
           output-file: .tmp/review-result-1.json
+          codex-home: ${{ runner.temp }}/ctrl-update-codex-1
           codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
           model: gpt-5.6-terra
           effort: medium
@@ -137,6 +138,7 @@ jobs:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           prompt-file: .github/codex/prompts/review-items.md
           output-file: .tmp/review-result-2.json
+          codex-home: ${{ runner.temp }}/ctrl-update-codex-2
           codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
           model: gpt-5.6-terra
           effort: medium
@@ -155,6 +157,7 @@ jobs:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           prompt-file: .github/codex/prompts/review-items.md
           output-file: .tmp/review-result-3.json
+          codex-home: ${{ runner.temp }}/ctrl-update-codex-3
           codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
           model: gpt-5.6-terra
           effort: medium
@@ -173,6 +176,7 @@ jobs:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           prompt-file: .github/codex/prompts/review-items.md
           output-file: .tmp/review-result-4.json
+          codex-home: ${{ runner.temp }}/ctrl-update-codex-4
           codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
           model: gpt-5.6-terra
           effort: medium
@@ -191,6 +195,7 @@ jobs:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           prompt-file: .github/codex/prompts/review-items.md
           output-file: .tmp/review-result-5.json
+          codex-home: ${{ runner.temp }}/ctrl-update-codex-5
           codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
           model: gpt-5.6-terra
           effort: medium
@@ -209,6 +214,7 @@ jobs:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           prompt-file: .github/codex/prompts/review-items.md
           output-file: .tmp/review-result-6.json
+          codex-home: ${{ runner.temp }}/ctrl-update-codex-6
           codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
           model: gpt-5.6-terra
           effort: medium
@@ -227,6 +233,7 @@ jobs:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           prompt-file: .github/codex/prompts/review-items.md
           output-file: .tmp/review-result-7.json
+          codex-home: ${{ runner.temp }}/ctrl-update-codex-7
           codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
           model: gpt-5.6-terra
           effort: medium
@@ -245,6 +252,7 @@ jobs:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           prompt-file: .github/codex/prompts/review-items.md
           output-file: .tmp/review-result-8.json
+          codex-home: ${{ runner.temp }}/ctrl-update-codex-8
           codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
           model: gpt-5.6-terra
           effort: medium
