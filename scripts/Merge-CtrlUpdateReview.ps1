@@ -15,7 +15,12 @@ $ErrorActionPreference = 'Stop'
 
 $inputData = Get-Content -LiteralPath $InputPath -Raw -Encoding UTF8 | ConvertFrom-Json
 $pendingData = Get-Content -LiteralPath $PendingPath -Raw -Encoding UTF8 | ConvertFrom-Json
-$resultData = Get-Content -LiteralPath $ResultPath -Raw -Encoding UTF8 | ConvertFrom-Json
+$resultFiles = @(Get-ChildItem -Path $ResultPath -File -ErrorAction SilentlyContinue | Sort-Object Name)
+if ($resultFiles.Count -eq 0) { throw "Geen cloudreviewresultaten gevonden: $ResultPath" }
+$resultItems = @($resultFiles | ForEach-Object {
+    $resultData = Get-Content -LiteralPath $_.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
+    @($resultData.items)
+})
 $config = Get-Content -LiteralPath $ConfigPath -Raw -Encoding UTF8 | ConvertFrom-Json
 $allowedCategories = @($config.categories.PSObject.Properties.Name)
 
@@ -35,7 +40,7 @@ foreach ($item in @($pendingData.items)) {
 }
 
 $receivedById = @{}
-foreach ($review in @($resultData.items)) {
+foreach ($review in $resultItems) {
     $id = [string]$review.id
     if (-not $expectedById.ContainsKey($id)) { throw "Onverwacht reviewitem ontvangen: $id" }
     if ($receivedById.ContainsKey($id)) { throw "Dubbel reviewitem ontvangen: $id" }

@@ -45,7 +45,8 @@ dist/index.html -> GitHub Pages -> news.intunetools.com
 1. openbare bronnen en geactiveerde tenantcapabilities ophalen en een tijdelijke reviewinput maken;
 2. dezelfde bronmomentopname vastleggen voor review en publicatie;
 3. alleen nieuwe of inhoudelijk gewijzigde items selecteren;
-4. die items via `openai/codex-action@v1` met een strikt JSON-schema beoordelen;
+4. die items in begrensde batches van maximaal tien via
+   `openai/codex-action@v1` met een strikt JSON-schema beoordelen;
 5. het resultaat atomair met de bestaande inhoudshash-cache samenvoegen;
 6. de definitieve pagina uit exact dezelfde momentopname genereren en alle kwaliteitscontroles uitvoeren;
 7. alleen nieuwe Actie-signalen, gewijzigde harde actiedatums en nieuwe bronstoringen als één Adaptive Card naar Teams sturen; brede incidenten en nood-/out-of-bandupdates krijgen daarin de aanduiding `Kritieke waarschuwing`;

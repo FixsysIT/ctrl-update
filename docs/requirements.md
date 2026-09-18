@@ -212,6 +212,8 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
   inhoud met dezelfde reviewbeleidsversie mag een eerdere agentreview uit de cache
   hergebruiken; nieuwe of gewijzigde inhoud en gewijzigd beleid gaan opnieuw langs de agent.
 - Parsing, schema-validatie, agentreview en de netwerkloze repositorytest zijn verplichte publicatiepoorten.
+- Een volledige migratie wordt opgesplitst in begrensde agentbatches; alle batches
+  moeten slagen en atomair samenvoegen voordat publicatie mogelijk is.
 - Een mislukte run commit en publiceert niets; de laatst geslaagde GitHub Pages-versie blijft online.
 - De kop toont de laatste succesvolle publicatie en een zichtbare waarschuwing na 26 uur zonder succes.
 - Teams ontvangt alleen nieuwe of gepromoveerde Actie-items, gewijzigde harde actiedatums, nieuwe bronstoringen en mislukte refreshes. Let op-, Info-, blog- en weekitems veroorzaken geen melding. Een bevestigd breed incident of een nood-/out-of-bandupdate wordt als `Kritieke waarschuwing` gemarkeerd.

@@ -176,6 +176,11 @@ if ($updater -notmatch "Urgency -eq 'critical'" -or
     $updater -notmatch '(?s)Sort-Object -Property.*?\$_\.Published.*?\$_\.Score') {
     Add-Failure 'Bronitems worden niet volgens kritiek-, actie- en daarna nieuwste-eerst opgebouwd'
 }
+if (@([regex]::Matches($refreshWorkflow, 'uses:\s*openai/codex-action@v1')).Count -ne 8 -or
+    $refreshWorkflow -notmatch 'batch_count' -or
+    $refreshWorkflow -notmatch 'review-result-\*\.json') {
+    Add-Failure 'Cloudreview is niet in acht begrensde, atomair samen te voegen batches voorbereid'
+}
 if ($template -notmatch "item\.urgency === 'critical'" -or $template -notmatch "item\.tier === 'action'" -or $template -notmatch "item\.personalInterest === 'mustRead'" -or $template -notmatch 'a\.date !== b\.date') {
     Add-Failure 'Browserweergave borgt de prioriteit- en datumsortering niet'
 }
@@ -423,6 +428,7 @@ $testInputPath = Join-Path $testDirectory 'input.json'
 $testCachePath = Join-Path $testDirectory 'cache.json'
 $testPendingPath = Join-Path $testDirectory 'pending.json'
 $testResultPath = Join-Path $testDirectory 'result.json'
+$testBatchDirectory = Join-Path $testDirectory 'batches'
 
 function New-TestReview {
     param([string] $Id, [string] $Hash)
@@ -448,8 +454,12 @@ try {
     ) } | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $testCachePath -Encoding UTF8
 
     $pendingCount = & (Join-Path $PSScriptRoot 'New-CtrlUpdateReviewBatch.ps1') `
-        -InputPath $testInputPath -CachePath $testCachePath -OutputPath $testPendingPath
+        -InputPath $testInputPath -CachePath $testCachePath -OutputPath $testPendingPath `
+        -BatchDirectory $testBatchDirectory -BatchSize 1
     if ($pendingCount -ne 1) { Add-Failure "Reviewbatchfixture verwachtte 1 item maar vond $pendingCount" }
+    elseif (@(Get-ChildItem -LiteralPath $testBatchDirectory -Filter 'batch-*.json' -File).Count -ne 1) {
+        Add-Failure 'Reviewbatchfixture is niet in begrensde agentbatch opgesplitst'
+    }
 
     # Simuleert een model dat pipeline-metadata verkeerd terugkopieert. De merge
     # moet hash én beleidsversie herstellen zonder onbekende ids toe te laten.
@@ -478,6 +488,11 @@ catch {
 finally {
     foreach ($path in @($testInputPath, $testCachePath, $testPendingPath, $testResultPath)) {
         Remove-Item -LiteralPath $path -Force -ErrorAction SilentlyContinue
+    }
+    if (Test-Path -LiteralPath $testBatchDirectory) {
+        Get-ChildItem -LiteralPath $testBatchDirectory -Filter 'batch-*.json' -File |
+            ForEach-Object { Remove-Item -LiteralPath $_.FullName -Force -ErrorAction SilentlyContinue }
+        Remove-Item -LiteralPath $testBatchDirectory -Force -ErrorAction SilentlyContinue
     }
     Remove-Item -LiteralPath $testDirectory -Force -ErrorAction SilentlyContinue
 }

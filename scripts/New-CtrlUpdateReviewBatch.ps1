@@ -6,7 +6,10 @@
 param(
     [string] $InputPath = (Join-Path (Split-Path -Parent $PSScriptRoot) 'data/review-input.json'),
     [string] $CachePath = (Join-Path (Split-Path -Parent $PSScriptRoot) 'data/review-cache.json'),
-    [string] $OutputPath = (Join-Path (Split-Path -Parent $PSScriptRoot) '.tmp/review-pending.json')
+    [string] $OutputPath = (Join-Path (Split-Path -Parent $PSScriptRoot) '.tmp/review-pending.json'),
+    [string] $BatchDirectory = (Join-Path (Split-Path -Parent $PSScriptRoot) '.tmp/review-batches'),
+    [ValidateRange(1, 25)]
+    [int] $BatchSize = 10
 )
 
 $ErrorActionPreference = 'Stop'
@@ -46,5 +49,20 @@ if (-not (Test-Path -LiteralPath $outputDirectory)) {
     ConvertTo-Json -Depth 10 |
     Set-Content -LiteralPath $OutputPath -Encoding UTF8
 
-Write-Host "Cloudreview nodig voor $($pending.Count) van $(@($inputData.items).Count) items."
+if (Test-Path -LiteralPath $BatchDirectory) {
+    Get-ChildItem -LiteralPath $BatchDirectory -Filter 'batch-*.json' -File |
+        ForEach-Object { Remove-Item -LiteralPath $_.FullName -Force }
+}
+else {
+    $null = New-Item -ItemType Directory -Path $BatchDirectory -Force
+}
+for ($offset = 0; $offset -lt $pending.Count; $offset += $BatchSize) {
+    $last = [Math]::Min($offset + $BatchSize - 1, $pending.Count - 1)
+    $batchNumber = [Math]::Floor($offset / $BatchSize) + 1
+    [PSCustomObject]@{ items = @($pending[$offset..$last]) } |
+        ConvertTo-Json -Depth 10 |
+        Set-Content -LiteralPath (Join-Path $BatchDirectory "batch-$batchNumber.json") -Encoding UTF8
+}
+
+Write-Host "Cloudreview nodig voor $($pending.Count) van $(@($inputData.items).Count) items in $([Math]::Ceiling($pending.Count / [double]$BatchSize)) batch(es)."
 Write-Output $pending.Count

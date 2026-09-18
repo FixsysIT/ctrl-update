@@ -31,7 +31,7 @@ jobs:
       TEAMS_WEBHOOK_CONFIGURED: ${{ secrets.TEAMS_WEBHOOK_URL != '' }}
       SERVICE_HEALTH_CONFIGURED: ${{ vars.CTRL_UPDATE_ENTRA_CLIENT_ID != '' && vars.CTRL_UPDATE_ENTRA_TENANT_ID != '' }}
       MESSAGE_CENTER_ENABLED: ${{ vars.CTRL_UPDATE_MESSAGE_CENTER_ENABLED == 'true' }}
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Repository ophalen
@@ -99,17 +99,152 @@ jobs:
         id: pending
         shell: pwsh
         run: |
-          $count = ./scripts/New-CtrlUpdateReviewBatch.ps1
+          $batchSize = 10
+          $count = ./scripts/New-CtrlUpdateReviewBatch.ps1 -BatchSize $batchSize
+          $batchCount = [int][Math]::Ceiling($count / [double]$batchSize)
+          if ($batchCount -gt 8) { throw "Te veel agentreviewbatches: $batchCount (maximaal 8)." }
           "count=$count" >> $env:GITHUB_OUTPUT
+          "batch_count=$batchCount" >> $env:GITHUB_OUTPUT
           "required=$($count -gt 0)".ToLowerInvariant() >> $env:GITHUB_OUTPUT
 
-      - name: Nieuwe en gewijzigde items inhoudelijk beoordelen
-        if: steps.pending.outputs.required == 'true'
+      - name: Reviewbatch 1 voorbereiden
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 1 }}
+        shell: pwsh
+        run: Copy-Item -LiteralPath .tmp/review-batches/batch-1.json -Destination .tmp/review-current.json -Force
+
+      - name: Reviewbatch 1 inhoudelijk beoordelen
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 1 }}
         uses: openai/codex-action@v1
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           prompt-file: .github/codex/prompts/review-items.md
-          output-file: .tmp/review-result.json
+          output-file: .tmp/review-result-1.json
+          codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
+          model: gpt-5.6-terra
+          effort: medium
+          sandbox: read-only
+          safety-strategy: drop-sudo
+
+      - name: Reviewbatch 2 voorbereiden
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 2 }}
+        shell: pwsh
+        run: Copy-Item -LiteralPath .tmp/review-batches/batch-2.json -Destination .tmp/review-current.json -Force
+
+      - name: Reviewbatch 2 inhoudelijk beoordelen
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 2 }}
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/codex/prompts/review-items.md
+          output-file: .tmp/review-result-2.json
+          codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
+          model: gpt-5.6-terra
+          effort: medium
+          sandbox: read-only
+          safety-strategy: drop-sudo
+
+      - name: Reviewbatch 3 voorbereiden
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 3 }}
+        shell: pwsh
+        run: Copy-Item -LiteralPath .tmp/review-batches/batch-3.json -Destination .tmp/review-current.json -Force
+
+      - name: Reviewbatch 3 inhoudelijk beoordelen
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 3 }}
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/codex/prompts/review-items.md
+          output-file: .tmp/review-result-3.json
+          codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
+          model: gpt-5.6-terra
+          effort: medium
+          sandbox: read-only
+          safety-strategy: drop-sudo
+
+      - name: Reviewbatch 4 voorbereiden
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 4 }}
+        shell: pwsh
+        run: Copy-Item -LiteralPath .tmp/review-batches/batch-4.json -Destination .tmp/review-current.json -Force
+
+      - name: Reviewbatch 4 inhoudelijk beoordelen
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 4 }}
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/codex/prompts/review-items.md
+          output-file: .tmp/review-result-4.json
+          codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
+          model: gpt-5.6-terra
+          effort: medium
+          sandbox: read-only
+          safety-strategy: drop-sudo
+
+      - name: Reviewbatch 5 voorbereiden
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 5 }}
+        shell: pwsh
+        run: Copy-Item -LiteralPath .tmp/review-batches/batch-5.json -Destination .tmp/review-current.json -Force
+
+      - name: Reviewbatch 5 inhoudelijk beoordelen
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 5 }}
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/codex/prompts/review-items.md
+          output-file: .tmp/review-result-5.json
+          codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
+          model: gpt-5.6-terra
+          effort: medium
+          sandbox: read-only
+          safety-strategy: drop-sudo
+
+      - name: Reviewbatch 6 voorbereiden
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 6 }}
+        shell: pwsh
+        run: Copy-Item -LiteralPath .tmp/review-batches/batch-6.json -Destination .tmp/review-current.json -Force
+
+      - name: Reviewbatch 6 inhoudelijk beoordelen
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 6 }}
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/codex/prompts/review-items.md
+          output-file: .tmp/review-result-6.json
+          codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
+          model: gpt-5.6-terra
+          effort: medium
+          sandbox: read-only
+          safety-strategy: drop-sudo
+
+      - name: Reviewbatch 7 voorbereiden
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 7 }}
+        shell: pwsh
+        run: Copy-Item -LiteralPath .tmp/review-batches/batch-7.json -Destination .tmp/review-current.json -Force
+
+      - name: Reviewbatch 7 inhoudelijk beoordelen
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 7 }}
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/codex/prompts/review-items.md
+          output-file: .tmp/review-result-7.json
+          codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
+          model: gpt-5.6-terra
+          effort: medium
+          sandbox: read-only
+          safety-strategy: drop-sudo
+
+      - name: Reviewbatch 8 voorbereiden
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 8 }}
+        shell: pwsh
+        run: Copy-Item -LiteralPath .tmp/review-batches/batch-8.json -Destination .tmp/review-current.json -Force
+
+      - name: Reviewbatch 8 inhoudelijk beoordelen
+        if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 8 }}
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/codex/prompts/review-items.md
+          output-file: .tmp/review-result-8.json
           codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
           model: gpt-5.6-terra
           effort: medium
@@ -119,7 +254,7 @@ jobs:
       - name: Agentreview valideren en samenvoegen
         if: steps.pending.outputs.required == 'true'
         shell: pwsh
-        run: ./scripts/Merge-CtrlUpdateReview.ps1
+        run: ./scripts/Merge-CtrlUpdateReview.ps1 -ResultPath '.tmp/review-result-*.json'
 
       - name: Definitieve publicatie genereren
         shell: pwsh
