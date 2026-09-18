@@ -23,7 +23,7 @@
   "agentReview": {
     "enabled": true,
     "policyVersion": 2,
-    "batchSize": 10,
+    "batchSize": 12,
     "outputPath": "data/review-cache.json",
     "minimumConfidence": 0.55
   },

@@ -99,7 +99,9 @@ jobs:
         id: pending
         shell: pwsh
         run: |
-          $batchSize = 10
+          $reviewConfig = Get-Content -LiteralPath config/sources.json -Raw -Encoding UTF8 | ConvertFrom-Json
+          $batchSize = [int]$reviewConfig.agentReview.batchSize
+          if ($batchSize -lt 1 -or $batchSize -gt 25) { throw "Ongeldige agentreview-batchgrootte: $batchSize." }
           $count = ./scripts/New-CtrlUpdateReviewBatch.ps1 -BatchSize $batchSize
           $batchCount = [int][Math]::Ceiling($count / [double]$batchSize)
           if ($batchCount -gt 8) { throw "Te veel agentreviewbatches: $batchCount (maximaal 8)." }

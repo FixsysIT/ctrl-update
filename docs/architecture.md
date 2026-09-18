@@ -45,7 +45,7 @@ dist/index.html -> GitHub Pages -> news.intunetools.com
 1. openbare bronnen en geactiveerde tenantcapabilities ophalen en een tijdelijke reviewinput maken;
 2. dezelfde bronmomentopname vastleggen voor review en publicatie;
 3. alleen nieuwe of inhoudelijk gewijzigde items selecteren;
-4. die items in begrensde batches van maximaal tien via
+4. die items in configureerbare, begrensde batches van maximaal twaalf via
    `openai/codex-action@v1` met een strikt JSON-schema beoordelen;
 5. het resultaat atomair met de bestaande inhoudshash-cache samenvoegen;
 6. de definitieve pagina uit exact dezelfde momentopname genereren en alle kwaliteitscontroles uitvoeren;

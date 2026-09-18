@@ -179,6 +179,7 @@ if ($updater -notmatch "Urgency -eq 'critical'" -or
 if (@([regex]::Matches($refreshWorkflow, 'uses:\s*openai/codex-action@v1')).Count -ne 8 -or
     @([regex]::Matches($refreshWorkflow, 'safety-strategy:\s*read-only')).Count -ne 8 -or
     @([regex]::Matches($refreshWorkflow, 'codex-home:\s*\$\{\{ runner\.temp \}\}/ctrl-update-codex-[1-8]')).Count -ne 8 -or
+    $refreshWorkflow -notmatch 'agentReview\.batchSize' -or
     $refreshWorkflow -notmatch 'batch_count' -or
     $refreshWorkflow -notmatch 'review-result-\*\.json') {
     Add-Failure 'Cloudreview is niet in acht begrensde, atomair samen te voegen batches voorbereid'
