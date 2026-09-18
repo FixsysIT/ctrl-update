@@ -55,11 +55,6 @@ function New-TextBlock {
     return $block
 }
 
-function New-FactSet {
-    param([Parameter(Mandatory)] [System.Collections.IEnumerable] $Facts)
-    return [ordered]@{ type = 'FactSet'; spacing = 'Small'; facts = @($Facts) }
-}
-
 function Get-DisplaySource {
     param([string] $Source)
     if ($Source -eq 'BleepingComputer - Microsoft & Windows') { return 'BleepingComputer' }
@@ -196,30 +191,153 @@ function Get-ShortText {
     return $Text.Substring(0, $Length - 1).TrimEnd() + '…'
 }
 
-if ($PSCmdlet.ParameterSetName -eq 'Test') {
-    $sampleItems = @(
-        New-TextBlock -Text 'Microsoft brengt noodupdates uit voor RDS-storingen' -Weight Bolder -Size Medium
-        New-FactSet -Facts @(
-            [ordered]@{ title = 'Bron'; value = 'BleepingComputer' }
-            [ordered]@{ title = 'Gepubliceerd'; value = '18 sep' }
+function New-CtrlUpdateNotificationEnvelope {
+    param(
+        [Parameter(Mandatory)] [object[]] $Events,
+        [Parameter(Mandatory)] [string] $SiteUrl,
+        [string] $HeaderLabel = 'CTRL UPDATE',
+        [string] $RunUrl,
+        [string] $FooterText
+    )
+
+    $criticalEvents = @($Events | Where-Object { $_.kind -eq 'action' -and $_.critical })
+    $actionEvents = @($Events | Where-Object { $_.kind -eq 'action' -and -not $_.critical })
+    $sourceEvents = @($Events | Where-Object kind -eq 'source')
+    $body = [System.Collections.Generic.List[object]]::new()
+    $body.Add((New-TextBlock -Text $HeaderLabel -Weight Bolder -Size Small -Color Accent))
+
+    if ($Events.Count -eq 1) {
+        $event = $Events[0]
+        $heading = if ($event.critical) { 'Kritieke waarschuwing' }
+        elseif ($event.kind -eq 'action') { 'Actie vereist' }
+        else { 'Bronprobleem' }
+        $headingColor = if ($event.critical) { 'Attention' } elseif ($event.kind -eq 'source') { 'Warning' } else { 'Accent' }
+        $panelStyle = if ($event.critical) { 'attention' } elseif ($event.kind -eq 'source') { 'warning' } else { 'emphasis' }
+        $body.Add((New-TextBlock -Text $heading -Weight Bolder -Color $headingColor -Size Large -Spacing Small))
+
+        $items = [System.Collections.Generic.List[object]]::new()
+        $items.Add((New-TextBlock -Text ([string]$event.title) -Weight Bolder -Size Medium))
+        $metadata = @((Get-DisplaySource -Source ([string]$event.source)))
+        if ($event.date) { $metadata += "Actiedatum $([string]$event.date)" }
+        elseif ($event.published) { $metadata += [string]$event.published }
+        $items.Add((New-TextBlock -Text ($metadata -join '  ·  ') -Subtle -Spacing Small))
+        if ($event.summary) {
+            $items.Add((New-TextBlock -Text (Get-ShortText -Text ([string]$event.summary) -Length 320) -Spacing Medium))
+        }
+        if (@($event.why).Count -gt 0) {
+            $items.Add((New-TextBlock -Text "**Volgende stap:** $([string]@($event.why)[0])" -Color Accent -Spacing Medium))
+            foreach ($point in @($event.why | Select-Object -Skip 1 -First 1)) {
+                $items.Add((New-TextBlock -Text "• $point" -Spacing Small))
+            }
+        }
+        elseif ($event.kind -eq 'source' -and $event.summary) {
+            $items.Add((New-TextBlock -Text '**Volgende stap:** controleer de bronstatus bij de volgende update.' -Color Accent -Spacing Medium))
+        }
+        $body.Add([ordered]@{
+            type = 'Container'; style = $panelStyle; spacing = 'Medium'; bleed = $false; items = @($items)
+        })
+    }
+    else {
+        $body.Add((New-TextBlock -Text 'Nieuwe aandachtspunten' -Weight Bolder -Size Large -Spacing Small))
+        $summary = @()
+        if ($criticalEvents.Count) { $summary += "$($criticalEvents.Count) kritiek" }
+        if ($actionEvents.Count) { $summary += "$($actionEvents.Count) actie$($(if ($actionEvents.Count -eq 1) { '' } else { 's' }))" }
+        if ($sourceEvents.Count) { $summary += "$($sourceEvents.Count) bronprobleem$($(if ($sourceEvents.Count -eq 1) { '' } else { 'en' }))" }
+        $body.Add((New-TextBlock -Text ($summary -join '  ·  ') -Subtle -Spacing Small))
+
+        $groups = @(
+            [ordered]@{ label = 'KRITIEK'; events = $criticalEvents; color = 'Attention'; style = 'attention' }
+            [ordered]@{ label = 'ACTIES'; events = $actionEvents; color = 'Accent'; style = 'emphasis' }
+            [ordered]@{ label = 'BRONPROBLEMEN'; events = $sourceEvents; color = 'Warning'; style = 'warning' }
         )
-        New-TextBlock -Text 'Microsoft heeft out-of-band-updates uitgebracht voor getroffen Remote Desktop Services-omgevingen.' -Spacing Small
-        New-TextBlock -Text 'Te beoordelen' -Weight Bolder -Color Accent -Spacing Medium
-        New-TextBlock -Text '• Beoordeel de noodupdate voor getroffen RDS-systemen.' -Spacing Small
-    )
-    $body = @(
-        New-TextBlock -Text 'CTRL UPDATE · ONTWERPVOORBEELD' -Weight Bolder -Size Small -Color Accent
-        New-TextBlock -Text 'Kritieke waarschuwing' -Weight Bolder -Color Attention -Size Large -Spacing Small
-        [ordered]@{ type = 'Container'; spacing = 'Medium'; items = $sampleItems }
-        New-TextBlock -Text 'Testbericht · geen beheeractie vereist' -Subtle -Spacing Medium
-    )
-    $actions = @(
-        [ordered]@{ type = 'Action.OpenUrl'; title = 'CTRL UPDATE openen'; url = $SiteUrl }
-    )
+        $remainingSlots = 5
+        $shownCount = 0
+        foreach ($group in $groups) {
+            if ($group.events.Count -eq 0 -or $remainingSlots -eq 0) { continue }
+            $visibleGroupEvents = @($group.events | Select-Object -First $remainingSlots)
+            $groupItems = [System.Collections.Generic.List[object]]::new()
+            $groupItems.Add((New-TextBlock -Text "$($group.label)  ·  $($group.events.Count)" -Weight Bolder -Color $group.color -Size Small))
+
+            for ($index = 0; $index -lt $visibleGroupEvents.Count; $index++) {
+                $event = $visibleGroupEvents[$index]
+                $itemBlocks = [System.Collections.Generic.List[object]]::new()
+                $itemBlocks.Add((New-TextBlock -Text ([string]$event.title) -Weight Bolder -Spacing Small))
+                $metadata = @((Get-DisplaySource -Source ([string]$event.source)))
+                if ($event.date) { $metadata += "Actiedatum $([string]$event.date)" }
+                elseif ($event.published) { $metadata += [string]$event.published }
+                $itemBlocks.Add((New-TextBlock -Text ($metadata -join '  ·  ') -Subtle -Spacing Small))
+
+                if ($event.critical -and $event.summary) {
+                    $itemBlocks.Add((New-TextBlock -Text (Get-ShortText -Text ([string]$event.summary) -Length 180) -Spacing Small))
+                }
+                $nextStep = @($event.why | Select-Object -First 1)
+                if ($nextStep.Count) {
+                    $itemBlocks.Add((New-TextBlock -Text "**Volgende stap:** $([string]$nextStep[0])" -Spacing Small))
+                }
+                elseif ($event.kind -eq 'source' -and $event.summary) {
+                    $itemBlocks.Add((New-TextBlock -Text "**Probleem:** $(Get-ShortText -Text ([string]$event.summary) -Length 160)" -Spacing Small))
+                }
+                $groupItems.Add([ordered]@{
+                    type = 'Container'; separator = $index -gt 0; spacing = 'Small'; items = @($itemBlocks)
+                })
+            }
+
+            $body.Add([ordered]@{
+                type = 'Container'; style = $group.style; spacing = 'Medium'; bleed = $false; items = @($groupItems)
+            })
+            $remainingSlots -= $visibleGroupEvents.Count
+            $shownCount += $visibleGroupEvents.Count
+        }
+        if ($Events.Count -gt $shownCount) {
+            $body.Add((New-TextBlock -Text "+ $($Events.Count - $shownCount) meer op CTRL UPDATE" -Weight Bolder -Color Accent -Spacing Medium))
+        }
+    }
+
+    if ($FooterText) {
+        $body.Add((New-TextBlock -Text $FooterText -Subtle -Spacing Medium))
+    }
+
+    $actions = @()
+    if ($Events.Count -eq 1 -and $Events[0].link -and [string]$Events[0].link -ne $SiteUrl) {
+        $actions += [ordered]@{ type = 'Action.OpenUrl'; title = 'Bron bekijken'; url = [string]$Events[0].link; style = 'positive' }
+        $actions += [ordered]@{ type = 'Action.OpenUrl'; title = 'Naar CTRL UPDATE'; url = $SiteUrl }
+    }
+    else {
+        $actions += [ordered]@{ type = 'Action.OpenUrl'; title = 'Naar CTRL UPDATE'; url = $SiteUrl; style = 'positive' }
+    }
     if ($RunUrl) {
         $actions += [ordered]@{ type = 'Action.OpenUrl'; title = 'GitHub-run bekijken'; url = $RunUrl }
     }
-    $testEnvelope = New-TeamsEnvelope -Body $body -Actions $actions
+    return New-TeamsEnvelope -Body $body -Actions $actions
+}
+
+if ($PSCmdlet.ParameterSetName -eq 'Test') {
+    $sampleEvents = @(
+        [ordered]@{
+            kind = 'action'; critical = $true; label = 'Kritieke waarschuwing'
+            title = 'Microsoft brengt noodupdates uit voor RDS-storingen'
+            source = 'BleepingComputer'; published = '18 sep'; date = $null
+            summary = 'Microsoft heeft out-of-band-updates uitgebracht voor getroffen Remote Desktop Services-omgevingen.'
+            why = @('Beoordeel de noodupdate voor getroffen RDS-systemen.'); link = 'https://example.invalid/critical'
+        }
+        [ordered]@{
+            kind = 'action'; critical = $false; label = 'Nieuwe actie'
+            title = 'Nieuwe Intune-instelling vraagt voorbereiding'
+            source = 'Microsoft Intune Blog'; published = '18 sep'; date = '30 sep'
+            summary = 'Een beheerwijziging komt beschikbaar.'
+            why = @('Controleer de huidige configuratie en plan de wijziging.'); link = 'https://example.invalid/action'
+        }
+        [ordered]@{
+            kind = 'source'; critical = $false; label = 'Nieuwe bronstoring'
+            title = 'Microsoft 365 Message Center'
+            source = 'Microsoft 365 Message Center'; published = $null; date = $null
+            summary = 'De bron kon tijdens deze update niet worden opgehaald.'
+            why = @(); link = $SiteUrl
+        }
+    )
+    $testEnvelope = New-CtrlUpdateNotificationEnvelope -Events $sampleEvents -SiteUrl $SiteUrl `
+        -HeaderLabel 'CTRL UPDATE · ONTWERPVOORBEELD' -RunUrl $RunUrl `
+        -FooterText 'Testbericht · geen beheeractie vereist'
     if ($PreviewOnly) {
         $testEnvelope | ConvertTo-Json -Depth 20
         return
@@ -341,77 +459,7 @@ if ($events.Count -eq 0) {
     return
 }
 
-$actionCount = @($events | Where-Object kind -eq 'action').Count
-$criticalCount = @($events | Where-Object { $_.kind -eq 'action' -and $_.critical }).Count
-$regularActionCount = $actionCount - $criticalCount
-$sourceCount = @($events | Where-Object kind -eq 'source').Count
-$summaryParts = @()
-if ($criticalCount) { $summaryParts += "$criticalCount kritieke waarschuwing$($(if ($criticalCount -eq 1) { '' } else { 'en' }))" }
-if ($regularActionCount) { $summaryParts += "$regularActionCount actie$($(if ($regularActionCount -eq 1) { '' } else { 's' }))" }
-if ($sourceCount) { $summaryParts += "$sourceCount bronstoring$($(if ($sourceCount -eq 1) { '' } else { 'en' }))" }
-
-$body = [System.Collections.Generic.List[object]]::new()
-$body.Add((New-TextBlock -Text 'CTRL UPDATE' -Weight Bolder -Size Small -Color Accent))
-$heading = if ($criticalCount -gt 1 -and $criticalCount -eq $events.Count) {
-    "$criticalCount kritieke waarschuwingen"
-}
-elseif ($criticalCount) { 'Kritieke waarschuwing' }
-elseif ($actionCount -gt 1 -and $actionCount -eq $events.Count) { "$actionCount acties vragen aandacht" }
-elseif ($actionCount) { 'Aandacht vereist' }
-else { 'Bronprobleem' }
-$body.Add((New-TextBlock -Text $heading -Weight Bolder -Color Attention -Size Large -Spacing Small))
-if ($events.Count -gt 1 -and -not (($criticalCount -eq $events.Count) -or ($actionCount -eq $events.Count))) {
-    $body.Add((New-TextBlock -Text ($summaryParts -join ' · ') -Subtle -Spacing Small))
-}
-
-$visibleEvents = @($events | Select-Object -First $(if ($events.Count -gt 1) { 5 } else { 1 }))
-for ($eventIndex = 0; $eventIndex -lt $visibleEvents.Count; $eventIndex++) {
-    $event = $visibleEvents[$eventIndex]
-    $eventItems = [System.Collections.Generic.List[object]]::new()
-    $labelMatchesGroup = ($criticalCount -eq $events.Count -and $event.critical) -or
-        ($actionCount -eq $events.Count -and -not $event.critical) -or
-        ($sourceCount -eq $events.Count -and [string]$event.label -eq 'Nieuwe bronstoring')
-    if (-not $labelMatchesGroup) {
-        $eventItems.Add((New-TextBlock -Text ([string]$event.label).ToUpperInvariant() -Weight Bolder -Color $(if ($event.critical) { 'Attention' } else { 'Accent' }) -Size Small))
-    }
-    $eventItems.Add((New-TextBlock -Text ([string]$event.title) -Weight Bolder -Size Medium -Spacing Small))
-
-    $facts = [System.Collections.Generic.List[object]]::new()
-    $facts.Add([ordered]@{ title = 'Bron'; value = (Get-DisplaySource -Source ([string]$event.source)) })
-    if ($event.date) { $facts.Add([ordered]@{ title = 'Actiedatum'; value = [string]$event.date }) }
-    elseif ($event.published) { $facts.Add([ordered]@{ title = 'Gepubliceerd'; value = [string]$event.published }) }
-    $eventItems.Add((New-FactSet -Facts $facts))
-
-    if ($events.Count -eq 1 -and $event.summary) {
-        $eventItems.Add((New-TextBlock -Text (Get-ShortText -Text ([string]$event.summary) -Length 320) -Spacing Small))
-    }
-    if ($events.Count -eq 1 -and @($event.why).Count -gt 0) {
-        $eventItems.Add((New-TextBlock -Text 'Te beoordelen' -Weight Bolder -Color Accent -Spacing Medium))
-        foreach ($point in @($event.why)) {
-            $eventItems.Add((New-TextBlock -Text "• $point" -Spacing Small))
-        }
-    }
-
-    $body.Add([ordered]@{
-        type = 'Container'
-        separator = $eventIndex -gt 0
-        spacing = 'Medium'
-        items = @($eventItems)
-    })
-}
-if ($events.Count -gt $visibleEvents.Count) {
-    $body.Add((New-TextBlock -Text "+ $($events.Count - $visibleEvents.Count) extra signaal/signalen op de website" -Weight Bolder -Spacing Medium))
-}
-
-$actions = @()
-if ($events.Count -eq 1 -and $visibleEvents[0].link -and [string]$visibleEvents[0].link -ne $SiteUrl) {
-    $actions += [ordered]@{ type = 'Action.OpenUrl'; title = 'Bekijk bron'; url = [string]$visibleEvents[0].link; style = 'positive' }
-    $actions += [ordered]@{ type = 'Action.OpenUrl'; title = 'Open CTRL UPDATE'; url = $SiteUrl }
-}
-else {
-    $actions += [ordered]@{ type = 'Action.OpenUrl'; title = 'Open CTRL UPDATE'; url = $SiteUrl; style = 'positive' }
-}
-$envelope = New-TeamsEnvelope -Body $body -Actions $actions
+$envelope = New-CtrlUpdateNotificationEnvelope -Events @($events) -SiteUrl $SiteUrl
 
 if ($PreviewOnly) {
     $envelope | ConvertTo-Json -Depth 20

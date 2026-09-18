@@ -215,8 +215,11 @@ if ($testPreview) {
     $testCardText = @(Get-AdaptiveCardText -Nodes $testPreview.attachments[0].content.body) -join "`n"
     $testActions = @($testPreview.attachments[0].content.actions)
     if ($testCardText -notmatch 'ONTWERPVOORBEELD' -or
-        $testCardText -notmatch 'Kritieke waarschuwing' -or
-        $testCardText -notmatch 'Te beoordelen' -or
+        $testCardText -notmatch 'Nieuwe aandachtspunten' -or
+        $testCardText -notmatch 'KRITIEK\s+·\s+1' -or
+        $testCardText -notmatch 'ACTIES\s+·\s+1' -or
+        $testCardText -notmatch 'BRONPROBLEMEN\s+·\s+1' -or
+        $testCardText -notmatch '\*\*Volgende stap:\*\*' -or
         $testCardText -notmatch 'geen beheeractie vereist' -or
         [string]$testPreview.attachments[0].content.msteams.width -ne 'Full' -or
         $testActions.Count -ne 2) {
@@ -256,8 +259,8 @@ else {
         $cardText = @(Get-AdaptiveCardText -Nodes $preview.attachments[0].content.body) -join "`n"
         if ([string]$preview.type -ne 'message' -or
             [string]$preview.attachments[0].contentType -ne 'application/vnd.microsoft.card.adaptive' -or
-            $cardText -notmatch 'NAAR ACTIE GEPROMOVEERD' -or
-            $cardText -notmatch 'NIEUWE BRONSTORING') {
+            $cardText -notmatch 'ACTIES\s+·\s+1' -or
+            $cardText -notmatch 'BRONPROBLEMEN\s+·\s+1') {
             Add-Failure 'Teams-preview bevat niet uitsluitend de verwachte actie- en bronwaarschuwingen'
         }
     }
@@ -297,9 +300,9 @@ else {
         $criticalCardText = @(Get-AdaptiveCardText -Nodes $criticalPreview.attachments[0].content.body) -join "`n"
         $criticalActions = @($criticalPreview.attachments[0].content.actions)
         if (@([regex]::Matches($criticalCardText, 'Kritieke waarschuwing', 'IgnoreCase')).Count -ne 1 -or
-            $criticalCardText -notmatch 'Te beoordelen' -or
+            $criticalCardText -notmatch '\*\*Volgende stap:\*\*' -or
             $criticalActions.Count -ne 2 -or
-            [string]$criticalActions[0].title -ne 'Bekijk bron') {
+            [string]$criticalActions[0].title -ne 'Bron bekijken') {
             Add-Failure 'Incidentactie wordt niet als kritieke Teams-waarschuwing weergegeven'
         }
     }
@@ -314,7 +317,7 @@ else {
             source = 'Gecontroleerde bron'
             link = "https://example.invalid/action-$_"
             keywords = @('failure')
-            actionCtx = @()
+            actionCtx = @([ordered]@{ text = "Plan lifecycle-actie $_ voor de relevante beheergroep." })
             dateText = '18 sep'
             keyDate = $null
             allDates = @()
@@ -328,8 +331,9 @@ else {
     catch { $multiActionPreview = $null; Add-Failure "Compacte Teams-preview is ongeldig: $($_.Exception.Message)" }
     if ($multiActionPreview) {
         $multiActionCardText = @(Get-AdaptiveCardText -Nodes $multiActionPreview.attachments[0].content.body) -join "`n"
-        if ($multiActionCardText -notmatch '3 acties vragen aandacht' -or
+        if ($multiActionCardText -notmatch 'ACTIES\s+·\s+3' -or
             $multiActionCardText -match 'Kritieke waarschuwing' -or
+            $multiActionCardText -notmatch '\*\*Volgende stap:\*\*' -or
             $multiActionCardText -match 'hoort niet op een compacte kaart') {
             Add-Failure 'Kaart met meerdere gewone acties is niet compact of wordt onterecht kritiek genoemd'
         }
