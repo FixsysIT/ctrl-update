@@ -208,7 +208,7 @@ function Get-AdaptiveCardText {
     return @($texts)
 }
 
-$testPreviewText = & $notificationScript -TestNotification -RunUrl 'https://github.com/FixsysIT/ctrl-update/actions/runs/1' -PreviewOnly | Out-String
+$testPreviewText = & $notificationScript -TestNotification -PreviewOnly | Out-String
 try { $testPreview = $testPreviewText | ConvertFrom-Json -AsHashtable }
 catch { $testPreview = $null; Add-Failure "Teams-testpreview is geen geldige Adaptive Card: $($_.Exception.Message)" }
 if ($testPreview) {
@@ -222,7 +222,8 @@ if ($testPreview) {
         $testCardText -notmatch '\*\*Volgende stap:\*\*' -or
         $testCardText -notmatch 'geen beheeractie vereist' -or
         [string]$testPreview.attachments[0].content.msteams.width -ne 'Full' -or
-        $testActions.Count -ne 2) {
+        $testActions.Count -ne 1 -or
+        [string]$testActions[0].title -ne 'Naar CTRL UPDATE') {
         Add-Failure 'Teams-testpreview bevat niet de verwachte status en acties'
     }
 }

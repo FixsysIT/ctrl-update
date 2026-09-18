@@ -96,7 +96,6 @@ jobs:
         run: >-
           ./scripts/Send-CtrlUpdateTeamsNotification.ps1
           -TestNotification
-          -RunUrl '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
 
       - name: Teams melden bij nieuwe acties of problemen
         if: ${{ env.TEAMS_WEBHOOK_CONFIGURED == 'true' && inputs.teams_test != true }}
@@ -139,7 +138,6 @@ jobs:
         run: >-
           ./scripts/Send-CtrlUpdateTeamsNotification.ps1
           -FailureMessage 'De automatische bronverwerking, agentreview of kwaliteitscontrole is mislukt.'
-          -RunUrl '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
 
   deploy:
     name: Publiceer de geslaagde refresh

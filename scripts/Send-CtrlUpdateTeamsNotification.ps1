@@ -26,8 +26,6 @@ param(
     [Parameter(Mandatory, ParameterSetName = 'Test')]
     [switch] $TestNotification,
 
-    [string] $RunUrl,
-
     [switch] $PreviewOnly,
     [string] $WebhookUrl = $env:TEAMS_WEBHOOK_URL,
     [string] $SiteUrl = 'https://news.intunetools.com/'
@@ -196,7 +194,6 @@ function New-CtrlUpdateNotificationEnvelope {
         [Parameter(Mandatory)] [object[]] $Events,
         [Parameter(Mandatory)] [string] $SiteUrl,
         [string] $HeaderLabel = 'CTRL UPDATE',
-        [string] $RunUrl,
         [string] $FooterText
     )
 
@@ -305,9 +302,6 @@ function New-CtrlUpdateNotificationEnvelope {
     else {
         $actions += [ordered]@{ type = 'Action.OpenUrl'; title = 'Naar CTRL UPDATE'; url = $SiteUrl; style = 'positive' }
     }
-    if ($RunUrl) {
-        $actions += [ordered]@{ type = 'Action.OpenUrl'; title = 'GitHub-run bekijken'; url = $RunUrl }
-    }
     return New-TeamsEnvelope -Body $body -Actions $actions
 }
 
@@ -336,7 +330,7 @@ if ($PSCmdlet.ParameterSetName -eq 'Test') {
         }
     )
     $testEnvelope = New-CtrlUpdateNotificationEnvelope -Events $sampleEvents -SiteUrl $SiteUrl `
-        -HeaderLabel 'CTRL UPDATE · ONTWERPVOORBEELD' -RunUrl $RunUrl `
+        -HeaderLabel 'CTRL UPDATE · ONTWERPVOORBEELD' `
         -FooterText 'Testbericht · geen beheeractie vereist'
     if ($PreviewOnly) {
         $testEnvelope | ConvertTo-Json -Depth 20
@@ -353,7 +347,7 @@ if ($PSCmdlet.ParameterSetName -eq 'Failure') {
         New-TextBlock -Text $FailureMessage -Spacing Small
         New-TextBlock -Text 'De vorige geslaagde versie blijft online; er is niets onvolledig gepubliceerd.' -Subtle -Spacing Medium
     )
-    $actions = @([ordered]@{ type = 'Action.OpenUrl'; title = 'GitHub-run bekijken'; url = $(if ($RunUrl) { $RunUrl } else { $SiteUrl }) })
+    $actions = @([ordered]@{ type = 'Action.OpenUrl'; title = 'Naar CTRL UPDATE'; url = $SiteUrl; style = 'positive' })
     $failureEnvelope = New-TeamsEnvelope -Body $body -Actions $actions
     if ($PreviewOnly) {
         $failureEnvelope | ConvertTo-Json -Depth 20
