@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-18T13:21:04.3109526Z",
+  "generated": "2026-09-18T13:55:31.0971368Z",
   "items": [
     {
       "id": "https://andrewstaylor.com/2026/09/11/intune-newsletter-11th-september-2026/",
@@ -256,19 +256,20 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/fundamentals/what-is-entra",
-      "contentHash": "38e7836ef957b55a742a333ac4d843fc6a86cfd2299446749ac53373c9690b95",
+      "contentHash": "282a43ebec96bb01a5803cd1413d5f0b2037ab358af6f322da681ebd7bce555f",
       "titleNl": "Wat is Microsoft Entra?",
-      "summaryNl": "Naslag over Microsoft Entra als productfamilie voor identiteits- en netwerktoegang binnen een Zero Trust-strategie.",
+      "summaryNl": "Naslagartikel over de Microsoft Entra-productfamilie voor identity, toegang, governance en beveiliging.",
       "whyNl": [],
       "titleEn": "What is Microsoft Entra?",
-      "summaryEn": "Reference documentation on Microsoft Entra as a family of identity and network access products for a Zero Trust strategy.",
+      "summaryEn": "Reference article about the Microsoft Entra product family for identity, access, governance, and security.",
       "whyEn": [],
       "categories": [
-        "Identiteit & MFA"
+        "Identiteit & MFA",
+        "Conditional Access"
       ],
       "kind": "naslag",
       "tier": "info",
-      "confidence": 0.98,
+      "confidence": 0.99,
       "reasonNl": "Dit is algemene productdocumentatie zonder aangekondigde wijziging of beheeractie.",
       "reasonEn": "This is general product documentation with no announced change or administrative action."
     },
@@ -353,21 +354,21 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/verified-id/",
-      "contentHash": "c2b995b1158259569d97c837ff72de0fb2dcac9be3f025121858407652f07071",
+      "contentHash": "280239b883a622839993265497e0a339c12cebfc2757cbb24dfaf545148ca9bc",
       "titleNl": "Documentatie voor Microsoft Entra Verified ID",
-      "summaryNl": "Overzicht van documentatie voor het instellen, bouwen, integreren en gebruiken van Microsoft Entra Verified ID.",
+      "summaryNl": "Overzicht van documentatie voor het configureren, ontwikkelen en gebruiken van Microsoft Entra Verified ID.",
       "whyNl": [],
       "titleEn": "Microsoft Entra Verified ID documentation",
-      "summaryEn": "Overview of documentation for setting up, building with, integrating, and using Microsoft Entra Verified ID.",
+      "summaryEn": "Overview of documentation for configuring, developing with, and using Microsoft Entra Verified ID.",
       "whyEn": [],
       "categories": [
         "Identiteit & MFA"
       ],
       "kind": "naslag",
       "tier": "info",
-      "confidence": 0.92,
-      "reasonNl": "Dit is een documentatieoverzicht zonder aangekondigde wijziging of actie.",
-      "reasonEn": "This is a documentation overview without an announced change or action."
+      "confidence": 0.99,
+      "reasonNl": "Dit is een documentatieoverzicht zonder concrete productwijziging of actie.",
+      "reasonEn": "This is a documentation overview without a concrete product change or action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/intune/app-management/ref-protected-apps",
@@ -831,30 +832,6 @@
       "reasonEn": "Microsoft recommends a relevant phased transition, but states no mandatory migration or deadline."
     },
     {
-      "id": "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/public-preview-of-self-service-onboarding-for-new-microsoft/ba-p/4557199",
-      "contentHash": "8367a1c728211d03fa25a3efd78c0ca0df9ee623231430a8c4b50aa497f2f0e2",
-      "titleNl": "Public preview van self-service onboarding voor nieuwe Microsoft Entra App Gallery-applicaties",
-      "summaryNl": "Microsoft introduceert een public preview waarmee uitgevers nieuwe App Gallery-applicaties kunnen valideren, indienen en volgen via het Microsoft Entra admin center. De preview ondersteunt geen wijzigingen aan of verwijdering van bestaande vermeldingen.",
-      "whyNl": [
-        "Uitgevers kunnen SSO- en provisioningintegraties vóór indiening valideren.",
-        "Gebruik voor bestaande App Gallery-vermeldingen het huidige wijzigings- of verwijderproces."
-      ],
-      "titleEn": "Public preview of self-service onboarding for new Microsoft Entra App Gallery applications",
-      "summaryEn": "Microsoft is introducing a public preview that lets publishers validate, submit, and track new App Gallery applications through the Microsoft Entra admin center. The preview does not support updates to or removal of existing listings.",
-      "whyEn": [
-        "Publishers can validate SSO and provisioning integrations before submission.",
-        "Continue using the existing update or removal process for current App Gallery listings."
-      ],
-      "categories": [
-        "Identiteit & MFA"
-      ],
-      "kind": "nieuws",
-      "tier": "watch",
-      "confidence": 0.97,
-      "reasonNl": "Dit is een relevante public preview, maar zonder verplichte beheeractie of deadline.",
-      "reasonEn": "This is a relevant public preview, but it has no mandatory administrative action or deadline."
-    },
-    {
       "id": "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/replace-vpn-access-with-identity-driven-security/ba-p/4529309",
       "contentHash": "fa39e6968201a462b848ee9a47b7884ffe9b29395b394008189a8b862798e9ff",
       "titleNl": "VPN-toegang gefaseerd vervangen met Microsoft Entra Private Access",
@@ -1010,28 +987,28 @@
     },
     {
       "id": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-broken-copy-and-paste-for-excel-2016-users/",
-      "contentHash": "e016219a47696c481536be7abf9dbdc34f098ba649e654cdce00ee21a11e9541",
-      "titleNl": "Microsoft herstelt kopiëren en plakken in Excel 2016",
-      "summaryNl": "KB5002914 kan kopiëren, plakken, automatisch aanvullen en het slepen van formules in Excel verstoren. KB5002665 verhelpt bepaalde mislukte plakbewerkingen voor de MSI-editie van Office 2016.",
+      "contentHash": "d7c14f29d89be68b4c0fafbfa6e89a4881284d3d300add0432a791f4cf389cce",
+      "titleNl": "Microsoft verhelpt kopieer- en plakprobleem in Excel 2016",
+      "summaryNl": "KB5002665 verhelpt bepaalde mislukte plakbewerkingen na KB5002914 voor de MSI-versie van Office 2016. De oplossing geldt niet voor Click-to-Run-edities of de overige genoemde Excel-versies.",
       "whyNl": [
         "Beoordeel KB5002665 voor getroffen MSI-installaties van Office 2016.",
-        "De oplossing geldt niet voor Office 2016 Click-to-Run of andere getroffen Excel-versies."
+        "Voor andere getroffen Excel-versies is nog geen permanente oplossing gemeld."
       ],
-      "titleEn": "Microsoft fixes copy and paste in Excel 2016",
-      "summaryEn": "KB5002914 can disrupt copy, paste, autofill, and formula dragging in Excel. KB5002665 fixes certain failed paste operations for the MSI edition of Office 2016.",
+      "titleEn": "Microsoft fixes copy-and-paste issue in Excel 2016",
+      "summaryEn": "KB5002665 fixes certain failed paste operations after KB5002914 for the MSI edition of Office 2016. The fix does not apply to Click-to-Run editions or the other cited Excel versions.",
       "whyEn": [
-        "Assess KB5002665 for affected Office 2016 MSI installations.",
-        "The fix does not apply to Office 2016 Click-to-Run or other affected Excel versions."
+        "Assess KB5002665 for affected MSI installations of Office 2016.",
+        "No permanent fix has been reported for the other affected Excel versions."
       ],
       "categories": [
-        "Apps & Packaging",
-        "Windows Update"
+        "Windows Update",
+        "Apps & Packaging"
       ],
-      "kind": "wijziging",
+      "kind": "nieuws",
       "tier": "action",
-      "confidence": 0.88,
-      "reasonNl": "Microsoft heeft een concrete update uitgebracht voor een bevestigd probleem dat beheerders moeten beoordelen.",
-      "reasonEn": "Microsoft has released a specific update for a confirmed issue that administrators should assess."
+      "confidence": 0.9,
+      "reasonNl": "Voor getroffen Office 2016 MSI-installaties is een herstelupdate beschikbaar die beheerders moeten beoordelen.",
+      "reasonEn": "A remediation update is available for affected Office 2016 MSI installations and should be assessed by administrators."
     },
     {
       "id": "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-emergency-windows-updates-to-fix-rds-failures/",
@@ -1158,29 +1135,6 @@
       "reasonEn": "The disruption is relevant, but the cause and an official workaround had not yet been confirmed."
     },
     {
-      "id": "https://www.bleepingcomputer.com/news/security/iranian-hackers-use-chosen-brick-windows-malware-to-spy-on-targets/",
-      "contentHash": "1213255c7d94c25ddde4b81596709b8d8b060bf5968db6f2a1f820cb9f572236",
-      "titleNl": "Iraanse aanvallers gebruiken CHOSEN BRICK-malware voor spionage",
-      "summaryNl": "Overheidsinstanties waarschuwen voor CHOSEN BRICK-malware die dissidenten, activisten en journalisten viseert. De malware kan gegevens stelen, schermafbeeldingen en audio opnemen en Microsoft Defender-uitsluitingen toevoegen.",
-      "whyNl": [
-        "Onderzoek verdachte Registry Run-vermeldingen en de in het advies genoemde indicators of compromise."
-      ],
-      "titleEn": "Iranian attackers use CHOSEN BRICK malware for espionage",
-      "summaryEn": "Government agencies warn of CHOSEN BRICK malware targeting dissidents, activists, and journalists. The malware can steal data, capture screenshots and audio, and add Microsoft Defender exclusions.",
-      "whyEn": [
-        "Investigate suspicious Registry Run entries and the indicators of compromise cited in the advisory."
-      ],
-      "categories": [
-        "Defender & Security",
-        "Windows 11"
-      ],
-      "kind": "nieuws",
-      "tier": "watch",
-      "confidence": 0.82,
-      "reasonNl": "Dit is relevante dreigingsinformatie, maar de gemelde campagne richt zich op specifieke doelwitten.",
-      "reasonEn": "This is relevant threat intelligence, but the reported campaign targets specific victims."
-    },
-    {
       "id": "https://www.bleepingcomputer.com/news/security/microsoft-fixes-bug-behind-defender-antivirus-is-turned-off-alerts/",
       "contentHash": "d030cf38529857bf60793650fc84f7d942c387770757731ef84f017a4ede681e",
       "titleNl": "Microsoft herstelt onjuiste meldingen dat Defender Antivirus is uitgeschakeld",
@@ -1201,6 +1155,24 @@
       "confidence": 0.94,
       "reasonNl": "De gemelde fout is opgelost en de bron noemt geen vereiste beheeractie of brede actuele storing.",
       "reasonEn": "The reported issue is resolved, and the source does not state a required administrative action or an active widespread outage."
+    },
+    {
+      "id": "https://www.bleepingcomputer.com/news/security/webinar-which-google-workspace-security-controls-actually-matter/",
+      "contentHash": "a70b869c88ff24e292cd80fbdd05a57e56b0ae01c03f87afdfd81c9ae22766c2",
+      "titleNl": "Webinar over relevante beveiligingsmaatregelen voor Google Workspace",
+      "summaryNl": "Aankondiging van een webinar over de prioritering van beveiligingsmaatregelen voor Google Workspace.",
+      "whyNl": [],
+      "titleEn": "Webinar on relevant Google Workspace security controls",
+      "summaryEn": "Announcement of a webinar about prioritizing security controls for Google Workspace.",
+      "whyEn": [],
+      "categories": [
+        "Defender & Security"
+      ],
+      "kind": "nieuws",
+      "tier": "info",
+      "confidence": 0.96,
+      "reasonNl": "Dit is een webinar-aankondiging en bevat geen productwijziging of vereiste beheeractie.",
+      "reasonEn": "This is a webinar announcement and contains no product change or required administrative action."
     },
     {
       "id": "https://www.microsoft.com/en-us/security/blog/2026/09/04/secure-edge-ai-customer-owned-environments/",
@@ -1405,6 +1377,50 @@
       "confidence": 0.94,
       "reasonNl": "Dit is een optionele implementatiehandleiding zonder verplichte migratie of harde deadline.",
       "reasonEn": "This is an optional deployment guide without a mandatory migration or firm deadline."
+    },
+    {
+      "id": "SH:ab79b62e62b587c57d41ef57",
+      "contentHash": "15522991915c67c4783d6c0bb5299649b5bd2ab26d1ad4204ec9684a49d24b02",
+      "titleNl": "Actief Microsoft 365-incident voor Microsoft Purview",
+      "summaryNl": "Microsoft meldt een actief service-incident voor Microsoft Purview dat deze tenant kan beïnvloeden. De status is serviceDegradation.",
+      "whyNl": [
+        "Controleer Service Health voor actuele impact en updates."
+      ],
+      "titleEn": "Active Microsoft 365 incident for Microsoft Purview",
+      "summaryEn": "Microsoft reports an active service incident for Microsoft Purview that may affect this tenant. The status is serviceDegradation.",
+      "whyEn": [
+        "Check Service Health for current impact and updates."
+      ],
+      "categories": [
+        "Compliance"
+      ],
+      "kind": "nieuws",
+      "tier": "action",
+      "confidence": 0.99,
+      "reasonNl": "Microsoft heeft dit als actief tenantincident geclassificeerd.",
+      "reasonEn": "Microsoft has classified this as an active tenant incident."
+    },
+    {
+      "id": "SH:e3721521e23187799224c9af",
+      "contentHash": "6ac695baa90e6c8ece89e24515d84278d6bdb7030275c951fa194303526a3905",
+      "titleNl": "Actief Microsoft 365-incident voor Microsoft 365 Copilot Chat",
+      "summaryNl": "Microsoft meldt een actief service-incident voor Microsoft 365 Copilot Chat dat deze tenant kan beïnvloeden. De status is serviceDegradation.",
+      "whyNl": [
+        "Controleer Service Health voor actuele impact en updates."
+      ],
+      "titleEn": "Active Microsoft 365 incident for Microsoft 365 Copilot Chat",
+      "summaryEn": "Microsoft reports an active service incident for Microsoft 365 Copilot Chat that may affect this tenant. The status is serviceDegradation.",
+      "whyEn": [
+        "Check Service Health for current impact and updates."
+      ],
+      "categories": [
+        "Licensing"
+      ],
+      "kind": "nieuws",
+      "tier": "action",
+      "confidence": 0.99,
+      "reasonNl": "Microsoft heeft dit als actief tenantincident geclassificeerd.",
+      "reasonEn": "Microsoft has classified this as an active tenant incident."
     }
   ]
 }
