@@ -177,6 +177,7 @@ if ($updater -notmatch "Urgency -eq 'critical'" -or
     Add-Failure 'Bronitems worden niet volgens kritiek-, actie- en daarna nieuwste-eerst opgebouwd'
 }
 if (@([regex]::Matches($refreshWorkflow, 'uses:\s*openai/codex-action@v1')).Count -ne 8 -or
+    @([regex]::Matches($refreshWorkflow, 'safety-strategy:\s*read-only')).Count -ne 8 -or
     $refreshWorkflow -notmatch 'batch_count' -or
     $refreshWorkflow -notmatch 'review-result-\*\.json') {
     Add-Failure 'Cloudreview is niet in acht begrensde, atomair samen te voegen batches voorbereid'

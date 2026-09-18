@@ -123,7 +123,7 @@ jobs:
           model: gpt-5.6-terra
           effort: medium
           sandbox: read-only
-          safety-strategy: drop-sudo
+          safety-strategy: read-only
 
       - name: Reviewbatch 2 voorbereiden
         if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 2 }}
@@ -141,7 +141,7 @@ jobs:
           model: gpt-5.6-terra
           effort: medium
           sandbox: read-only
-          safety-strategy: drop-sudo
+          safety-strategy: read-only
 
       - name: Reviewbatch 3 voorbereiden
         if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 3 }}
@@ -159,7 +159,7 @@ jobs:
           model: gpt-5.6-terra
           effort: medium
           sandbox: read-only
-          safety-strategy: drop-sudo
+          safety-strategy: read-only
 
       - name: Reviewbatch 4 voorbereiden
         if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 4 }}
@@ -177,7 +177,7 @@ jobs:
           model: gpt-5.6-terra
           effort: medium
           sandbox: read-only
-          safety-strategy: drop-sudo
+          safety-strategy: read-only
 
       - name: Reviewbatch 5 voorbereiden
         if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 5 }}
@@ -195,7 +195,7 @@ jobs:
           model: gpt-5.6-terra
           effort: medium
           sandbox: read-only
-          safety-strategy: drop-sudo
+          safety-strategy: read-only
 
       - name: Reviewbatch 6 voorbereiden
         if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 6 }}
@@ -213,7 +213,7 @@ jobs:
           model: gpt-5.6-terra
           effort: medium
           sandbox: read-only
-          safety-strategy: drop-sudo
+          safety-strategy: read-only
 
       - name: Reviewbatch 7 voorbereiden
         if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 7 }}
@@ -231,7 +231,7 @@ jobs:
           model: gpt-5.6-terra
           effort: medium
           sandbox: read-only
-          safety-strategy: drop-sudo
+          safety-strategy: read-only
 
       - name: Reviewbatch 8 voorbereiden
         if: ${{ fromJSON(steps.pending.outputs.batch_count) >= 8 }}
@@ -249,7 +249,7 @@ jobs:
           model: gpt-5.6-terra
           effort: medium
           sandbox: read-only
-          safety-strategy: drop-sudo
+          safety-strategy: read-only
 
       - name: Agentreview valideren en samenvoegen
         if: steps.pending.outputs.required == 'true'
