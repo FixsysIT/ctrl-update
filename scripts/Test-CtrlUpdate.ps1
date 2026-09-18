@@ -98,6 +98,7 @@ foreach ($item in @($reviewCache.items)) {
 if ($failures.Count -eq 0) { Write-Pass "$(@($reviewCache.items).Count) reviewitems geldig" }
 
 $template = Get-Content -LiteralPath (Join-Path $projectRoot 'src/index.template.html') -Raw -Encoding UTF8
+$updater = Get-Content -LiteralPath (Join-Path $projectRoot 'scripts/Update-CtrlUpdate.ps1') -Raw -Encoding UTF8
 $placeholderCount = ([regex]::Matches($template, '__DATA__')).Count
 if ($placeholderCount -ne 1) {
     Add-Failure "Template moet exact één __DATA__-placeholder bevatten; gevonden: $placeholderCount"
@@ -118,21 +119,28 @@ foreach ($requiredFragment in @('timezone: "Europe/Amsterdam"', '30 6 * * *', '0
         Add-Failure "Refresh-workflow mist verplichte configuratie: $requiredFragment"
     }
 }
-if ($template -notmatch 'staleAfterHours' -or $template -notmatch 'fresh-next-value') {
-    Add-Failure 'Template mist zichtbare actualiteitsbewaking of de volgende automatische run'
+if ($template -notmatch 'staleAfterHours' -or $template -notmatch 'fresh-state-value') {
+    Add-Failure 'Template mist zichtbare actualiteitsbewaking en de laatste succesvolle update'
 }
 if ($template -notmatch "f.Status === 'OVERGESLAGEN'") {
     Add-Failure 'Bewust overgeslagen bronnen worden ten onrechte als bronstoring geteld'
 }
-foreach ($removedUi in @('id="density"', 'id="help-btn"', 'id="metric-health"', 'id="status"', 'id="src"', 'CAT_VISIBLE')) {
+foreach ($removedUi in @('id="density"', 'id="help-btn"', 'id="metric-health"', 'id="status"', 'id="src"', 'id="fresh-last"', 'id="fresh-next"', 'CAT_VISIBLE')) {
     if ($template -match [regex]::Escape($removedUi)) {
         Add-Failure "Verwijderde of dubbele UI is teruggekeerd: $removedUi"
     }
 }
-foreach ($requiredUi in @('id="source-status"', 'id="feeds-body"', 'id="fresh-last"')) {
+foreach ($requiredUi in @('id="source-status"', 'id="feeds-body"', 'id="fresh-state"')) {
     if ($template -notmatch [regex]::Escape($requiredUi)) {
         Add-Failure "Centrale update- en bronstatus mist: $requiredUi"
     }
+}
+if ($updater -notmatch '\$priorityRank\s*=\s*@\{\s*action\s*=\s*0;\s*watch\s*=\s*1;\s*info\s*=\s*1\s*\}' -or
+    $updater -notmatch '(?s)\$priorityRank\[\$_\.Tier\].*?\$_\.Published.*?\$_\.Score') {
+    Add-Failure 'Bronitems worden niet volgens actie-eerst, daarna nieuwste-eerst opgebouwd'
+}
+if ($template -notmatch "a\.tier === 'action'" -or $template -notmatch 'a\.date !== b\.date') {
+    Add-Failure 'Browserweergave borgt de prioriteit- en datumsortering niet'
 }
 if ($failures.Count -eq 0) { Write-Pass 'Cloudrefresh bevat lokale planning, veilige Codex-action, reviewgate en actualiteitsstatus' }
 

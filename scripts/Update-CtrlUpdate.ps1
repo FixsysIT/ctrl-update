@@ -1295,12 +1295,12 @@ foreach ($item in $deduped) {
     $item | Add-Member -NotePropertyName Section -NotePropertyValue $section -Force
 }
 
-$tierRank = @{ action = 0; watch = 1; info = 2 }
+$priorityRank = @{ action = 0; watch = 1; info = 1 }
 
 $sorted = @($deduped |
-    Sort-Object -Property @{ Expression = { $tierRank[$_.Tier] } },
-                          @{ Expression = { $_.Score };     Descending = $true },
-                          @{ Expression = { $_.Published }; Descending = $true })
+    Sort-Object -Property @{ Expression = { $priorityRank[$_.Tier] } },
+                          @{ Expression = { $_.Published }; Descending = $true },
+                          @{ Expression = { $_.Score };     Descending = $true })
 
 foreach ($item in $sorted) {
     if (-not $state.ContainsKey($item.Id)) { $state[$item.Id] = $runStamp }
