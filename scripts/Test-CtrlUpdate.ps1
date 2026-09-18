@@ -169,7 +169,12 @@ $notificationPublishedPath = Join-Path $notificationTestDirectory 'index.html'
 
 $payloadMatch = [regex]::Match($published, '<script id="payload" type="application/json">(?<json>[\s\S]*?)</script>')
 $notificationPayload = $payloadMatch.Groups['json'].Value | ConvertFrom-Json -AsHashtable
-$promotedItem = @($notificationPayload.items | Where-Object tier -ne 'action')[0]
+$promotedItem = @($notificationPayload.items | Where-Object {
+    $itemId = [string]$_.id
+    [string]$_.tier -ne 'action' -and
+        $notificationState.items.ContainsKey($itemId) -and
+        [string]$notificationState.items[$itemId].tier -ne 'action'
+})[0]
 $failedFeed = @($notificationPayload.feeds | Where-Object Status -eq 'OK')[0]
 if (-not $promotedItem -or -not $failedFeed) {
     Add-Failure 'Geen geschikt testitem of testbron voor Teams-meldingscontrole gevonden'
