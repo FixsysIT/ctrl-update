@@ -83,15 +83,16 @@ dist/         exact wat GitHub Pages publiceert
 
 GitHub Actions voert `.github/workflows/refresh.yml` dagelijks om 06:30 en 14:00 uit in `Europe/Amsterdam` (zomer- en wintertijd worden automatisch gevolgd). De workflow haalt de openbare bronnen op, laat alleen nieuwe of gewijzigde items door de officiële Codex GitHub Action beoordelen, valideert het resultaat en pusht uitsluitend gewijzigde cache-, state- en publicatiebestanden. Als een stap faalt wordt niets gepubliceerd en blijft de laatst geslaagde versie online.
 
-De site toont bovenaan de laatste succesvolle publicatie, de volgende run en een waarschuwing wanneer de data ouder is dan 26 uur.
+De site toont bovenaan de laatste succesvolle publicatie en waarschuwt wanneer de data ouder is dan 26 uur. Teams ontvangt maximaal één Adaptive Card per run en uitsluitend bij een nieuw of gepromoveerd Actie-item, een gewijzigde harde actiedatum, een nieuwe bronstoring of een mislukte refresh. De versiebeheerbare nulmeting in `data/notification-state.json` voorkomt een eerste spamgolf en herhaalde meldingen.
 
-De repository moet hiervoor één Actions-secret bevatten:
+De repository moet hiervoor twee Actions-secrets bevatten:
 
 ```text
 OPENAI_API_KEY
+TEAMS_WEBHOOK_URL
 ```
 
-De sleutel wordt alleen rechtstreeks aan `openai/codex-action` aangeboden en nooit als algemene jobvariabele, bestand of repository-inhoud opgeslagen. Message Center is niet onderdeel van deze publieke cloudrun omdat daarvoor tenantgebonden Microsoft Graph-authenticatie en afzonderlijk beheer van least-privilege credentials nodig zijn.
+De OpenAI-sleutel wordt alleen rechtstreeks aan `openai/codex-action` aangeboden. De Teams-webhook wordt alleen aan de meldingsstap aangeboden. Geen van beide secrets wordt in een bestand of in de repository opgeslagen. Message Center is niet onderdeel van deze publieke cloudrun omdat daarvoor tenantgebonden Microsoft Graph-authenticatie en afzonderlijk beheer van least-privilege credentials nodig zijn.
 
 ## Valideren
 

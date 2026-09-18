@@ -30,13 +30,17 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: OpenAI-secret controleren
+      - name: Vereiste secrets controleren
         shell: pwsh
         env:
           OPENAI_KEY_PRESENT: ${{ secrets.OPENAI_API_KEY != '' }}
+          TEAMS_WEBHOOK_PRESENT: ${{ secrets.TEAMS_WEBHOOK_URL != '' }}
         run: |
           if ($env:OPENAI_KEY_PRESENT -ne 'true') {
             throw 'Repository-secret OPENAI_API_KEY ontbreekt. De bestaande productieversie blijft online.'
+          }
+          if ($env:TEAMS_WEBHOOK_PRESENT -ne 'true') {
+            throw 'Repository-secret TEAMS_WEBHOOK_URL ontbreekt. De bestaande productieversie blijft online.'
           }
 
       - name: Bronnen ophalen en reviewinput voorbereiden
@@ -77,6 +81,13 @@ jobs:
         shell: pwsh
         run: ./scripts/Test-CtrlUpdate.ps1
 
+      - name: Teams melden bij nieuwe acties of problemen
+        continue-on-error: true
+        shell: pwsh
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        run: ./scripts/Send-CtrlUpdateTeamsNotification.ps1
+
       - name: GitHub Pages configureren
         uses: actions/configure-pages@v5
 
@@ -90,7 +101,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          git add data/review-cache.json data/state.json dist/index.html
+          git add data/notification-state.json data/review-cache.json data/state.json dist/index.html
           if git diff --cached --quiet; then
             echo "Geen inhoudelijke wijzigingen."
             exit 0
@@ -100,6 +111,17 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Automatische nieuwsupdate"
           git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
+
+      - name: Teams melden wanneer de refresh mislukt
+        if: ${{ failure() }}
+        continue-on-error: true
+        shell: pwsh
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        run: >-
+          ./scripts/Send-CtrlUpdateTeamsNotification.ps1
+          -FailureMessage 'De automatische bronverwerking, agentreview of kwaliteitscontrole is mislukt.'
+          -RunUrl '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
 
   deploy:
     name: Publiceer de geslaagde refresh

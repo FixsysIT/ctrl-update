@@ -210,8 +210,9 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 - Alleen nieuwe of inhoudelijk gewijzigde items gaan naar de agentreview; de reviewcache voorkomt dubbele modelkosten.
 - Parsing, schema-validatie, agentreview en de netwerkloze repositorytest zijn verplichte publicatiepoorten.
 - Een mislukte run commit en publiceert niets; de laatst geslaagde GitHub Pages-versie blijft online.
-- De kop toont de laatste succesvolle publicatie, de volgende run en een zichtbare waarschuwing na 26 uur zonder succes.
-- Signalen worden in de workflow samengevat; externe notificaties vereisen bewust een gekozen kanaal.
+- De kop toont de laatste succesvolle publicatie en een zichtbare waarschuwing na 26 uur zonder succes.
+- Teams ontvangt alleen nieuwe of gepromoveerde Actie-items, gewijzigde harde actiedatums, nieuwe bronstoringen en mislukte refreshes. Let op-, Info-, blog- en weekitems veroorzaken geen melding.
+- Per run wordt maximaal één Adaptive Card gestuurd. De bestaande dataset is de nulmeting en veroorzaakt geen eerste spamgolf; ongewijzigde signalen worden niet opnieuw gemeld.
 
 ## V10 - Agent-eindredactie, kanalen en persoonlijke radar
 

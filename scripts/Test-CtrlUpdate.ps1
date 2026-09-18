@@ -23,9 +23,11 @@ function Write-Pass {
 $requiredFiles = @(
     'config/sources.json',
     'data/state.json',
+    'data/notification-state.json',
     'data/review-cache.json',
     'schemas/review.schema.json',
     'src/index.template.html',
+    'scripts/Send-CtrlUpdateTeamsNotification.ps1',
     'dist/index.html',
     '.github/workflows/pages.yml',
     '.github/workflows/quality.yml',
@@ -61,6 +63,7 @@ else { Write-Pass 'PowerShell-syntax geldig' }
 $jsonPaths = @(
     (Join-Path $projectRoot 'config/sources.json'),
     (Join-Path $projectRoot 'data/state.json'),
+    (Join-Path $projectRoot 'data/notification-state.json'),
     (Join-Path $projectRoot 'data/review-cache.json'),
     (Join-Path $projectRoot 'schemas/review.schema.json')
 )
@@ -114,7 +117,7 @@ if ($published -notmatch '<!doctype html>') { Add-Failure 'dist/index.html is ge
 if ($failures.Count -eq 0) { Write-Pass 'Publicatie-output compleet' }
 
 $refreshWorkflow = Get-Content -LiteralPath (Join-Path $projectRoot '.github/workflows/refresh.yml') -Raw -Encoding UTF8
-foreach ($requiredFragment in @('timezone: "Europe/Amsterdam"', '30 6 * * *', '0 14 * * *', 'openai/codex-action@v1', 'OPENAI_API_KEY', 'model: gpt-5.6-terra', '-RequireAgentReview', 'actions/upload-pages-artifact@v5', 'actions/deploy-pages@v5')) {
+foreach ($requiredFragment in @('timezone: "Europe/Amsterdam"', '30 6 * * *', '0 14 * * *', 'openai/codex-action@v1', 'OPENAI_API_KEY', 'TEAMS_WEBHOOK_URL', 'Send-CtrlUpdateTeamsNotification.ps1', 'data/notification-state.json', 'model: gpt-5.6-terra', '-RequireAgentReview', 'actions/upload-pages-artifact@v5', 'actions/deploy-pages@v5')) {
     if ($refreshWorkflow -notmatch [regex]::Escape($requiredFragment)) {
         Add-Failure "Refresh-workflow mist verplichte configuratie: $requiredFragment"
     }
@@ -151,6 +154,54 @@ if ($template -notmatch "a\.tier === 'action'" -or $template -notmatch 'a\.date 
     Add-Failure 'Browserweergave borgt de prioriteit- en datumsortering niet'
 }
 if ($failures.Count -eq 0) { Write-Pass 'Cloudrefresh bevat lokale planning, veilige Codex-action, reviewgate en actualiteitsstatus' }
+
+$notificationScript = Join-Path $projectRoot 'scripts/Send-CtrlUpdateTeamsNotification.ps1'
+$notificationStatePath = Join-Path $projectRoot 'data/notification-state.json'
+$notificationStateBefore = Get-Content -LiteralPath $notificationStatePath -Raw -Encoding UTF8
+$notificationState = $notificationStateBefore | ConvertFrom-Json -AsHashtable
+if ([int]$notificationState.version -ne 1 -or $notificationState.items.Count -eq 0 -or $notificationState.feeds.Count -eq 0) {
+    Add-Failure 'Teams-nulmeting bevat geen geldige item- en bronstatus'
+}
+
+$notificationTestDirectory = Join-Path $projectRoot '.tmp/test-teams-notification'
+$null = New-Item -ItemType Directory -Path $notificationTestDirectory -Force
+$notificationPublishedPath = Join-Path $notificationTestDirectory 'index.html'
+
+$payloadMatch = [regex]::Match($published, '<script id="payload" type="application/json">(?<json>[\s\S]*?)</script>')
+$notificationPayload = $payloadMatch.Groups['json'].Value | ConvertFrom-Json -AsHashtable
+$promotedItem = @($notificationPayload.items | Where-Object tier -ne 'action')[0]
+$failedFeed = @($notificationPayload.feeds | Where-Object Status -eq 'OK')[0]
+if (-not $promotedItem -or -not $failedFeed) {
+    Add-Failure 'Geen geschikt testitem of testbron voor Teams-meldingscontrole gevonden'
+}
+else {
+    $promotedItem.tier = 'action'
+    $failedFeed.Status = 'FOUT'
+    $failedFeed.Detail = 'Gecontroleerde teststoring'
+    $notificationJson = $notificationPayload | ConvertTo-Json -Depth 30 -Compress
+    "<script id=`"payload`" type=`"application/json`">$notificationJson</script>" |
+        Set-Content -LiteralPath $notificationPublishedPath -Encoding UTF8
+
+    $previewText = & $notificationScript -PublishedPath $notificationPublishedPath -StatePath $notificationStatePath -PreviewOnly | Out-String
+    try { $preview = $previewText | ConvertFrom-Json -AsHashtable }
+    catch { $preview = $null; Add-Failure "Teams-preview is geen geldige Adaptive Card: $($_.Exception.Message)" }
+
+    if ($preview) {
+        $cardText = @($preview.attachments[0].content.body | ForEach-Object { [string]$_.text }) -join "`n"
+        if ([string]$preview.type -ne 'message' -or
+            [string]$preview.attachments[0].contentType -ne 'application/vnd.microsoft.card.adaptive' -or
+            $cardText -notmatch 'NAAR ACTIE GEPROMOVEERD' -or
+            $cardText -notmatch 'NIEUWE BRONSTORING') {
+            Add-Failure 'Teams-preview bevat niet uitsluitend de verwachte actie- en bronwaarschuwingen'
+        }
+    }
+
+    $notificationStateAfter = Get-Content -LiteralPath $notificationStatePath -Raw -Encoding UTF8
+    if ($notificationStateAfter -ne $notificationStateBefore) {
+        Add-Failure 'PreviewOnly heeft de productie-nulmeting onbedoeld gewijzigd'
+    }
+}
+if ($failures.Count -eq 0) { Write-Pass 'Teams-meldingen zijn actiegericht, kaartgeldig en zonder eerste spamgolf' }
 
 $testDirectory = Join-Path $projectRoot '.tmp/test-review-pipeline'
 $null = New-Item -ItemType Directory -Path $testDirectory -Force
