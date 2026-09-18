@@ -26,7 +26,11 @@ $pending = @($inputData.items | Where-Object {
     [string]$cacheById[$id].contentHash -ne [string]$_.contentHash -or
     [string]::IsNullOrWhiteSpace([string]$cacheById[$id].titleEn) -or
     [string]::IsNullOrWhiteSpace([string]$cacheById[$id].summaryEn) -or
-    [string]::IsNullOrWhiteSpace([string]$cacheById[$id].reasonEn)
+    [string]::IsNullOrWhiteSpace([string]$cacheById[$id].reasonEn) -or
+    [string]$cacheById[$id].urgency -notin @('critical', 'high', 'normal', 'low') -or
+    [string]$cacheById[$id].tenantRelevance -notin @('confirmed', 'likely', 'unknown', 'notApplicable') -or
+    [string]::IsNullOrWhiteSpace([string]$cacheById[$id].tenantReasonNl) -or
+    [string]::IsNullOrWhiteSpace([string]$cacheById[$id].tenantReasonEn)
 })
 
 $outputDirectory = Split-Path -Parent $OutputPath

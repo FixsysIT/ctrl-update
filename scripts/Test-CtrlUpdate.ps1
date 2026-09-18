@@ -167,11 +167,12 @@ foreach ($unprofessionalHeader in @('Endpoint intelligence', 'Endpoint-informati
 if ($template -notmatch "store\(THEME_KEY, 'light'\)" -or $template -match 'prefers-color-scheme:\s*dark') {
     Add-Failure 'Lichte modus is niet de vaste standaard voor nieuwe bezoekers'
 }
-if ($updater -notmatch '\$priorityRank\s*=\s*@\{\s*action\s*=\s*0;\s*watch\s*=\s*1;\s*info\s*=\s*1\s*\}' -or
-    $updater -notmatch '(?s)\$priorityRank\[\$_\.Tier\].*?\$_\.Published.*?\$_\.Score') {
-    Add-Failure 'Bronitems worden niet volgens actie-eerst, daarna nieuwste-eerst opgebouwd'
+if ($updater -notmatch "Urgency -eq 'critical'" -or
+    $updater -notmatch "Tier -eq 'action'" -or
+    $updater -notmatch '(?s)Sort-Object -Property.*?\$_\.Published.*?\$_\.Score') {
+    Add-Failure 'Bronitems worden niet volgens kritiek-, actie- en daarna nieuwste-eerst opgebouwd'
 }
-if ($template -notmatch "a\.tier === 'action'" -or $template -notmatch 'a\.date !== b\.date') {
+if ($template -notmatch "item\.urgency === 'critical'" -or $template -notmatch "item\.tier === 'action'" -or $template -notmatch 'a\.date !== b\.date') {
     Add-Failure 'Browserweergave borgt de prioriteit- en datumsortering niet'
 }
 if ($template -notmatch 'Nieuwsbron' -or $updater -notmatch 'includeTerms' -or $updater -notmatch '\$feed\.tag -eq ''News''') {
@@ -191,6 +192,24 @@ if (-not $config.serviceHealth.enabled -or
     $updater -match 'impactDescription') {
     Add-Failure 'Service Health is niet minimaal, incidentgericht en privacyveilig geconfigureerd'
 }
+if (-not $config.messageCenter.enabled -or
+    [string]$config.messageCenter.link -ne 'https://admin.cloud.microsoft/#/MessageCenter' -or
+    [string]$config.messageCenter.privacyMode -ne 'derived' -or
+    $updater -notmatch 'admin/serviceAnnouncement/messages' -or
+    $updater -notmatch 'message-center:' -or
+    $updater -match 'MessageCenter/:/messages/' -or
+    $updater -notmatch 'originalTitle\s*=\s*\$\(if \(\$_\.Channel -eq ''tenant''\)' -or
+    $updater -notmatch 'nativeTags\s*=\s*\$\(if \(\$_\.Kind -eq ''messagecenter''\)' -or
+    $refreshWorkflow -notmatch 'CTRL_UPDATE_MESSAGE_CENTER_ENABLED' -or
+    $refreshWorkflow -notmatch 'Message Center is geactiveerd, maar de Entra client- of tenantvariabele ontbreekt' -or
+    $refreshWorkflow -notmatch 'ServiceMessage.Read.All') {
+    Add-Failure 'Message Center is niet feature-gated, least-privilege en privacyveilig geconfigureerd'
+}
+foreach ($phaseTwoFragment in @('urgency-filter', 'relevance-filter', 'workflow-planned', "value: 'planned'", 'tenantRelevance')) {
+    if ($template -notmatch [regex]::Escape($phaseTwoFragment) -and $updater -notmatch [regex]::Escape($phaseTwoFragment)) {
+        Add-Failure "Fase 2 mist verplicht oordeel of workflowveld: $phaseTwoFragment"
+    }
+}
 if ($template -notmatch 'searchBox\.scrollIntoView' -or $template -notmatch 'searchBox\.focus\(\)') {
     Add-Failure 'De zichtbare zoekknop activeert de bestaande zoekfunctie niet'
 }
@@ -198,8 +217,8 @@ if ($failures.Count -eq 0) { Write-Pass 'Cloudrefresh bevat lokale planning, vei
 
 $notificationScript = Join-Path $projectRoot 'scripts/Send-CtrlUpdateTeamsNotification.ps1'
 $notificationSource = Get-Content -LiteralPath $notificationScript -Raw -Encoding UTF8
-if ($notificationSource -notmatch "item\.kind\s*-eq\s*'servicehealth'") {
-    Add-Failure 'Actieve Service Health-incidenten worden niet als kritieke Teams-waarschuwing behandeld'
+if ($notificationSource -notmatch "isCriticalUrgency" -or $notificationSource -notmatch "item\.urgency\s*-eq\s*'critical'") {
+    Add-Failure 'Kritieke urgentie wordt niet als kritieke Teams-waarschuwing behandeld'
 }
 $notificationStatePath = Join-Path $projectRoot 'data/notification-state.json'
 $notificationStateBefore = Get-Content -LiteralPath $notificationStatePath -Raw -Encoding UTF8
@@ -325,6 +344,36 @@ else {
         }
     }
 
+    # Een kritisch Service Health-incident is ernstig, maar zonder aangetoonde
+    # klantactie geen Actie-item. Het moet desondanks als kritieke waarschuwing
+    # kunnen melden.
+    $criticalWatchPayload = [ordered]@{
+        items = @([ordered]@{
+            id = 'ctrl-update-critical-watch-fixture'
+            tier = 'watch'; urgency = 'critical'; kind = 'servicehealth'
+            title = 'Kritiek Microsoft 365-incident'
+            originalTitle = 'Critical Microsoft 365 incident'
+            summary = 'Microsoft meldt een kritieke onderbreking in de referentietenant.'
+            source = 'Microsoft 365 Service Health'
+            link = 'https://admin.cloud.microsoft/#/servicehealth'
+            keywords = @('service health'); actionCtx = @()
+            dateText = '18 sep'; keyDate = $null; allDates = @()
+        })
+        feeds = @()
+    }
+    $criticalWatchJson = $criticalWatchPayload | ConvertTo-Json -Depth 30 -Compress
+    "<script id=`"payload`" type=`"application/json`">$criticalWatchJson</script>" |
+        Set-Content -LiteralPath $notificationPublishedPath -Encoding UTF8
+    $criticalWatchPreviewText = & $notificationScript -PublishedPath $notificationPublishedPath -StatePath $notificationStatePath -PreviewOnly | Out-String
+    try { $criticalWatchPreview = $criticalWatchPreviewText | ConvertFrom-Json -AsHashtable }
+    catch { $criticalWatchPreview = $null; Add-Failure "Kritieke Let op-preview is ongeldig: $($_.Exception.Message)" }
+    if ($criticalWatchPreview) {
+        $criticalWatchText = @(Get-AdaptiveCardText -Nodes $criticalWatchPreview.attachments[0].content.body) -join "`n"
+        if ($criticalWatchText -notmatch 'Kritieke waarschuwing' -or $criticalWatchText -match 'Actie vereist') {
+            Add-Failure 'Kritiek incident zonder beheeractie wordt niet afzonderlijk en correct gemeld'
+        }
+    }
+
     $multiActionItems = @(1..3 | ForEach-Object {
         [ordered]@{
             id = "ctrl-update-compact-action-fixture-$_"
@@ -373,6 +422,8 @@ function New-TestReview {
         titleNl = "Nederlandse titel $Id"; summaryNl = 'Nederlandse samenvatting.'; whyNl = @()
         titleEn = "English title $Id"; summaryEn = 'English summary.'; whyEn = @()
         categories = @($allowedCategories[0]); kind = 'nieuws'; tier = 'info'; confidence = 0.9
+        urgency = 'normal'; tenantRelevance = 'unknown'
+        tenantReasonNl = 'Tenantimpact niet bevestigd.'; tenantReasonEn = 'Tenant impact is not confirmed.'
         reasonNl = 'Geen concrete beheeractie.'; reasonEn = 'No concrete administrative action.'
     }
 }

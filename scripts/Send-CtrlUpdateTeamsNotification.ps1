@@ -149,6 +149,7 @@ function New-NotificationState {
         }
         $items[[string]$item.id] = [ordered]@{
             tier     = [string]$item.tier
+            urgency  = [string]$item.urgency
             dateIso  = $dateIso
             dateKind = $dateKind
             hardDates = @($hardDates | Sort-Object -Unique)
@@ -197,7 +198,7 @@ function New-CtrlUpdateNotificationEnvelope {
         [string] $FooterText
     )
 
-    $criticalEvents = @($Events | Where-Object { $_.kind -eq 'action' -and $_.critical })
+    $criticalEvents = @($Events | Where-Object { $_.critical })
     $actionEvents = @($Events | Where-Object { $_.kind -eq 'action' -and -not $_.critical })
     $sourceEvents = @($Events | Where-Object kind -eq 'source')
     $body = [System.Collections.Generic.List[object]]::new()
@@ -382,7 +383,9 @@ $criticalIncidentPatterns = @(
 )
 
 foreach ($item in @($payload.items)) {
-    if ([string]$item.tier -ne 'action') { continue }
+    $isAction = [string]$item.tier -eq 'action'
+    $isCriticalUrgency = [string]$item.urgency -eq 'critical'
+    if (-not $isAction -and -not $isCriticalUrgency) { continue }
 
     $id = [string]$item.id
     $previous = if ($previousItems.ContainsKey($id)) { $previousItems[$id] } else { $null }
@@ -398,21 +401,21 @@ foreach ($item in @($payload.items)) {
     # kritiek. Losse trefwoorden diep in een artikel mogen een gewone lifecycle-
     # actie of beperkte storing niet onterecht opschalen.
     $criticalText = "$([string]$item.originalTitle) $([string]$item.title) $([string]$item.summary)"
-    $isCriticalIncident = [string]$item.kind -eq 'servicehealth' -or
+    $isCriticalIncident = $isCriticalUrgency -or
         @($criticalIncidentPatterns | Where-Object { $criticalText -match $_ }).Count -gt 0
 
     $eventType = $null
     if (-not $previous) { $eventType = $(if ($isCriticalIncident) { 'Kritieke waarschuwing' } else { 'Nieuwe actie' }) }
-    elseif ([string]$previous.tier -ne 'action') { $eventType = $(if ($isCriticalIncident) { 'Kritieke waarschuwing' } else { 'Naar Actie gepromoveerd' }) }
-    elseif ([string]$previous.dateIso -ne $currentDate -or
+    elseif ($isAction -and [string]$previous.tier -ne 'action') { $eventType = $(if ($isCriticalIncident) { 'Kritieke waarschuwing' } else { 'Naar Actie gepromoveerd' }) }
+    elseif ($isAction -and ([string]$previous.dateIso -ne $currentDate -or
             [string]$previous.dateKind -ne $currentKind -or
-            ($previousHardDates -join '|') -ne ($currentHardDates -join '|')) {
+            ($previousHardDates -join '|') -ne ($currentHardDates -join '|'))) {
         $eventType = 'Actiedatum gewijzigd'
     }
 
     if ($eventType) {
         $events.Add([ordered]@{
-            kind    = 'action'
+            kind    = $(if ($isAction) { 'action' } else { 'incident' })
             label   = $eventType
             title   = [string]$item.title
             summary = [string]$item.summary

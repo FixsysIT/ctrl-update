@@ -244,6 +244,8 @@
 
   "messageCenter": {
     "enabled": true,
+    "link": "https://admin.cloud.microsoft/#/MessageCenter",
+    "privacyMode": "derived",
     "services": [ "Microsoft Intune", "Microsoft Entra", "Microsoft Defender", "Windows" ],
     "scoring": {
       "planForChange": 5,
@@ -262,4 +264,3 @@
     "privacyMode": "generic"
   }
 }
-

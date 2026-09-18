@@ -23,8 +23,9 @@
 
 .PARAMETER GraphAccessToken
     Kortlevend Microsoft Graph-token. De cloudrun gebruikt dit uitsluitend voor
-    Microsoft 365 Service Health met ServiceHealth.Read.All. Het token wordt nooit
-    naar de publicatie, state of logs geschreven.
+    Microsoft 365 Service Health en, na expliciete activering, Message Center met
+    ServiceHealth.Read.All en ServiceMessage.Read.All. Het token wordt nooit naar
+    de publicatie, state of logs geschreven.
 
 .PARAMETER Open
     Open het dashboard in de standaardbrowser na afloop.
@@ -1048,22 +1049,30 @@ if ($enrich.enabled -and $items.Count -gt 0) {
 $useMessageCenter = $config.messageCenter.enabled -and -not $SkipMessageCenter
 
 if ($useMessageCenter) {
-    if (-not (Get-Command Invoke-MgGraphRequest -ErrorAction SilentlyContinue)) {
-        Write-Warning 'Microsoft.Graph module niet gevonden - Message Center overgeslagen.'
+    if ([string]::IsNullOrWhiteSpace($GraphAccessToken) -and
+        -not (Get-Command Invoke-MgGraphRequest -ErrorAction SilentlyContinue)) {
+        Write-Warning 'Geen Graph-token of actieve Microsoft.Graph-sessie - Message Center overgeslagen.'
         $feedStatus.Add([PSCustomObject]@{
             Source = 'Message Center'; Status = 'OVERGESLAGEN'; Items = 0
-            Detail = 'Microsoft.Graph module ontbreekt'
+            Detail = 'Geen kortlevend Graph-token of Microsoft.Graph-sessie beschikbaar'
         })
     }
     else {
         try {
             $mcScoring = $config.messageCenter.scoring
             $wanted    = @($config.messageCenter.services)
-            $uri       = 'https://graph.microsoft.com/v1.0/admin/serviceAnnouncement/messages'
+            $select    = 'id,title,category,severity,isMajorChange,actionRequiredByDateTime,lastModifiedDateTime,services,tags,body'
+            $uri       = "https://graph.microsoft.com/v1.0/admin/serviceAnnouncement/messages?`$select=$select"
             $mcCount   = 0
+            $headers   = @{ Authorization = "Bearer $GraphAccessToken"; Accept = 'application/json' }
 
             do {
-                $page = Invoke-MgGraphRequest -Method GET -Uri $uri
+                $page = if ([string]::IsNullOrWhiteSpace($GraphAccessToken)) {
+                    Invoke-MgGraphRequest -Method GET -Uri $uri
+                }
+                else {
+                    Invoke-RestMethod -Method Get -Uri $uri -Headers $headers -TimeoutSec ([int]$settings.timeoutSec)
+                }
 
                 foreach ($message in $page.value) {
                     $published = ConvertTo-DateTimeSafe $message.lastModifiedDateTime
@@ -1085,6 +1094,7 @@ if ($useMessageCenter) {
                     $score     = $relevance.Score
                     $scoreBreakdown = @($relevance.Breakdown)
                     $signals   = [System.Collections.Generic.List[string]]::new()
+                    $urgency   = 'normal'
 
                     # Message Center scoort vooral op eigen metadata, niet op keywords.
                     switch ($message.category) {
@@ -1100,6 +1110,7 @@ if ($useMessageCenter) {
                     if ($message.isMajorChange) {
                         $score += $mcScoring.isMajorChange
                         $signals.Add('major change')
+                        $urgency = 'high'
                         $scoreBreakdown += [PSCustomObject]@{ label = 'Message Center: grote wijziging'; points = [int]$mcScoring.isMajorChange; location = 'metadata' }
                     }
 
@@ -1107,16 +1118,19 @@ if ($useMessageCenter) {
                     if ($deadline) {
                         $score += $mcScoring.actionRequiredByDateTime
                         $signals.Add('action required')
+                        $urgency = 'high'
                         $scoreBreakdown += [PSCustomObject]@{ label = 'Message Center: actiedeadline'; points = [int]$mcScoring.actionRequiredByDateTime; location = 'metadata' }
                     }
 
                     switch ($message.severity) {
                         'high'     {
                             $score += $mcScoring.severityHigh; $signals.Add('severity high')
+                            $urgency = 'high'
                             $scoreBreakdown += [PSCustomObject]@{ label = 'Message Center: hoge ernst'; points = [int]$mcScoring.severityHigh; location = 'metadata' }
                         }
                         'critical' {
                             $score += $mcScoring.severityCritical; $signals.Add('severity critical')
+                            $urgency = 'critical'
                             $scoreBreakdown += [PSCustomObject]@{ label = 'Message Center: kritieke ernst'; points = [int]$mcScoring.severityCritical; location = 'metadata' }
                         }
                     }
@@ -1134,12 +1148,15 @@ if ($useMessageCenter) {
                         $primary = Select-PrimaryDate $keyDates
                     }
 
-                    $id = "MC:$($message.id)"
+                    # De echte Message Center-id blijft in de runner. State, cache
+                    # en publieke HTML gebruiken uitsluitend een eenrichtingshash.
+                    $publicId = (Get-TextHash "message-center:$([string]$message.id)").Substring(0, 24)
+                    $id = "MC:$publicId"
 
                     $items.Add([PSCustomObject]@{
                         Id         = $id
-                        Title      = "$($message.id) - $($message.title)"
-                        Link       = 'https://admin.microsoft.com/#/MessageCenter/:/messages/' + $message.id
+                        Title      = [string]$message.title
+                        Link       = [string]$config.messageCenter.link
                         Source     = 'Message Center'
                         Tag        = 'Tenant'
                         Published  = $published
@@ -1158,6 +1175,10 @@ if ($useMessageCenter) {
                         AllDates   = @($keyDates | Where-Object { $_.Date -ge $today } | Select-Object -First 4 | ForEach-Object { Format-DateBadge $_ })
                         Kind       = 'messagecenter'
                         Channel    = 'tenant'
+                        Urgency    = $urgency
+                        TenantRelevance = 'confirmed'
+                        TenantReason = 'Dit bericht komt uit de eigen Microsoft 365-referentietenant.'
+                        TenantReasonEn = 'This message comes from the Microsoft 365 reference tenant.'
                         FullText   = $fullText
                         Enriched   = $true
                         Boost      = 0
@@ -1229,8 +1250,14 @@ if ($serviceHealthConfig.enabled) {
                     $publicId = (Get-TextHash "service-health:$([string]$issue.id)").Substring(0, 24)
                     $title = "Active Microsoft 365 incident for $service"
                     $summary = "Microsoft reports an active service incident for $service that may affect this tenant. Open Service Health for current impact and updates."
-                    $actionText = 'Controleer Microsoft 365 Service Health voordat je lokaal gaat troubleshooten of wijzigingen uitvoert.'
-                    $score = [int]$settings.actionThreshold + 5
+                    $statusKey = $status.ToLowerInvariant()
+                    $urgency = switch ($statusKey) {
+                        'serviceinterruption' { 'critical' }
+                        'servicedegradation'  { 'high' }
+                        'extendedrecovery'    { 'high' }
+                        default               { 'normal' }
+                    }
+                    $score = [int]$settings.watchThreshold + $(if ($urgency -eq 'critical') { 4 } elseif ($urgency -eq 'high') { 2 } else { 0 })
 
                     $items.Add([PSCustomObject]@{
                         Id         = "SH:$publicId"
@@ -1244,9 +1271,9 @@ if ($serviceHealthConfig.enabled) {
                         ScoreBreakdown = @([PSCustomObject]@{
                             label = 'Microsoft 365 Service Health: actief incident'; points = $score; location = 'tenantmetadata'
                         })
-                        Tier       = 'action'
+                        Tier       = 'watch'
                         Demote     = $null
-                        ActionCtx  = @([PSCustomObject]@{ text = $actionText })
+                        ActionCtx  = @()
                         Keywords   = @('service health', 'incident', $status)
                         Categories = @(Get-Categories -Title $service -Text "$service $status")
                         NativeTags = @($service, $classification, $status)
@@ -1254,6 +1281,10 @@ if ($serviceHealthConfig.enabled) {
                         AllDates   = @()
                         Kind       = 'servicehealth'
                         Channel    = 'tenant'
+                        Urgency    = $urgency
+                        TenantRelevance = 'confirmed'
+                        TenantReason = 'Dit incident komt uit de eigen Microsoft 365-referentietenant.'
+                        TenantReasonEn = 'This incident comes from the Microsoft 365 reference tenant.'
                         FullText   = "$title. $summary Status: $status."
                         Enriched   = $true
                         Boost      = 0
@@ -1300,6 +1331,27 @@ $deduped = foreach ($group in ($items | Group-Object Id)) {
 
 $duplicatesRemoved = $items.Count - @($deduped).Count
 
+# Urgentie, tenantrelevantie en actieerbaarheid zijn afzonderlijke oordelen.
+# Openbare bronnen beginnen conservatief; de agent kan ze inhoudelijk bijstellen.
+foreach ($item in $deduped) {
+    if (-not $item.PSObject.Properties['Urgency']) {
+        $initialUrgency = if ($item.Tier -eq 'action') { 'high' } elseif ($item.Tier -eq 'watch') { 'normal' } else { 'low' }
+        $item | Add-Member -NotePropertyName Urgency -NotePropertyValue $initialUrgency -Force
+    }
+    if (-not $item.PSObject.Properties['TenantRelevance']) {
+        $initialRelevance = if ($item.Channel -eq 'tenant') { 'confirmed' } else { 'unknown' }
+        $item | Add-Member -NotePropertyName TenantRelevance -NotePropertyValue $initialRelevance -Force
+    }
+    if (-not $item.PSObject.Properties['TenantReason']) {
+        $reason = if ($item.Channel -eq 'tenant') { 'Dit signaal komt uit de eigen referentietenant.' } else { 'Een openbare bron bevestigt de tenantimpact niet.' }
+        $item | Add-Member -NotePropertyName TenantReason -NotePropertyValue $reason -Force
+    }
+    if (-not $item.PSObject.Properties['TenantReasonEn']) {
+        $reasonEn = if ($item.Channel -eq 'tenant') { 'This signal comes from the reference tenant.' } else { 'A public source does not confirm tenant impact.' }
+        $item | Add-Member -NotePropertyName TenantReasonEn -NotePropertyValue $reasonEn -Force
+    }
+}
+
 # De regelscore is snel en uitlegbaar; de agentreview doet daarna de inhoudelijke
 # eindredactie. De inhoudshash maakt de reviewcache veilig: alleen gewijzigde
 # artikelen gaan opnieuw naar Codex.
@@ -1344,9 +1396,12 @@ if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -g
                 text = $_.FullText
                 rulesScore = $_.Score
                 proposedTier = $_.Tier
+                proposedUrgency = $_.Urgency
+                proposedTenantRelevance = $_.TenantRelevance
                 demote = $_.Demote
                 detectedCategories = @($_.Categories)
                 detectedDates = @($_.AllDates)
+                nativeTags = @($_.NativeTags)
             }
         })
     }
@@ -1403,12 +1458,32 @@ if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -g
                     if ($item.Demote -and $agentTier -eq 'action') { $agentTier = 'watch' }
                     $item.Tier = $agentTier
                 }
+
+                $agentUrgency = [string]$review.urgency
+                if ($agentUrgency -in @('critical', 'high', 'normal', 'low')) {
+                    $item.Urgency = $agentUrgency
+                }
+
+                if ($item.Channel -eq 'tenant') {
+                    $item.TenantRelevance = 'confirmed'
+                }
+                else {
+                    $agentRelevance = [string]$review.tenantRelevance
+                    if ($agentRelevance -in @('confirmed', 'likely', 'unknown', 'notApplicable')) {
+                        # Alleen tenantbronnen kunnen automatisch bevestigd zijn.
+                        $item.TenantRelevance = $(if ($agentRelevance -eq 'confirmed') { 'likely' } else { $agentRelevance })
+                    }
+                }
             }
 
             $item.AgentReviewed = $true
             $item.AgentConfidence = [Math]::Round([double]$review.confidence, 2)
             $item.AgentReason = [string]$review.reasonNl
             $item.AgentReasonEn = [string]$review.reasonEn
+            if ($item.Channel -ne 'tenant') {
+                $item.TenantReason = [string]$review.tenantReasonNl
+                $item.TenantReasonEn = [string]$review.tenantReasonEn
+            }
             $item.ReviewKind = [string]$review.kind
             $reviewedCount++
         }
@@ -1435,10 +1510,14 @@ foreach ($item in $deduped) {
     $item | Add-Member -NotePropertyName Section -NotePropertyValue $section -Force
 }
 
-$priorityRank = @{ action = 0; watch = 1; info = 1 }
-
 $sorted = @($deduped |
-    Sort-Object -Property @{ Expression = { $priorityRank[$_.Tier] } },
+    Sort-Object -Property @{ Expression = {
+                              if ($_.Urgency -eq 'critical') { 0 }
+                              elseif ($_.Tier -eq 'action') { 1 }
+                              elseif ($_.Urgency -eq 'high') { 2 }
+                              elseif ($_.Tier -eq 'watch') { 3 }
+                              else { 4 }
+                          } },
                           @{ Expression = { $_.Published }; Descending = $true },
                           @{ Expression = { $_.Score };     Descending = $true })
 
@@ -1560,7 +1639,7 @@ $payload = [PSCustomObject]@{
             id         = $_.Id
             title      = $_.Title
             titleEn    = $_.EnglishTitle
-            originalTitle = $_.OriginalTitle
+            originalTitle = $(if ($_.Channel -eq 'tenant') { '' } else { $_.OriginalTitle })
             link       = $_.Link
             source     = $_.Source
             alsoIn     = @($_.AlsoIn)
@@ -1572,12 +1651,16 @@ $payload = [PSCustomObject]@{
             score      = $_.Score
             scoreBreakdown = @($_.ScoreBreakdown)
             tier       = $_.Tier
+            urgency    = $_.Urgency
+            tenantRelevance = $_.TenantRelevance
+            tenantReason = $_.TenantReason
+            tenantReasonEn = $_.TenantReasonEn
             keywords   = @($_.Keywords)
             actionCtx  = @($_.ActionCtx)
             actionCtxEn = @($_.EnglishActionCtx)
             demote     = $_.Demote
             categories = @($_.Categories)
-            nativeTags = @($_.NativeTags)
+            nativeTags = $(if ($_.Kind -eq 'messagecenter') { @() } else { @($_.NativeTags) })
             keyDate    = $_.KeyDate
             allDates   = @($_.AllDates)
             kind       = $_.Kind

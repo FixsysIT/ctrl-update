@@ -55,8 +55,16 @@ foreach ($review in @($resultData.items)) {
         [string]::IsNullOrWhiteSpace([string]$review.titleEn) -or
         [string]::IsNullOrWhiteSpace([string]$review.summaryEn) -or
         [string]::IsNullOrWhiteSpace([string]$review.reasonNl) -or
-        [string]::IsNullOrWhiteSpace([string]$review.reasonEn)) {
+        [string]::IsNullOrWhiteSpace([string]$review.reasonEn) -or
+        [string]::IsNullOrWhiteSpace([string]$review.tenantReasonNl) -or
+        [string]::IsNullOrWhiteSpace([string]$review.tenantReasonEn)) {
         throw "Onvolledig reviewitem ontvangen: $id"
+    }
+    if ([string]$review.urgency -notin @('critical', 'high', 'normal', 'low')) {
+        throw "Ongeldige algemene urgentie voor: $id"
+    }
+    if ([string]$review.tenantRelevance -notin @('confirmed', 'likely', 'unknown', 'notApplicable')) {
+        throw "Ongeldige tenantrelevantie voor: $id"
     }
 
     $review.categories = $categories

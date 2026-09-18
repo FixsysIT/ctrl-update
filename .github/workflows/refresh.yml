@@ -30,6 +30,7 @@ jobs:
     env:
       TEAMS_WEBHOOK_CONFIGURED: ${{ secrets.TEAMS_WEBHOOK_URL != '' }}
       SERVICE_HEALTH_CONFIGURED: ${{ vars.CTRL_UPDATE_ENTRA_CLIENT_ID != '' && vars.CTRL_UPDATE_ENTRA_TENANT_ID != '' }}
+      MESSAGE_CENTER_ENABLED: ${{ vars.CTRL_UPDATE_MESSAGE_CENTER_ENABLED == 'true' }}
     timeout-minutes: 45
 
     steps:
@@ -49,6 +50,9 @@ jobs:
           }
           if ($env:TEAMS_WEBHOOK_CONFIGURED -ne 'true') {
             Write-Warning 'Repository-secret TEAMS_WEBHOOK_URL ontbreekt. De refresh gaat door zonder Teams-meldingen.'
+          }
+          if ($env:MESSAGE_CENTER_ENABLED -eq 'true' -and $env:SERVICE_HEALTH_CONFIGURED -ne 'true') {
+            throw 'Message Center is geactiveerd, maar de Entra client- of tenantvariabele ontbreekt.'
           }
 
       - name: Aanmelden voor Microsoft 365 Service Health
@@ -71,18 +75,25 @@ jobs:
           while ($payload.Length % 4) { $payload += '=' }
           $claims = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($payload)) | ConvertFrom-Json
           $roles = @($claims.roles | ForEach-Object { [string]$_ })
-          if ('ServiceHealth.Read.All' -notin $roles) {
-            throw 'De Entra-app mist de applicatiepermissie ServiceHealth.Read.All.'
+          $requiredRoles = @('ServiceHealth.Read.All')
+          if ($env:MESSAGE_CENTER_ENABLED -eq 'true') { $requiredRoles += 'ServiceMessage.Read.All' }
+          $missingRoles = @($requiredRoles | Where-Object { $_ -notin $roles })
+          if ($missingRoles.Count) {
+            throw "De Entra-app mist vereiste Graph-rollen: $($missingRoles -join ', ')."
           }
-          $excessiveRoles = @($roles | Where-Object { $_ -ne 'ServiceHealth.Read.All' })
+          $allowedRoles = @('ServiceHealth.Read.All', 'ServiceMessage.Read.All')
+          $excessiveRoles = @($roles | Where-Object { $_ -notin $allowedRoles })
           if ($excessiveRoles.Count) {
-            throw "De Service Health-app heeft te ruime Graph-rechten: $($excessiveRoles -join ', ')."
+            throw "De CTRL UPDATE-app heeft te ruime Graph-rechten: $($excessiveRoles -join ', ')."
           }
           "CTRL_UPDATE_GRAPH_TOKEN=$token" >> $env:GITHUB_ENV
 
       - name: Bronnen ophalen en reviewinput voorbereiden
         shell: pwsh
-        run: ./scripts/Update-CtrlUpdate.ps1 -SkipMessageCenter -PrepareAgentReviewOnly
+        run: |
+          $messageCenter = @{}
+          if ($env:MESSAGE_CENTER_ENABLED -ne 'true') { $messageCenter.SkipMessageCenter = $true }
+          ./scripts/Update-CtrlUpdate.ps1 @messageCenter -PrepareAgentReviewOnly
 
       - name: Nieuwe en gewijzigde items selecteren
         id: pending
@@ -112,7 +123,10 @@ jobs:
 
       - name: Definitieve publicatie genereren
         shell: pwsh
-        run: ./scripts/Update-CtrlUpdate.ps1 -SkipMessageCenter -UsePreparedSnapshot -UseReviewCacheOnly -RequireAgentReview
+        run: |
+          $messageCenter = @{}
+          if ($env:MESSAGE_CENTER_ENABLED -ne 'true') { $messageCenter.SkipMessageCenter = $true }
+          ./scripts/Update-CtrlUpdate.ps1 @messageCenter -UsePreparedSnapshot -UseReviewCacheOnly -RequireAgentReview
 
       - name: Repository controleren
         shell: pwsh

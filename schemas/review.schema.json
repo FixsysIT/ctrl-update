@@ -9,7 +9,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "contentHash", "titleNl", "summaryNl", "whyNl", "titleEn", "summaryEn", "whyEn", "categories", "kind", "tier", "confidence", "reasonNl", "reasonEn"],
+        "required": ["id", "contentHash", "titleNl", "summaryNl", "whyNl", "titleEn", "summaryEn", "whyEn", "categories", "kind", "tier", "urgency", "tenantRelevance", "tenantReasonNl", "tenantReasonEn", "confidence", "reasonNl", "reasonEn"],
         "properties": {
           "id": { "type": "string" },
           "contentHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
@@ -22,6 +22,10 @@
           "categories": { "type": "array", "minItems": 1, "maxItems": 3, "items": { "type": "string" } },
           "kind": { "type": "string", "enum": ["wijziging", "nieuws", "analyse", "handleiding", "naslag"] },
           "tier": { "type": "string", "enum": ["action", "watch", "info"] },
+          "urgency": { "type": "string", "enum": ["critical", "high", "normal", "low"] },
+          "tenantRelevance": { "type": "string", "enum": ["confirmed", "likely", "unknown", "notApplicable"] },
+          "tenantReasonNl": { "type": "string" },
+          "tenantReasonEn": { "type": "string" },
           "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
           "reasonNl": { "type": "string" },
           "reasonEn": { "type": "string" }

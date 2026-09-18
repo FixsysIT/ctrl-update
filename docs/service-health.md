@@ -15,8 +15,9 @@ tenantgerichte gegevens zijn niet anoniem beschikbaar.
 - de publieke site bevat alleen een generiek signaal met de getroffen dienst;
 - issue-id, impacttekst en voortgangsupdates blijven in Microsoft 365 Service Health.
 
-`ServiceMessage.Read.All` is niet nodig. Message Center is een afzonderlijke
-capability en blijft buiten deze koppeling.
+`ServiceMessage.Read.All` is niet nodig voor Service Health. Message Center is een
+afzonderlijk feature-gated capability met eigen validatie en rollback; zie
+[Message Center](message-center.md).
 
 ## Eenmalige tenantconfiguratie
 

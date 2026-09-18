@@ -36,7 +36,7 @@ dist/index.html -> GitHub Pages -> news.intunetools.com
 
 `.github/workflows/refresh.yml` draait dagelijks om 06:30 en 14:00 in `Europe/Amsterdam` volledig op een GitHub-hosted Linux-runner:
 
-1. openbare bronnen ophalen en een lokale reviewinput maken;
+1. openbare bronnen en geactiveerde tenantcapabilities ophalen en een tijdelijke reviewinput maken;
 2. dezelfde bronmomentopname vastleggen voor review en publicatie;
 3. alleen nieuwe of inhoudelijk gewijzigde items selecteren;
 4. die items via `openai/codex-action@v1` met een strikt JSON-schema beoordelen;
@@ -46,6 +46,12 @@ dist/index.html -> GitHub Pages -> news.intunetools.com
 8. alleen gewijzigde data, meldingsstatus en `dist/index.html` naar `main` pushen.
 
 `OPENAI_API_KEY` en de optionele `TEAMS_WEBHOOK_URL` bestaan uitsluitend als GitHub Actions-secrets. De OpenAI-sleutel gaat direct naar de officiële Codex-action; de webhook alleen naar het meldingsscript. De Codex-stap draait read-only en behandelt alle artikeltekst als onbetrouwbare data. Een mislukte run pusht niets, zodat de vorige productieversie online blijft. Een ontbrekende of ongeldige webhook schakelt alleen de meldingen uit en blokkeert de nieuwsactualisatie niet.
+
+Message Center is standaard uitgeschakeld en gebruikt bij activering dezelfde
+kortlevende OIDC-aanmelding met de aparte application permission
+`ServiceMessage.Read.All`. De runner leest begrensde velden via Microsoft Graph,
+hasht bericht-id's en geeft ruwe tekst alleen tijdelijk aan de read-only
+agentreview. Git, reviewcache en HTML bevatten uitsluitend afgeleide redactie.
 
 `data/notification-state.json` is de auditeerbare nulmeting voor meldingen. Alle huidige items en bronstatussen worden bewaard, maar alleen de overgang naar `action`, een nieuw `action`-item, een gewijzigde harde datum of een nieuwe status `FOUT` veroorzaakt een kaart. Een actie met een gecontroleerd incident-signaal wordt als kritieke waarschuwing gepresenteerd. Bij een mislukte webhookpost wordt de nulmeting niet bijgewerkt, zodat de melding bij de volgende run opnieuw kan worden geprobeerd.
 
@@ -57,4 +63,5 @@ De daaropvolgende Pages-workflow valideert de commit opnieuw en publiceert uitsl
 - Een mislukte agentreview mag nooit stilzwijgend als volledig beoordeeld worden gepubliceerd.
 - Een mislukte kwaliteitscontrole of Pages-deployment laat de vorige productieversie intact.
 - Een ontbrekende of ongeldige API-secret laat de refresh vroeg falen zonder de website te wijzigen.
+- Een geactiveerde tenantcapability zonder vereiste Graph-rol stopt vóór ophalen en publiceren.
 - Een mislukte refresh probeert een aparte technische Teams-kaart te sturen; een meldingsfout blokkeert de websitepublicatie niet.

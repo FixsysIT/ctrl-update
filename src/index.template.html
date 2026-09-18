@@ -359,6 +359,7 @@
   .item.read { opacity: .42; }
   .item.triage-done, .item.triage-skip { opacity: .56; }
   .item.triage-followup { border-color: color-mix(in srgb, var(--warn) 46%, var(--border)); }
+  .item.triage-planned { border-color: color-mix(in srgb, var(--sched) 52%, var(--border)); }
 
   /* severity als eerste ding links: F-patroon, belangrijkste informatie
      komt de lezer als eerste tegen */
@@ -383,6 +384,17 @@
   .badge.demoted { background: var(--neutral-soft); color: var(--muted); }
   .badge.reviewed { background: var(--ok-soft); color: var(--ok); }
   .badge.unreviewed { background: var(--neutral-soft); color: var(--muted); }
+  .badge.urgency-critical { background: var(--crit); color: #fff; }
+  .badge.urgency-high { background: var(--warn-soft); color: var(--warn); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--warn) 30%, transparent); }
+  .badge.urgency-normal, .badge.urgency-low { background: var(--neutral-soft); color: var(--muted); }
+  .badge.relevance-confirmed { background: var(--ok-soft); color: var(--ok); }
+  .badge.relevance-likely { background: var(--accent-soft); color: var(--accent); }
+  .badge.relevance-unknown, .badge.relevance-notApplicable { background: var(--neutral-soft); color: var(--muted); }
+  .badge.workflow-review { background: var(--crit-soft); color: var(--crit); }
+  .badge.workflow-followup { background: var(--warn-soft); color: var(--warn); }
+  .badge.workflow-planned { background: var(--sched-soft); color: var(--sched); }
+  .badge.workflow-done { background: var(--ok-soft); color: var(--ok); }
+  .badge.workflow-none, .badge.workflow-skip { background: var(--neutral-soft); color: var(--muted); }
 
   /* de datum is het zwaarste element op de kaart */
   .datehit {
@@ -629,8 +641,16 @@
 
     <aside class="side" id="side">
       <div class="side-block">
-        <h3 data-i18n="urgency">Urgentie</h3>
+        <h3 id="action-status-heading">Actie &amp; status</h3>
         <div class="facets" id="tiers"></div>
+      </div>
+      <div class="side-block">
+        <h3 id="urgency-heading">Algemene urgentie</h3>
+        <select id="urgency-filter" aria-label="Filter op algemene urgentie"></select>
+      </div>
+      <div class="side-block">
+        <h3 id="relevance-heading">Tenantrelevantie</h3>
+        <select id="relevance-filter" aria-label="Filter op tenantrelevantie"></select>
       </div>
       <div class="side-block facets-block">
         <h3 data-i18n="category">Categorie</h3>
@@ -838,6 +858,9 @@
     document.getElementById('source-status-close').setAttribute('aria-label', language === 'en' ? 'Close' : 'Sluiten');
     document.getElementById('source-status-col-status').textContent = 'Status';
     document.getElementById('source-status-col-items').textContent = language === 'en' ? 'Items' : 'Items';
+    document.getElementById('action-status-heading').textContent = language === 'en' ? 'Action & status' : 'Actie & status';
+    document.getElementById('urgency-heading').textContent = language === 'en' ? 'General urgency' : 'Algemene urgentie';
+    document.getElementById('relevance-heading').textContent = language === 'en' ? 'Tenant relevance' : 'Tenantrelevantie';
     if (language === 'en') { document.getElementById('rss-name').placeholder = 'For example Veeam Blog'; }
   }
   applyStaticLanguage();
@@ -850,6 +873,27 @@
 
   function triageState(item) {
     return item.tier === 'action' ? (triage[item.id] || 'review') : '';
+  }
+
+  function urgencyLabel(value) {
+    var labels = language === 'en'
+      ? { critical: 'Critical', high: 'High', normal: 'Normal', low: 'Low' }
+      : { critical: 'Kritiek', high: 'Hoog', normal: 'Normaal', low: 'Laag' };
+    return labels[value] || labels.normal;
+  }
+
+  function relevanceLabel(value) {
+    var labels = language === 'en'
+      ? { confirmed: 'Confirmed in reference tenant', likely: 'Likely', unknown: 'Unknown', notApplicable: 'Not applicable' }
+      : { confirmed: 'Bevestigd in referentietenant', likely: 'Waarschijnlijk', unknown: 'Onbekend', notApplicable: 'Niet van toepassing' };
+    return labels[value] || labels.unknown;
+  }
+
+  function workflowLabel(value) {
+    var labels = language === 'en'
+      ? { review: 'To review', followup: 'Follow up', planned: 'Planned', done: 'Completed', skip: 'Not applicable', none: 'No action' }
+      : { review: 'Te beoordelen', followup: 'Opvolgen', planned: 'Gepland', done: 'Afgerond', skip: 'Niet van toepassing', none: 'Geen actie' };
+    return labels[value] || labels.none;
   }
 
   /* ---------- iconen: kleur draagt nooit alleen de betekenis ---------- */
@@ -1002,7 +1046,7 @@
   /* ---------- tellingen ---------- */
 
   function calculateCounts() {
-    var next = { action: 0, watch: 0, info: 0, nieuw: 0, dated: 0, ongelezen: 0, review: 0, followup: 0, done: 0, skip: 0 };
+    var next = { action: 0, watch: 0, info: 0, nieuw: 0, dated: 0, ongelezen: 0, review: 0, followup: 0, planned: 0, done: 0, skip: 0 };
     data.items.forEach(function (i) {
       next[i.tier]++;
       if (i.isNew) { next.nieuw++; }
@@ -1135,7 +1179,7 @@
 
   /* ---------- filters ---------- */
 
-  var filters = { tier: preferences.channel === 'personal' && counts.review > 0 ? 'todo' : 'all', q: '', cats: [] };
+  var filters = { tier: preferences.channel === 'personal' && counts.review > 0 ? 'todo' : 'all', urgency: 'all', relevance: 'all', q: '', cats: [] };
   var view = 'urgentie';
   var shownLimit = PAGE;
 
@@ -1147,6 +1191,9 @@
       button.setAttribute('aria-pressed', String(button.dataset.channel === preferences.channel));
     });
     filters.tier = 'all';
+    filters.urgency = 'all'; filters.relevance = 'all';
+    document.getElementById('urgency-filter').value = 'all';
+    document.getElementById('relevance-filter').value = 'all';
     Array.prototype.forEach.call(tierBox.querySelectorAll('[data-tier]'), function (button) {
       button.setAttribute('aria-pressed', String(button.dataset.tier === 'all'));
     });
@@ -1167,6 +1214,7 @@
     { key: 'all',    label: language === 'en' ? 'All' : 'Alles', dot: '', count: data.items.length },
     { key: 'todo',   label: language === 'en' ? 'To review' : 'Te beoordelen', dot: 'crit', count: counts.review },
     { key: 'followup', label: language === 'en' ? 'Follow-up needed' : 'Opvolging nodig', dot: 'warn', count: counts.followup },
+    { key: 'planned', label: language === 'en' ? 'Planned' : 'Gepland', dot: 'accent', count: counts.planned },
     { key: 'action', label: language === 'en' ? 'Action' : 'Actie', dot: 'crit', count: counts.action },
     { key: 'watch',  label: language === 'en' ? 'Watch' : 'Let op', dot: 'warn', count: counts.watch },
     { key: 'dated',  label: language === 'en' ? 'Has date' : 'Met datum', dot: 'accent', count: counts.dated },
@@ -1202,7 +1250,7 @@
   }
 
   function refreshTierCounts() {
-    var values = { all: data.items.length, todo: counts.review, followup: counts.followup, action: counts.action, watch: counts.watch, dated: counts.dated, new: counts.nieuw, unread: counts.ongelezen };
+    var values = { all: data.items.length, todo: counts.review, followup: counts.followup, planned: counts.planned, action: counts.action, watch: counts.watch, dated: counts.dated, new: counts.nieuw, unread: counts.ongelezen };
     Array.prototype.forEach.call(tierBox.querySelectorAll('[data-tier]'), function (b) {
       b.querySelector('.ct').textContent = values[b.dataset.tier];
     });
@@ -1212,6 +1260,34 @@
   document.getElementById('metric-followup').addEventListener('click', function () { setTier('followup'); });
   document.getElementById('metric-new').addEventListener('click', function () { setTier('new'); });
   document.getElementById('metric-review').setAttribute('aria-pressed', String(filters.tier === 'todo'));
+
+  function fillSelect(select, values) {
+    values.forEach(function (entry) {
+      var option = document.createElement('option');
+      option.value = entry.value; option.textContent = entry.label;
+      select.appendChild(option);
+    });
+  }
+
+  var urgencyFilter = document.getElementById('urgency-filter');
+  fillSelect(urgencyFilter, [
+    { value: 'all', label: language === 'en' ? 'All urgency levels' : 'Alle urgenties' },
+    { value: 'critical', label: urgencyLabel('critical') },
+    { value: 'high', label: urgencyLabel('high') },
+    { value: 'normal', label: urgencyLabel('normal') },
+    { value: 'low', label: urgencyLabel('low') }
+  ]);
+  urgencyFilter.addEventListener('change', function () { filters.urgency = urgencyFilter.value; shownLimit = PAGE; render(); });
+
+  var relevanceFilter = document.getElementById('relevance-filter');
+  fillSelect(relevanceFilter, [
+    { value: 'all', label: language === 'en' ? 'All relevance levels' : 'Alle relevantieniveaus' },
+    { value: 'confirmed', label: relevanceLabel('confirmed') },
+    { value: 'likely', label: relevanceLabel('likely') },
+    { value: 'unknown', label: relevanceLabel('unknown') },
+    { value: 'notApplicable', label: relevanceLabel('notApplicable') }
+  ]);
+  relevanceFilter.addEventListener('change', function () { filters.relevance = relevanceFilter.value; shownLimit = PAGE; render(); });
 
   /* Alle categorieën staan direct open: geen verborgen +x-laag. */
   var catBox = document.getElementById('cats');
@@ -1249,8 +1325,9 @@
 
   document.getElementById('reset').addEventListener('click', resetFilters);
   function resetFilters() {
-    filters = { tier: 'all', q: '', cats: [] };
+    filters = { tier: 'all', urgency: 'all', relevance: 'all', q: '', cats: [] };
     searchBox.value = '';
+    urgencyFilter.value = 'all'; relevanceFilter.value = 'all';
     Array.prototype.forEach.call(document.querySelectorAll('[data-cat]'), function (b) { b.setAttribute('aria-pressed', 'false'); });
     setTier('all');
   }
@@ -1303,17 +1380,20 @@
 
     if (filters.tier === 'todo' && (item.tier !== 'action' || triageState(item) !== 'review')) { return false; }
     if (filters.tier === 'followup' && (item.tier !== 'action' || triageState(item) !== 'followup')) { return false; }
+    if (filters.tier === 'planned' && (item.tier !== 'action' || triageState(item) !== 'planned')) { return false; }
     if (filters.tier === 'action' && item.tier !== 'action') { return false; }
     if (filters.tier === 'watch'  && item.tier !== 'watch')  { return false; }
     if (filters.tier === 'dated'  && !item.keyDate)          { return false; }
     if (filters.tier === 'new'    && !item.isNew)            { return false; }
     if (filters.tier === 'unread' && read[item.id])          { return false; }
+    if (filters.urgency !== 'all' && item.urgency !== filters.urgency) { return false; }
+    if (filters.relevance !== 'all' && item.tenantRelevance !== filters.relevance) { return false; }
     if (filters.cats.length) {
       var hit = filters.cats.some(function (c) { return item.categories.indexOf(c) !== -1; });
       if (!hit) { return false; }
     }
     if (filters.q) {
-      var hay = (item.title + ' ' + item.titleEn + ' ' + item.summary + ' ' + item.summaryEn + ' ' + item.keywords.join(' ') + ' ' +
+      var hay = (item.title + ' ' + item.titleEn + ' ' + item.summary + ' ' + item.summaryEn + ' ' + (item.tenantReason || '') + ' ' + (item.tenantReasonEn || '') + ' ' + item.keywords.join(' ') + ' ' +
                  item.categories.join(' ') + ' ' + (item.nativeTags || []).join(' ')).toLowerCase();
       if (hay.indexOf(filters.q) === -1) { return false; }
     }
@@ -1369,6 +1449,24 @@
       b.appendChild(document.createTextNode(item.tier === 'action' ? (language === 'en' ? 'Action' : 'Actie') : (language === 'en' ? 'Watch' : 'Let op')));
       flags.appendChild(b);
     }
+    var urgency = document.createElement('span');
+    urgency.className = 'badge urgency-' + (item.urgency || 'normal');
+    urgency.textContent = (language === 'en' ? 'Urgency: ' : 'Urgentie: ') + urgencyLabel(item.urgency || 'normal');
+    urgency.title = language === 'en' ? 'General urgency, independent of whether an administrative action is required' : 'Algemene urgentie, los van de vraag of een beheeractie nodig is';
+    flags.appendChild(urgency);
+
+    var relevance = document.createElement('span');
+    relevance.className = 'badge relevance-' + (item.tenantRelevance || 'unknown');
+    relevance.textContent = (language === 'en' ? 'Tenant: ' : 'Tenant: ') + relevanceLabel(item.tenantRelevance || 'unknown');
+    relevance.title = language === 'en' ? (item.tenantReasonEn || item.tenantReason || '') : (item.tenantReason || '');
+    flags.appendChild(relevance);
+
+    var workflowState = itemState || 'none';
+    var workflowBadge = document.createElement('span');
+    workflowBadge.className = 'badge workflow-' + workflowState;
+    workflowBadge.textContent = (language === 'en' ? 'Status: ' : 'Status: ') + workflowLabel(workflowState);
+    workflowBadge.title = language === 'en' ? 'Personal status stored only in this browser' : 'Persoonlijke status, alleen opgeslagen in deze browser';
+    flags.appendChild(workflowBadge);
     if (item.kind === 'messagecenter') {
       var mc = document.createElement('span');
       mc.className = 'badge mc'; mc.textContent = 'Message Center';
@@ -1556,7 +1654,7 @@
 
       var workflowLabel = document.createElement('label');
       workflowLabel.setAttribute('for', 'triage-' + Math.abs(hashCode(item.id)));
-      workflowLabel.textContent = language === 'en' ? 'Assessment' : 'Beoordeling';
+      workflowLabel.textContent = language === 'en' ? 'Action status' : 'Actiestatus';
       workflow.appendChild(workflowLabel);
 
       var workflowSelect = document.createElement('select');
@@ -1564,8 +1662,9 @@
       workflowSelect.setAttribute('aria-label', (language === 'en' ? 'Assessment for ' : 'Beoordeling voor ') + itemTitle(item));
       [
         { value: 'review', label: language === 'en' ? 'To review' : 'Te beoordelen' },
-        { value: 'followup', label: language === 'en' ? 'Follow-up needed' : 'Opvolging nodig' },
-        { value: 'done', label: language === 'en' ? 'Completed' : 'Afgehandeld' },
+        { value: 'followup', label: language === 'en' ? 'Follow up' : 'Opvolgen' },
+        { value: 'planned', label: language === 'en' ? 'Planned' : 'Gepland' },
+        { value: 'done', label: language === 'en' ? 'Completed' : 'Afgerond' },
         { value: 'skip', label: language === 'en' ? 'Not applicable' : 'Niet van toepassing' }
       ].forEach(function (choice) {
         var option = document.createElement('option');
@@ -1637,8 +1736,15 @@
 
     visible = visible.slice().sort(function (a, b) {
       if (view !== 'tijdlijn') {
-        var aPriority = a.tier === 'action' ? 0 : 1;
-        var bPriority = b.tier === 'action' ? 0 : 1;
+        function priority(item) {
+          if (item.urgency === 'critical') { return 0; }
+          if (item.tier === 'action') { return 1; }
+          if (item.urgency === 'high') { return 2; }
+          if (item.tier === 'watch') { return 3; }
+          return 4;
+        }
+        var aPriority = priority(a);
+        var bPriority = priority(b);
         if (aPriority !== bPriority) { return aPriority - bPriority; }
       }
       if (a.date !== b.date) { return a.date < b.date ? 1 : -1; }

@@ -202,7 +202,7 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 
 | Punt | Waarom nog niet |
 |---|---|
-| Message Center meenemen | Werkt, maar vereist `Connect-MgGraph -Scopes 'ServiceMessage.Read.All'` voor de run. |
+| Message Center cloudactivering | Implementatie is feature-gated voorbereid; admin consent voor `ServiceMessage.Read.All`, repositoryvariabele en live privacyvalidatie ontbreken nog. |
 | Meerdere klanttenants | Message Center is nu een tenant. Voor meerdere klanten is app-only auth per tenant nodig. |
 
 ## V12 - Veilige automatische actualisatie
@@ -224,6 +224,11 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 - Onderwerp- en bronkeuzes zijn per browser. Optionele domeinen staan standaard uit.
 - Een RSS-aanvraag uit de browser wordt geëxporteerd en daarna centraal ontdekt en gevalideerd. De statische
   browserpagina is bewust geen open RSS-proxy.
+- Ieder item toont afzonderlijk algemene urgentie, tenantrelevantie en persoonlijke
+  actiestatus. Actiestatus kent `Te beoordelen`, `Opvolgen`, `Gepland`, `Afgerond`
+  en `Niet van toepassing` en blijft browserlokaal.
+- Tenantgerichte Service Health- en Message Center-signalen zijn `Bevestigd in
+  referentietenant`; dit is geen bewijs van impact in iedere klantconfiguratie.
 
 ## V11 - Tweetalig, inhoudsroutes en blijvende praktijktips
 

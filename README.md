@@ -96,7 +96,9 @@ TEAMS_WEBHOOK_URL  # optioneel; vereist voor Teams-meldingen
 
 De OpenAI-sleutel wordt alleen rechtstreeks aan `openai/codex-action` aangeboden. De Teams-webhook wordt alleen aan de meldingsstap aangeboden. Geen van beide secrets wordt in een bestand of in de repository opgeslagen. Een ontbrekende of ongeldige Teams-koppeling blokkeert de nieuwsactualisatie niet.
 
-Microsoft 365 Service Health kan zonder client secret via GitHub OIDC worden aangesloten. Hiervoor gebruikt een aparte single-tenant Entra-app uitsluitend de application permission `ServiceHealth.Read.All`; de publieke site ontvangt alleen een generiek incidentsignaal en nooit issue-id's of ruwe tenantdetails. De inrichting, validatie en rollback staan in [Microsoft 365 Service Health](docs/service-health.md). Message Center blijft een afzonderlijke optionele capability met `ServiceMessage.Read.All` en is niet onderdeel van de cloudrun.
+Microsoft 365 Service Health kan zonder client secret via GitHub OIDC worden aangesloten. Hiervoor gebruikt een aparte single-tenant Entra-app de application permission `ServiceHealth.Read.All`; de publieke site ontvangt alleen een generiek incidentsignaal en nooit issue-id's of ruwe tenantdetails. De inrichting, validatie en rollback staan in [Microsoft 365 Service Health](docs/service-health.md).
+
+Message Center is als afzonderlijk feature-gated capability voorbereid met `ServiceMessage.Read.All`. Activering vereist expliciete admin consent én repositoryvariabele `CTRL_UPDATE_MESSAGE_CENTER_ENABLED=true`. De runner gebruikt alleen afgeleide redactie; echte bericht-id's en ruwe tenanttekst worden niet gepubliceerd. Zie [Message Center](docs/message-center.md).
 
 Een beheerder kan bij een handmatige workflowrun `teams_test` inschakelen. Na alle kwaliteitscontroles verstuurt die run precies één herkenbare testkaart en slaat de normale inhoudsmelding over. Geplande runs gebruiken deze testmodus nooit.
 

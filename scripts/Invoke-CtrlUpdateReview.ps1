@@ -88,11 +88,14 @@ Lever voor elk item exact een object terug met hetzelfde id en contentHash.
 - categories: maximaal drie uit deze vaste lijst: $categoryText
 - kind: wijziging, nieuws, analyse, handleiding of naslag.
 - tier: action alleen bij een concrete beheeractie, verplichte migratie, deadline, retirement of operationeel probleem; watch bij relevante ontwikkeling die aandacht verdient; info bij nieuws, analyse, handleiding of naslag zonder concrete actie.
+- urgency: critical alleen bij actuele brede uitval, actief misbruik, noodupdate of onmiddellijke harde deadline; high bij grote impact of nabije verplichte wijziging; normal bij reguliere wijzigingen en relevante statusinformatie; anders low.
+- tenantRelevance: confirmed wanneer channel tenant is; likely bij een openbare bron die duidelijk een beheerd Microsoft-, endpoint-, identity- of securityonderwerp raakt; unknown wanneer toepasbaarheid niet bewezen is; notApplicable alleen met expliciete evidence.
+- tenantReasonNl en tenantReasonEn: een korte toelichting op de tenantrelevantie. Confirmed betekent bevestigd in de referentietenant, niet bewezen impact voor iedere klant.
 - confidence: 0 tot 1, lager als de brontekst onvoldoende bewijs bevat.
 - reasonNl: een korte Nederlandse toelichting op de gekozen tier.
 - reasonEn: dezelfde korte toelichting in het Engels.
 
-De regelscore en voorgestelde tier zijn aanwijzingen, geen feiten. Corrigeer foutpositieven. Een hoge trefwoordscore maakt naslag niet automatisch actie.
+De regelscore en voorgestelde waarden zijn aanwijzingen, geen feiten. Corrigeer foutpositieven. Een hoge trefwoordscore maakt naslag niet automatisch actie. Service Health kan kritisch zijn zonder concrete actie. Message Center is tenantbevestigd maar kan informatief, te volgen of actiegericht zijn.
 Schrijf de *Nl-velden volledig in het Nederlands en de *En-velden volledig in het Engels, helder en zonder Markdown. Geef alleen JSON volgens het schema.
 
 ITEMS:
