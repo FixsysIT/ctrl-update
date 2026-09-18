@@ -1372,7 +1372,13 @@ $allCategories = @($sorted | ForEach-Object { $_.Categories } | Where-Object { $
                    ForEach-Object { [PSCustomObject]@{ name = $_.Name; count = $_.Count } })
 
 $payload = [PSCustomObject]@{
-    generated  = (Get-Date).ToString('dd-MM-yyyy HH:mm')
+    generated  = (Get-Date).ToUniversalTime().ToString('o')
+    generatedIso = (Get-Date).ToUniversalTime().ToString('o')
+    schedule   = [PSCustomObject]@{
+        timezone = 'Europe/Amsterdam'
+        times = @('06:30', '14:00')
+        staleAfterHours = 26
+    }
     today      = $today.ToString('yyyy-MM-dd')
     days       = $Days
     firstRun   = $isFirstRun

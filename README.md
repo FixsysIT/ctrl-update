@@ -81,7 +81,9 @@ dist/         exact wat GitHub Pages publiceert
 
 ## Automatische refresh
 
-GitHub Actions voert `.github/workflows/refresh.yml` iedere vier uur uit. De workflow haalt de openbare bronnen op, laat alleen nieuwe of gewijzigde items door de officiële Codex GitHub Action beoordelen, valideert het resultaat en pusht uitsluitend gewijzigde cache-, state- en publicatiebestanden.
+GitHub Actions voert `.github/workflows/refresh.yml` dagelijks om 06:30 en 14:00 uit in `Europe/Amsterdam` (zomer- en wintertijd worden automatisch gevolgd). De workflow haalt de openbare bronnen op, laat alleen nieuwe of gewijzigde items door de officiële Codex GitHub Action beoordelen, valideert het resultaat en pusht uitsluitend gewijzigde cache-, state- en publicatiebestanden. Als een stap faalt wordt niets gepubliceerd en blijft de laatst geslaagde versie online.
+
+De site toont bovenaan de laatste succesvolle publicatie, de volgende run en een waarschuwing wanneer de data ouder is dan 26 uur.
 
 De repository moet hiervoor één Actions-secret bevatten:
 

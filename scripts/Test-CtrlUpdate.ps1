@@ -113,12 +113,15 @@ if ($published -notmatch '<!doctype html>') { Add-Failure 'dist/index.html is ge
 if ($failures.Count -eq 0) { Write-Pass 'Publicatie-output compleet' }
 
 $refreshWorkflow = Get-Content -LiteralPath (Join-Path $projectRoot '.github/workflows/refresh.yml') -Raw -Encoding UTF8
-foreach ($requiredFragment in @('schedule:', 'openai/codex-action@v1', 'OPENAI_API_KEY', '-RequireAgentReview')) {
+foreach ($requiredFragment in @('timezone: "Europe/Amsterdam"', '30 6 * * *', '0 14 * * *', 'openai/codex-action@v1', 'OPENAI_API_KEY', 'model: gpt-5.6-terra', '-RequireAgentReview')) {
     if ($refreshWorkflow -notmatch [regex]::Escape($requiredFragment)) {
         Add-Failure "Refresh-workflow mist verplichte configuratie: $requiredFragment"
     }
 }
-if ($failures.Count -eq 0) { Write-Pass 'Cloudrefresh bevat planning, veilige Codex-action en reviewgate' }
+if ($template -notmatch 'staleAfterHours' -or $template -notmatch 'fresh-next-value') {
+    Add-Failure 'Template mist zichtbare actualiteitsbewaking of de volgende automatische run'
+}
+if ($failures.Count -eq 0) { Write-Pass 'Cloudrefresh bevat lokale planning, veilige Codex-action, reviewgate en actualiteitsstatus' }
 
 $testDirectory = Join-Path $projectRoot '.tmp/test-review-pipeline'
 $null = New-Item -ItemType Directory -Path $testDirectory -Force

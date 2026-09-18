@@ -201,9 +201,17 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 
 | Punt | Waarom nog niet |
 |---|---|
-| Automatisch draaien | Nu handmatig, op verzoek. Taakplanner of Azure Automation is een latere stap. |
 | Message Center meenemen | Werkt, maar vereist `Connect-MgGraph -Scopes 'ServiceMessage.Read.All'` voor de run. |
 | Meerdere klanttenants | Message Center is nu een tenant. Voor meerdere klanten is app-only auth per tenant nodig. |
+
+## V12 - Veilige automatische actualisatie
+
+- GitHub Actions draait dagelijks om 06:30 en 14:00 in `Europe/Amsterdam`, inclusief zomertijd.
+- Alleen nieuwe of inhoudelijk gewijzigde items gaan naar de agentreview; de reviewcache voorkomt dubbele modelkosten.
+- Parsing, schema-validatie, agentreview en de netwerkloze repositorytest zijn verplichte publicatiepoorten.
+- Een mislukte run commit en publiceert niets; de laatst geslaagde GitHub Pages-versie blijft online.
+- De kop toont de laatste succesvolle publicatie, de volgende run en een zichtbare waarschuwing na 26 uur zonder succes.
+- Signalen worden in de workflow samengevat; externe notificaties vereisen bewust een gekozen kanaal.
 
 ## V10 - Agent-eindredactie, kanalen en persoonlijke radar
 

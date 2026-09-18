@@ -149,6 +149,32 @@
   .brand .eyebrow { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 3px; }
   .brand .tagline { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
 
+  .freshness {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px; margin: 0 0 14px;
+  }
+  .freshness-item {
+    min-width: 0; display: flex; align-items: center; gap: 9px;
+    padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px;
+    background: var(--panel); color: var(--text-soft); box-shadow: var(--shadow);
+  }
+  .freshness-item svg { flex: none; color: var(--muted); }
+  .freshness-copy { min-width: 0; }
+  .freshness-label {
+    display: block; color: var(--muted); font-size: 9.5px; font-weight: 800;
+    letter-spacing: .1em; text-transform: uppercase;
+  }
+  .freshness-value {
+    display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-size: 12.5px; font-weight: 620;
+  }
+  .freshness-item.current svg, .freshness-item.current .freshness-value { color: var(--ok); }
+  .freshness-item.stale {
+    border-color: color-mix(in srgb, var(--warn) 35%, var(--border));
+    background: var(--warn-soft);
+  }
+  .freshness-item.stale svg, .freshness-item.stale .freshness-value { color: var(--warn); }
+
   .toolbar { display: flex; gap: 6px; align-items: center; }
   .tool {
     background: var(--panel); border: 1px solid var(--border); color: var(--text-soft);
@@ -584,6 +610,7 @@
     .settings-grid { grid-template-columns: 1fr; }
     .channelbar { width: 100%; }
     .channelbar button { flex: 1 1 auto; }
+    .freshness { grid-template-columns: 1fr; }
   }
   dialog.settings .bd { padding: 16px 18px 19px; overflow: auto; max-height: calc(100vh - 95px); }
   .settings p { color: var(--text-soft); font-size: 13px; margin: 0 0 14px; }
@@ -636,6 +663,21 @@
       <button class="tool icon-only" id="theme" title="Licht of donker" aria-label="Licht of donker">&#9680;</button>
     </div>
   </header>
+
+  <section class="freshness" aria-label="Actualiteit van de radar">
+    <div class="freshness-item" id="fresh-last">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
+      <span class="freshness-copy"><span class="freshness-label" id="fresh-last-label">Laatst succesvol bijgewerkt</span><span class="freshness-value" id="fresh-last-value">—</span></span>
+    </div>
+    <div class="freshness-item" id="fresh-next">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 3.5v3M17 3.5v3M4 9h16M5.5 5h13A1.5 1.5 0 0 1 20 6.5v12A1.5 1.5 0 0 1 18.5 20h-13A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5Z"></path></svg>
+      <span class="freshness-copy"><span class="freshness-label" id="fresh-next-label">Volgende automatische run</span><span class="freshness-value" id="fresh-next-value">—</span></span>
+    </div>
+    <div class="freshness-item" id="fresh-state">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"></circle><path d="m8.5 12 2.2 2.2 4.8-5"></path></svg>
+      <span class="freshness-copy"><span class="freshness-label" id="fresh-state-label">Actualiteit</span><span class="freshness-value" id="fresh-state-value">Wordt gecontroleerd…</span></span>
+    </div>
+  </section>
 
   <section class="overview" aria-label="Ochtendoverzicht">
     <button class="metric attention" id="metric-review" type="button" aria-pressed="false">
@@ -1086,8 +1128,57 @@
 
   var counts = calculateCounts();
 
+  function getZonedNow(timezone) {
+    var parts = new Intl.DateTimeFormat('en-GB', {
+      timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+    }).formatToParts(new Date());
+    var result = {};
+    parts.forEach(function (part) { if (part.type !== 'literal') { result[part.type] = part.value; } });
+    return result;
+  }
+
+  function renderFreshness() {
+    var schedule = data.schedule || { timezone: 'Europe/Amsterdam', times: ['06:30', '14:00'], staleAfterHours: 26 };
+    var generated = new Date(data.generatedIso || data.generated);
+    var validGenerated = !isNaN(generated.getTime());
+    var locale = language === 'en' ? 'en-GB' : 'nl-NL';
+    var lastValue = validGenerated ? new Intl.DateTimeFormat(locale, {
+      timeZone: schedule.timezone, dateStyle: 'medium', timeStyle: 'short'
+    }).format(generated) : (language === 'en' ? 'Unknown' : 'Onbekend');
+
+    document.getElementById('fresh-last-label').textContent = language === 'en' ? 'Last successful update' : 'Laatst succesvol bijgewerkt';
+    document.getElementById('fresh-last-value').textContent = lastValue;
+    document.getElementById('fresh-next-label').textContent = language === 'en' ? 'Next automatic run' : 'Volgende automatische run';
+    document.getElementById('fresh-state-label').textContent = language === 'en' ? 'Freshness' : 'Actualiteit';
+    document.querySelector('.freshness').setAttribute('aria-label', language === 'en' ? 'Radar freshness' : 'Actualiteit van de radar');
+
+    var now = getZonedNow(schedule.timezone);
+    var nowMinutes = Number(now.hour) * 60 + Number(now.minute);
+    var times = (schedule.times || []).slice().sort();
+    var next = times.find(function (time) {
+      var p = time.split(':'); return Number(p[0]) * 60 + Number(p[1]) > nowMinutes;
+    });
+    var tomorrow = !next;
+    next = next || times[0] || '06:30';
+    document.getElementById('fresh-next-value').textContent =
+      (tomorrow ? (language === 'en' ? 'Tomorrow ' : 'Morgen ') : (language === 'en' ? 'Today ' : 'Vandaag ')) + next + ' · ' + schedule.timezone;
+
+    var staleAfter = Number(schedule.staleAfterHours || 26);
+    var ageHours = validGenerated ? (Date.now() - generated.getTime()) / 3600000 : Number.POSITIVE_INFINITY;
+    var stale = ageHours > staleAfter;
+    var state = document.getElementById('fresh-state');
+    state.classList.toggle('current', !stale);
+    state.classList.toggle('stale', stale);
+    document.getElementById('fresh-state-value').textContent = stale
+      ? (language === 'en' ? 'Outdated · last success ' + Math.floor(ageHours) + ' hours ago' : 'Verouderd · laatste succes ' + Math.floor(ageHours) + ' uur geleden')
+      : (language === 'en' ? 'Current · outdated after ' + staleAfter + ' hours' : 'Actueel · verouderd na ' + staleAfter + ' uur');
+  }
+
+  renderFreshness();
+
   document.getElementById('tagline').textContent =
-    data.generated + ' · ' + data.items.length + (language === 'en' ? ' items from ' : ' items uit ') + data.days + (language === 'en' ? ' days' : ' dagen') +
+    data.items.length + (language === 'en' ? ' items from ' : ' items uit ') + data.days + (language === 'en' ? ' days' : ' dagen') +
     (data.duplicates > 0 ? ' · ' + data.duplicates + (language === 'en' ? ' duplicates removed' : ' dubbel gefilterd') : '') +
     ' · agent ' + data.review.reviewed + '/' + data.review.total;
 

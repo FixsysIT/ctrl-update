@@ -2,7 +2,10 @@ name: Ververs CTRL UPDATE
 
 on:
   schedule:
-    - cron: "17 */4 * * *"
+    - cron: "30 6 * * *"
+      timezone: "Europe/Amsterdam"
+    - cron: "0 14 * * *"
+      timezone: "Europe/Amsterdam"
   workflow_dispatch:
 
 permissions:
@@ -54,7 +57,8 @@ jobs:
           prompt-file: .github/codex/prompts/review-items.md
           output-file: .tmp/review-result.json
           codex-args: '["--ephemeral", "--output-schema", "schemas/review.schema.json"]'
-          effort: high
+          model: gpt-5.6-terra
+          effort: medium
           sandbox: read-only
           safety-strategy: drop-sudo
 
