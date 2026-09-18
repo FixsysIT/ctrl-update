@@ -37,12 +37,13 @@ dist/index.html -> GitHub Pages -> news.intunetools.com
 `.github/workflows/refresh.yml` draait dagelijks om 06:30 en 14:00 in `Europe/Amsterdam` volledig op een GitHub-hosted Linux-runner:
 
 1. openbare bronnen ophalen en een lokale reviewinput maken;
-2. alleen nieuwe of inhoudelijk gewijzigde items selecteren;
-3. die items via `openai/codex-action@v1` met een strikt JSON-schema beoordelen;
-4. het resultaat atomair met de bestaande inhoudshash-cache samenvoegen;
-5. de definitieve pagina genereren en alle kwaliteitscontroles uitvoeren;
-6. alleen nieuwe Actie-signalen, gewijzigde harde actiedatums en nieuwe bronstoringen als één Adaptive Card naar Teams sturen;
-7. alleen gewijzigde data, meldingsstatus en `dist/index.html` naar `main` pushen.
+2. dezelfde bronmomentopname vastleggen voor review en publicatie;
+3. alleen nieuwe of inhoudelijk gewijzigde items selecteren;
+4. die items via `openai/codex-action@v1` met een strikt JSON-schema beoordelen;
+5. het resultaat atomair met de bestaande inhoudshash-cache samenvoegen;
+6. de definitieve pagina uit exact dezelfde momentopname genereren en alle kwaliteitscontroles uitvoeren;
+7. alleen nieuwe Actie-signalen, gewijzigde harde actiedatums en nieuwe bronstoringen als één Adaptive Card naar Teams sturen;
+8. alleen gewijzigde data, meldingsstatus en `dist/index.html` naar `main` pushen.
 
 `OPENAI_API_KEY` en de optionele `TEAMS_WEBHOOK_URL` bestaan uitsluitend als GitHub Actions-secrets. De OpenAI-sleutel gaat direct naar de officiële Codex-action; de webhook alleen naar het meldingsscript. De Codex-stap draait read-only en behandelt alle artikeltekst als onbetrouwbare data. Een mislukte run pusht niets, zodat de vorige productieversie online blijft. Een ontbrekende of ongeldige webhook schakelt alleen de meldingen uit en blokkeert de nieuwsactualisatie niet.
 

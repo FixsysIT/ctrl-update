@@ -117,7 +117,7 @@ if ($published -notmatch '<!doctype html>') { Add-Failure 'dist/index.html is ge
 if ($failures.Count -eq 0) { Write-Pass 'Publicatie-output compleet' }
 
 $refreshWorkflow = Get-Content -LiteralPath (Join-Path $projectRoot '.github/workflows/refresh.yml') -Raw -Encoding UTF8
-foreach ($requiredFragment in @('timezone: "Europe/Amsterdam"', '30 6 * * *', '0 14 * * *', 'teams_test:', '-TestNotification', 'openai/codex-action@v1', 'OPENAI_API_KEY', 'TEAMS_WEBHOOK_URL', 'Send-CtrlUpdateTeamsNotification.ps1', 'data/notification-state.json', 'model: gpt-5.6-terra', '-RequireAgentReview', 'actions/upload-pages-artifact@v5', 'actions/deploy-pages@v5')) {
+foreach ($requiredFragment in @('timezone: "Europe/Amsterdam"', '30 6 * * *', '0 14 * * *', 'teams_test:', '-TestNotification', 'openai/codex-action@v1', 'OPENAI_API_KEY', 'TEAMS_WEBHOOK_URL', 'Send-CtrlUpdateTeamsNotification.ps1', 'data/notification-state.json', 'model: gpt-5.6-terra', '-UsePreparedSnapshot', '-RequireAgentReview', 'actions/upload-pages-artifact@v5', 'actions/deploy-pages@v5')) {
     if ($refreshWorkflow -notmatch [regex]::Escape($requiredFragment)) {
         Add-Failure "Refresh-workflow mist verplichte configuratie: $requiredFragment"
     }
@@ -152,6 +152,11 @@ if ($updater -notmatch '\$priorityRank\s*=\s*@\{\s*action\s*=\s*0;\s*watch\s*=\s
 }
 if ($template -notmatch "a\.tier === 'action'" -or $template -notmatch 'a\.date !== b\.date') {
     Add-Failure 'Browserweergave borgt de prioriteit- en datumsortering niet'
+}
+if ($updater -notmatch '\$UsePreparedSnapshot' -or
+    $updater -notmatch 'prepared-publication\.json' -or
+    $updater -notmatch 'Publicatiemomentopname voorbereid') {
+    Add-Failure 'Review en publicatie delen geen vaste bronmomentopname'
 }
 if ($failures.Count -eq 0) { Write-Pass 'Cloudrefresh bevat lokale planning, veilige Codex-action, reviewgate en actualiteitsstatus' }
 

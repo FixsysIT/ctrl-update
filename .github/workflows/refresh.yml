@@ -82,7 +82,7 @@ jobs:
 
       - name: Definitieve publicatie genereren
         shell: pwsh
-        run: ./scripts/Update-CtrlUpdate.ps1 -SkipMessageCenter -UseReviewCacheOnly -RequireAgentReview
+        run: ./scripts/Update-CtrlUpdate.ps1 -SkipMessageCenter -UsePreparedSnapshot -UseReviewCacheOnly -RequireAgentReview
 
       - name: Repository controleren
         shell: pwsh

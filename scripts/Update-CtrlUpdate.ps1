@@ -37,6 +37,7 @@ param(
     [switch] $SkipMessageCenter,
     [switch] $SkipAgentReview,
     [switch] $PrepareAgentReviewOnly,
+    [switch] $UsePreparedSnapshot,
     [switch] $UseReviewCacheOnly,
     [switch] $RequireAgentReview,
     [switch] $Open,
@@ -686,6 +687,22 @@ if ($TestUrl) {
 
 $items      = [System.Collections.Generic.List[object]]::new()
 $feedStatus = [System.Collections.Generic.List[object]]::new()
+$projectRoot = Split-Path -Parent $PSScriptRoot
+$preparedSnapshotPath = Join-Path $projectRoot '.tmp/prepared-publication.json'
+$preparedSnapshotLoaded = $false
+
+if ($UsePreparedSnapshot) {
+    if (-not (Test-Path -LiteralPath $preparedSnapshotPath)) {
+        throw "Voorbereide publicatiemomentopname ontbreekt: $preparedSnapshotPath"
+    }
+    $preparedSnapshot = Get-Content -LiteralPath $preparedSnapshotPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    foreach ($preparedItem in @($preparedSnapshot.items)) { $items.Add($preparedItem) }
+    foreach ($preparedFeed in @($preparedSnapshot.feeds)) { $feedStatus.Add($preparedFeed) }
+    $preparedSnapshotLoaded = $true
+    Write-Host "Voorbereide publicatiemomentopname geladen: $($items.Count) items." -ForegroundColor Cyan
+}
+
+if (-not $preparedSnapshotLoaded) {
 
 $enabledFeeds = @($config.feeds | Where-Object { $_.enabled -ne $false })
 $feedIndex    = 0
@@ -1154,6 +1171,8 @@ elseif ($config.messageCenter.enabled -and $SkipMessageCenter) {
     })
 }
 
+}
+
 #endregion
 
 #region Ontdubbelen, sorteren en state opslaan --------------------------------
@@ -1224,7 +1243,18 @@ if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -g
     $reviewInput | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $reviewInputPath -Encoding UTF8
 
     if ($PrepareAgentReviewOnly) {
+        $snapshotDirectory = Split-Path -Parent $preparedSnapshotPath
+        if (-not (Test-Path -LiteralPath $snapshotDirectory)) {
+            $null = New-Item -ItemType Directory -Path $snapshotDirectory -Force
+        }
+        [PSCustomObject]@{
+            generated = (Get-Date).ToUniversalTime().ToString('o')
+            items = @($deduped)
+            feeds = @($feedStatus)
+        } | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $preparedSnapshotPath -Encoding UTF8
+        $null = Get-Content -LiteralPath $preparedSnapshotPath -Raw -Encoding UTF8 | ConvertFrom-Json
         Write-Host "Reviewinput voorbereid: $(@($reviewInput.items).Count) items in $reviewInputPath" -ForegroundColor Cyan
+        Write-Host "Publicatiemomentopname voorbereid: $preparedSnapshotPath" -ForegroundColor Cyan
         return
     }
 
