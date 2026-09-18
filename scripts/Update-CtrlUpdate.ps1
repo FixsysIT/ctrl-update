@@ -860,6 +860,7 @@ Write-Progress -Activity 'Feeds ophalen' -Completed
 # bronlinks: de agent vat ze samen, maar de oorspronkelijke auteur blijft leidend.
 foreach ($curated in @($config.curatedArticles)) {
     try {
+        $isAlert = [string]$curated.mode -eq 'alert'
         $page = Invoke-WebRequest -Uri $curated.url `
                                   -Headers @{
                                       'User-Agent' = $settings.userAgent
@@ -877,6 +878,10 @@ foreach ($curated in @($config.curatedArticles)) {
         $summary = ConvertFrom-HtmlText $raw ([int]$settings.summaryLength)
         $published = ConvertTo-DateTimeSafe ([string]$curated.published)
         if (-not $published) { $published = (Get-Date).ToUniversalTime() }
+        # Een backfill-alert vult alleen een korte lacune in een RSS-feed en
+        # gehoorzaamt daarom aan hetzelfde nieuwsvenster als gewone feeditems.
+        # Tijdloze handleidingen mogen bewust buiten dat venster blijven staan.
+        if ($isAlert -and $published -lt $cutoff) { continue }
         $title = [string]$curated.title
         $relevance = Get-RelevanceScore -Title $title -Summary $fullText
         $keyDates = @(Get-KeyDates "$title. $fullText" |
@@ -890,9 +895,9 @@ foreach ($curated in @($config.curatedArticles)) {
             $scoreBreakdown += [PSCustomObject]@{ label = 'Concrete wijzigingsdatum'; points = 3; location = 'datum' }
         }
         $demote = Get-DemoteKind $title
-        if (-not $demote) { $demote = 'guide' }
+        if (-not $isAlert -and -not $demote) { $demote = 'guide' }
         $tier = Get-Tier -Score $score -ActionSignal:($relevance.ActionSignal -or $dateSignal)
-        if ($tier -eq 'action') { $tier = 'watch' }
+        if ($demote -and $tier -eq 'action') { $tier = 'watch' }
         $id = [string]$curated.url
 
         $items.Add([PSCustomObject]@{
@@ -905,7 +910,7 @@ foreach ($curated in @($config.curatedArticles)) {
             Categories = @(Get-Categories -Title "$title $(@($curated.nativeTags) -join ' ')" -Text $fullText)
             NativeTags = @($curated.nativeTags); KeyDate = Format-DateBadge $primary
             AllDates = @($keyDates | Where-Object { $_.Date -ge $today } | Select-Object -First 4 | ForEach-Object { Format-DateBadge $_ })
-            Kind = 'feed'; Channel = 'community'; FullText = $fullText; Enriched = $true
+            Kind = 'feed'; Channel = $(if ($curated.tag -eq 'News') { 'news' } else { 'community' }); FullText = $fullText; Enriched = $true
             Boost = 0; Deadline = $null; IsNew = -not $state.ContainsKey($id); Curated = $true
         })
     }

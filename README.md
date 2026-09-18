@@ -62,7 +62,7 @@ Een gebruiker kan vanuit de radar voorkeuren en aangevraagde feeds exporteren. I
 ./scripts/Import-CtrlUpdatePreferences.ps1 ./ctrl-update-voorkeuren.json -WhatIf
 ```
 
-Feedconfiguratie, trefwoorden en drempels staan in `config/sources.json`. Tijdloze, uitzonderlijk nuttige artikelen kunnen in `curatedArticles` worden vastgezet.
+Feedconfiguratie, trefwoorden en drempels staan in `config/sources.json`. Tijdloze, uitzonderlijk nuttige artikelen kunnen in `curatedArticles` worden vastgezet. Een gemist maar nog actueel waarschuwingsbericht kan daar tijdelijk met `mode: "alert"` worden aangevuld; zo'n backfill volgt wel het gewone nieuwsvenster en wordt niet als handleiding gedempt.
 
 Brede nieuwsfeeds kunnen met `includeTerms` tot het relevante Microsoft-, Windows- en endpointdomein worden beperkt. BleepingComputer wordt zo als afzonderlijke nieuwsbron verwerkt zonder dat ongerelateerd consumenten-, crypto- of algemeen malwarenieuws de radar vult.
 

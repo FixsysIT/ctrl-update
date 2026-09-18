@@ -95,6 +95,14 @@ if (-not $incidentGroup -or -not [bool]$incidentGroup.isActionSignal -or
     'emergency update' -notin @($incidentGroup.terms) -or 'out-of-band' -notin @($incidentGroup.terms)) {
     Add-Failure 'Kritieke incidenten bereiken niet betrouwbaar de Actie-drempel'
 }
+$rdsAlerts = @($config.curatedArticles | Where-Object {
+    [string]$_.mode -eq 'alert' -and [string]$_.source -eq 'BleepingComputer - Microsoft & Windows'
+})
+if ($rdsAlerts.Count -ne 2 -or
+    @($rdsAlerts | Where-Object { [string]$_.tag -ne 'News' }).Count -gt 0 -or
+    @($rdsAlerts | Where-Object { [string]$_.url -match 'rds|remote-desktop-services' }).Count -ne 2) {
+    Add-Failure 'De twee gecontroleerde BleepingComputer RDS-waarschuwingen ontbreken in de backfill'
+}
 
 $allowedCategories = @($config.categories.PSObject.Properties.Name)
 $reviewPath = Join-Path $projectRoot 'data/review-cache.json'
