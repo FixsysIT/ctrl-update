@@ -1,21 +1,47 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-18T13:55:33.6710504+00:00",
+  "updatedAt": "2026-09-18T17:44:55.0565402+00:00",
   "items": {
-    "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-broken-copy-and-paste-for-excel-2016-users/": {
+    "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-emergency-windows-updates-to-fix-rds-failures/": {
       "tier": "action",
+      "urgency": "critical",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
-    "SH:e3721521e23187799224c9af": {
+    "https://www.microsoft.com/en-us/security/blog/2026/09/09/passkey-themed-social-engineering-leads-identity-cloud-compromise/": {
       "tier": "action",
+      "urgency": "critical",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "MC:39808105a7bd28ba16fec78f": {
+      "tier": "action",
+      "urgency": "high",
+      "dateIso": "2027-02-01",
+      "dateKind": "deadline",
+      "hardDates": [
+        "retirement:2027-02-01"
+      ]
+    },
+    "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-broken-copy-and-paste-for-excel-2016-users/": {
+      "tier": "action",
+      "urgency": "normal",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "MC:07b2b4bc5c6ca5fe768e3174": {
+      "tier": "action",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://www.bleepingcomputer.com/news/microsoft/windows-11-24h2-home-and-pro-reach-end-of-support-in-october/": {
       "tier": "action",
+      "urgency": "high",
       "dateIso": "2026-10-13",
       "dateKind": "deadline",
       "hardDates": [
@@ -23,14 +49,16 @@
         "deadline:2027-10-01"
       ]
     },
-    "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-workaround-for-windows-domain-login-authentication-issues/": {
+    "MC:8af7ed3a790adfc73bc3991a": {
       "tier": "action",
-      "dateIso": "2026-09-01",
-      "dateKind": "start",
+      "urgency": "normal",
+      "dateIso": null,
+      "dateKind": null,
       "hardDates": []
     },
     "https://ourcloudnetwork.com/microsoft-delays-entra-sms-and-voice-retirement-dates/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-delays-entra-sms-and-voice-retirement-dates": {
       "tier": "action",
+      "urgency": "high",
       "dateIso": "2027-02-01",
       "dateKind": "deadline",
       "hardDates": [
@@ -38,332 +66,525 @@
         "deadline:2027-07-01"
       ]
     },
-    "SH:ab79b62e62b587c57d41ef57": {
+    "MC:81afc9b3d2ae6bf2bc12cb7c": {
       "tier": "action",
-      "dateIso": null,
-      "dateKind": null,
+      "urgency": "high",
+      "dateIso": "2027-02-01",
+      "dateKind": "retirement",
+      "hardDates": [
+        "retirement:2027-02-01",
+        "retirement:2027-07-01"
+      ]
+    },
+    "MC:e12dafd914b3844949bf6149": {
+      "tier": "action",
+      "urgency": "high",
+      "dateIso": "2028-10-11",
+      "dateKind": "deadline",
+      "hardDates": [
+        "deadline:2028-10-11"
+      ]
+    },
+    "MC:1bb6e3aba9d416796f06e86a": {
+      "tier": "action",
+      "urgency": "high",
+      "dateIso": "2026-09-14",
+      "dateKind": "available",
       "hardDates": []
     },
-    "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-emergency-windows-updates-to-fix-rds-failures/": {
+    "MC:e38aeff6e1788168333a44d4": {
       "tier": "action",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
+      "urgency": "high",
+      "dateIso": "2027-10-12",
+      "dateKind": "deadline",
+      "hardDates": [
+        "deadline:2027-10-12"
+      ]
     },
-    "https://patchmypc.com/blog/defender-is-on-intune-says-noncompliant/?utm_term=rss": {
+    "MC:811ced7289bbcf75e35a9339": {
       "tier": "action",
-      "dateIso": null,
-      "dateKind": null,
+      "urgency": "high",
+      "dateIso": "2026-10-01",
+      "dateKind": "start",
+      "hardDates": [
+        "start:2026-10-01"
+      ]
+    },
+    "MC:c23ebb6638dfbdc92c20db94": {
+      "tier": "action",
+      "urgency": "normal",
+      "dateIso": "2026-10-01",
+      "dateKind": "start",
+      "hardDates": [
+        "start:2026-10-01",
+        "start:2027-02-01"
+      ]
+    },
+    "MC:0e11276ec19eea53c53fca6a": {
+      "tier": "action",
+      "urgency": "normal",
+      "dateIso": "2026-09-14",
+      "dateKind": "deadline",
       "hardDates": []
     },
     "https://ourcloudnetwork.com/microsoft-closes-a-data-access-gap-for-graph-api-permission/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-closes-a-data-access-gap-for-graph-api-permission": {
       "tier": "action",
+      "urgency": "high",
       "dateIso": "2026-09-01",
       "dateKind": "start",
       "hardDates": []
     },
-    "https://www.microsoft.com/en-us/security/blog/2026/09/09/passkey-themed-social-engineering-leads-identity-cloud-compromise/": {
+    "MC:d51f5c3b00fac65de10575e8": {
       "tier": "action",
-      "dateIso": null,
-      "dateKind": null,
+      "urgency": "high",
+      "dateIso": "2026-09-01",
+      "dateKind": "start",
       "hardDates": []
     },
     "https://ourcloudnetwork.com/microsoft-entra-expands-passkey-registration-campaigns/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-entra-expands-passkey-registration-campaigns": {
       "tier": "action",
+      "urgency": "normal",
       "dateIso": "2026-09-01",
       "dateKind": "start",
       "hardDates": []
     },
-    "https://www.bleepingcomputer.com/news/security/webinar-which-google-workspace-security-controls-actually-matter/": {
-      "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
+    "MC:7240a2af5c69066dd8a4b475": {
+      "tier": "action",
+      "urgency": "normal",
+      "dateIso": "2026-09-01",
+      "dateKind": "start",
       "hardDates": []
+    },
+    "MC:8c1524cc1eaf25afb9d584e6": {
+      "tier": "action",
+      "urgency": "normal",
+      "dateIso": "2026-09-01",
+      "dateKind": "available",
+      "hardDates": []
+    },
+    "MC:7ff84cd73cc0f006ba154cb5": {
+      "tier": "watch",
+      "urgency": "normal",
+      "dateIso": "2026-10-01",
+      "dateKind": "start",
+      "hardDates": [
+        "start:2026-10-01"
+      ]
+    },
+    "https://www.bleepingcomputer.com/news/security/microsoft-teams-will-let-admins-block-custom-file-extensions/": {
+      "tier": "watch",
+      "urgency": "normal",
+      "dateIso": "2026-11-01",
+      "dateKind": "start",
+      "hardDates": [
+        "start:2026-11-01"
+      ]
     },
     "https://www.bleepingcomputer.com/news/security/microsoft-fixes-bug-behind-defender-antivirus-is-turned-off-alerts/": {
       "tier": "info",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
-    "https://andrewstaylor.com/2026/09/18/intune-newsletter-18th-september-2026/": {
-      "tier": "info",
+    "SH:e3721521e23187799224c9af": {
+      "tier": "watch",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://learn.microsoft.com/en-us/intune/device-configuration/settings-catalog/configure-platform-sso-macos": {
       "tier": "info",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://learn.microsoft.com/en-us/intune/cloud-pki/": {
       "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://learn.microsoft.com/en-us/entra/identity/authentication/concept-sspr-policy": {
-      "tier": "info",
+      "urgency": "low",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://www.microsoft.com/en-us/security/blog/2026/09/17/from-guidance-to-action-security-fundamentals-that-materially-reduce-risk/": {
       "tier": "watch",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://www.microsoft.com/en-us/security/blog/2026/09/17/improving-email-security-outcomes-with-real-world-microsoft-defender-insights/": {
-      "tier": "info",
-      "dateIso": "2026-07-01",
-      "dateKind": "start",
-      "hardDates": []
-    },
-    "https://www.anoopcnair.com/apple-software-update-recommendation-intune/": {
-      "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://www.anoopcnair.com/intune-company-portal-branding-customisation/": {
-      "tier": "watch",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://jannikreinhard.com/five-gates-mcp-tool-production/": {
-      "tier": "info",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://techcommunity.microsoft.com/t5/intune-customer-success/moving-from-windows-autopilot-to-windows-autopilot-device/ba-p/4557269": {
       "tier": "watch",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://www.bleepingcomputer.com/news/microsoft/windows-11-kb5124008-update-breaks-domain-trust-for-some-users/": {
-      "tier": "watch",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/known-issues": {
-      "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq": {
-      "tier": "watch",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/replace-vpn-access-with-identity-driven-security/ba-p/4529309": {
-      "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-install-roadmap": {
-      "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://www.anoopcnair.com/intune-remote-help-enterprise-app-catalog-apps/": {
-      "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://www.anoopcnair.com/control-built-in-administrator-account-lockout/": {
-      "tier": "info",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://learn.microsoft.com/en-us/defender-endpoint/mac-install-with-intune": {
       "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://jannikreinhard.com/copilot-vs-cowork-vs-agents/": {
-      "tier": "info",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://ourcloudnetwork.com/microsoft-adds-basic-permissions-for-groups-in-graph/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-adds-basic-permissions-for-groups-in-graph": {
       "tier": "watch",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
-    "https://www.anoopcnair.com/intune-mma-to-manage-multiple-work-accounts/": {
-      "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://ourcloudnetwork.com/microsoft-outlook-adds-meeting-organiser-transfers/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-outlook-adds-meeting-organiser-transfers": {
+    "MC:e8a2dfc6d20017e228a8450a": {
       "tier": "watch",
-      "dateIso": "2026-09-01",
+      "urgency": "normal",
+      "dateIso": "2026-10-01",
       "dateKind": "start",
-      "hardDates": []
-    },
-    "https://learn.microsoft.com/en-us/entra/id-governance/licensing-fundamentals": {
-      "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
+      "hardDates": [
+        "start:2026-10-01",
+        "start:2027-02-01"
+      ]
     },
     "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/simplify-employee-identity-lifecycle-with-hibob-and-microsoft/ba-p/4554510": {
       "tier": "watch",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
-    "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15": {
-      "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://andrewstaylor.com/2026/09/11/intune-newsletter-11th-september-2026/": {
+    "SH:ab79b62e62b587c57d41ef57": {
       "tier": "watch",
-      "dateIso": "2026-09-01",
-      "dateKind": "deadline",
+      "urgency": "normal",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://patchmypc.com/blog/defender-is-on-intune-says-noncompliant/?utm_term=rss": {
+      "tier": "watch",
+      "urgency": "high",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "MC:b2a77129ece5f0d8dcf26edc": {
+      "tier": "watch",
+      "urgency": "high",
+      "dateIso": "2026-10-01",
+      "dateKind": "available",
       "hardDates": []
     },
     "https://learn.microsoft.com/en-us/defender-endpoint/configure-endpoints-mdm": {
       "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-reference": {
-      "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://learn.microsoft.com/en-us/intune/app-management/ref-protected-apps": {
-      "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://learn.microsoft.com/en-us/microsoft-365/enterprise/desktop-deployment-center-home": {
-      "tier": "watch",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://www.microsoft.com/en-us/security/blog/2026/09/10/protecting-organizations-ai-assisted-executive-impersonation-invoice-fraud/": {
       "tier": "watch",
+      "urgency": "high",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://www.microsoft.com/en-us/security/blog/2026/09/10/detect-and-disrupt-ai-themed-attacks-with-microsoft-defender/": {
       "tier": "watch",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://jannikreinhard.com/azure-api-management-mcp-control-plane/": {
-      "tier": "info",
+      "urgency": "high",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://www.bleepingcomputer.com/news/microsoft/september-windows-server-updates-break-remote-desktop-services/": {
       "tier": "watch",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://www.microsoft.com/en-us/security/blog/2026/09/09/threat-matrix-mapping-threats-across-cloud-web-applications/": {
-      "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/overview": {
-      "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://learn.microsoft.com/en-us/entra/fundamentals/what-is-entra": {
-      "tier": "info",
+      "urgency": "high",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://learn.microsoft.com/en-us/intune/whats-new/in-development": {
       "tier": "watch",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
-    "https://learn.microsoft.com/en-us/entra/verified-id/": {
+    "https://intunestuff.com/2026/09/07/device-association/": {
+      "tier": "watch",
+      "urgency": "normal",
+      "dateIso": "2026-08-27",
+      "dateKind": "available",
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/entra/identity/authentication/concept-sspr-policy": {
       "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://www.anoopcnair.com/apple-software-update-recommendation-intune/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://www.anoopcnair.com/intune-company-portal-branding-customisation/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/known-issues": {
+      "tier": "info",
+      "urgency": "normal",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/replace-vpn-access-with-identity-driven-security/ba-p/4529309": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://www.anoopcnair.com/intune-remote-help-enterprise-app-catalog-apps/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://www.anoopcnair.com/control-built-in-administrator-account-lockout/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://jannikreinhard.com/copilot-vs-cowork-vs-agents/": {
+      "tier": "watch",
+      "urgency": "normal",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://www.anoopcnair.com/intune-mma-to-manage-multiple-work-accounts/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://ourcloudnetwork.com/microsoft-outlook-adds-meeting-organiser-transfers/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-outlook-adds-meeting-organiser-transfers": {
+      "tier": "watch",
+      "urgency": "normal",
+      "dateIso": "2026-09-01",
+      "dateKind": "start",
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/entra/id-governance/licensing-fundamentals": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-reference": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/intune/app-management/ref-protected-apps": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "MC:e41b1f202358ee7058e43879": {
+      "tier": "info",
+      "urgency": "normal",
+      "dateIso": "2026-09-10",
+      "dateKind": "available",
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/microsoft-365/enterprise/desktop-deployment-center-home": {
+      "tier": "watch",
+      "urgency": "normal",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "MC:29062ab7dbccdd70603032dd": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "MC:4d705ea2251ee84686f2dc7d": {
+      "tier": "watch",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://petervanderwoude.nl/post/using-multiple-managed-accounts-with-app-protection-policies/": {
       "tier": "watch",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
-      "hardDates": []
-    },
-    "https://intunestuff.com/2026/09/07/device-association/": {
-      "tier": "info",
-      "dateIso": "2026-08-27",
-      "dateKind": "available",
       "hardDates": []
     },
     "https://scloud.work/en/dynamic-autopilot-group-queries/": {
       "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://patchmypc.com/blog/autopilot-device-preparation-vs-device-association-vs-autopilot/?utm_term=rss": {
-      "tier": "info",
+      "urgency": "low",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://patchmypc.com/blog/autopilot-device-preparation-vs-device-association-vs-autopilot/": {
       "tier": "info",
+      "urgency": "low",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
-    "https://msendpointmgr.com/2026/09/05/1phonemirror-levels-up-webcam-stats-better-screenshots-and-signed/": {
+    "https://patchmypc.com/blog/autopilot-device-preparation-vs-device-association-vs-autopilot/?utm_term=rss": {
       "tier": "info",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://www.microsoft.com/en-us/security/blog/2026/09/04/secure-edge-ai-customer-owned-environments/": {
-      "tier": "info",
+      "urgency": "low",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://www.systemcenterdudes.com/how-to-configure-intune-remote-help-step-by-step-guide/": {
       "tier": "info",
+      "urgency": "normal",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://andrewstaylor.com/2026/09/18/intune-newsletter-18th-september-2026/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://www.microsoft.com/en-us/security/blog/2026/09/17/improving-email-security-outcomes-with-real-world-microsoft-defender-insights/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": "2026-07-01",
+      "dateKind": "start",
+      "hardDates": []
+    },
+    "https://jannikreinhard.com/five-gates-mcp-tool-production/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://andrewstaylor.com/2026/09/11/intune-newsletter-11th-september-2026/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": "2026-09-01",
+      "dateKind": "deadline",
+      "hardDates": []
+    },
+    "https://jannikreinhard.com/azure-api-management-mcp-control-plane/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://www.microsoft.com/en-us/security/blog/2026/09/09/threat-matrix-mapping-threats-across-cloud-web-applications/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "MC:8d843c309dc337e23364b67f": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/entra/fundamentals/what-is-entra": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/entra/verified-id/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://msendpointmgr.com/2026/09/05/1phonemirror-levels-up-webcam-stats-better-screenshots-and-signed/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://www.microsoft.com/en-us/security/blog/2026/09/04/secure-edge-ai-customer-owned-environments/": {
+      "tier": "info",
+      "urgency": "normal",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://www.bleepingcomputer.com/news/security/secure-enterprise-sharing-with-access-reviews-for-microsoft-365/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://www.bleepingcomputer.com/news/security/webinar-which-google-workspace-security-controls-actually-matter/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/public-preview-of-self-service-onboarding-for-new-microsoft/ba-p/4557199": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/overview": {
+      "tier": "info",
+      "urgency": "low",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
@@ -395,7 +616,7 @@
     "IntuneWeekly": "OK",
     "OpenIntuneBaseline Releases": "OK",
     "Artikelen verrijkt": "OK",
-    "Message Center": "OVERGESLAGEN",
+    "Message Center": "OK",
     "Microsoft 365 Service Health": "OK"
   }
 }
