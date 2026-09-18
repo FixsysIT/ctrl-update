@@ -304,7 +304,9 @@ try {
     if ($pendingCount -ne 1) { Add-Failure "Reviewbatchfixture verwachtte 1 item maar vond $pendingCount" }
 
     [PSCustomObject]@{ items = @(
-        (New-TestReview -Id 'fixture-2' -Hash 'hash-2')
+        # Simuleert een model dat pipeline-metadata verkeerd terugkopieert. De
+        # merge moet de bekende hash herstellen zonder onbekende ids toe te laten.
+        (New-TestReview -Id 'fixture-2' -Hash '0')
     ) } | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $testResultPath -Encoding UTF8
 
     & (Join-Path $PSScriptRoot 'Merge-CtrlUpdateReview.ps1') `
@@ -313,6 +315,9 @@ try {
 
     $mergedFixture = Get-Content -LiteralPath $testCachePath -Raw -Encoding UTF8 | ConvertFrom-Json
     if (@($mergedFixture.items).Count -ne 2) { Add-Failure 'Reviewmergefixture bevat niet exact twee items' }
+    elseif ([string]@($mergedFixture.items | Where-Object id -eq 'fixture-2')[0].contentHash -ne 'hash-2') {
+        Add-Failure 'Reviewmerge herstelt pipeline-metadata niet deterministisch'
+    }
     elseif ($failures.Count -eq 0) { Write-Pass 'Cloudreviewselectie en atomaire cachemerge geldig' }
 }
 catch {
