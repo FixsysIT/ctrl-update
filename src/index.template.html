@@ -155,6 +155,7 @@
   }
   .tool:hover { border-color: var(--border-sharp); color: var(--text); }
   .tool.icon-only { width: 28px; padding: 0; justify-content: center; }
+  a.tool { text-decoration: none; }
 
   /* ===================== ochtendoverzicht ===================== */
 
@@ -589,6 +590,8 @@
     <div class="mast-actions">
       <div class="toolbar">
         <button class="tool filters-toggle" id="filters-toggle">Filters</button>
+        <button class="tool" id="search-btn" data-i18n="search">Zoeken</button>
+        <a class="tool" id="service-health-link" href="https://admin.cloud.microsoft/#/servicehealth" target="_blank" rel="noopener" data-i18n="serviceHealth">Service Health</a>
         <button class="tool" id="settings-btn" data-i18n="preferences">Voorkeuren</button>
         <button class="tool" id="language" title="Taal wijzigen" aria-label="Taal wijzigen">EN</button>
         <button class="tool icon-only" id="theme" title="Licht of donker" aria-label="Licht of donker">&#9680;</button>
@@ -771,7 +774,7 @@
   var language = store(LANG_KEY, 'nl') === 'en' ? 'en' : 'nl';
 
   var EN = {
-    preferences: 'Preferences', toReview: 'To review',
+    preferences: 'Preferences', search: 'Search', serviceHealth: 'Service Health', toReview: 'To review',
     reviewedSignals: 'content-reviewed signals', followup: 'Follow-up needed', confirmedByYou: 'confirmed by you',
     newSignals: 'New signals', sinceLastRun: 'since the previous run', sources: 'Sources',
     changeCalendar: 'Change calendar', urgency: 'Urgency', category: 'Category', source: 'Source',
@@ -1236,6 +1239,10 @@
   }
 
   var searchBox = document.getElementById('q');
+  document.getElementById('search-btn').addEventListener('click', function () {
+    searchBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    window.setTimeout(function () { searchBox.focus(); searchBox.select(); }, 220);
+  });
   searchBox.addEventListener('input', function (e) {
     filters.q = e.target.value.toLowerCase().trim(); shownLimit = PAGE; render();
   });

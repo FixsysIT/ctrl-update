@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-    Verzamelt Intune/Entra nieuws uit RSS/Atom feeds en (optioneel) het Microsoft 365
-    Message Center, scoort elk item op relevantie, haalt er de belangrijke datums uit
-    en schrijft een self-contained HTML dashboard.
+    Verzamelt Intune/Entra nieuws uit RSS/Atom feeds en optioneel tenantgebonden
+    Microsoft 365-signalen, scoort elk item op relevantie, haalt er de belangrijke
+    datums uit en schrijft een self-contained HTML-dashboard.
 
 .DESCRIPTION
     Feeds, categorieen, keywords en drempelwaarden staan in config/sources.json.
@@ -20,6 +20,11 @@
 
 .PARAMETER SkipMessageCenter
     Sla het Message Center over, ook als het in sources.json aanstaat.
+
+.PARAMETER GraphAccessToken
+    Kortlevend Microsoft Graph-token. De cloudrun gebruikt dit uitsluitend voor
+    Microsoft 365 Service Health met ServiceHealth.Read.All. Het token wordt nooit
+    naar de publicatie, state of logs geschreven.
 
 .PARAMETER Open
     Open het dashboard in de standaardbrowser na afloop.
@@ -41,6 +46,7 @@ param(
     [switch] $UseReviewCacheOnly,
     [switch] $RequireAgentReview,
     [switch] $Open,
+    [string] $GraphAccessToken = $env:CTRL_UPDATE_GRAPH_TOKEN,
 
     # Haalt een enkele pagina op, laat zien welke datums eruit komen en stopt.
     # Bedoeld om de datumherkenning te testen zonder een hele run te draaien.
@@ -1186,6 +1192,94 @@ elseif ($config.messageCenter.enabled -and $SkipMessageCenter) {
     })
 }
 
+# Service Health bevat tenantgebonden details. CTRL UPDATE publiceert bewust
+# alleen een generiek signaal (dienst, classificatie en status); issue-id,
+# impacttekst en updates blijven uitsluitend in Microsoft 365 Admin Center.
+$serviceHealthConfig = $config.serviceHealth
+if ($serviceHealthConfig.enabled) {
+    $serviceHealthSource = 'Microsoft 365 Service Health'
+    if ([string]::IsNullOrWhiteSpace($GraphAccessToken)) {
+        $feedStatus.Add([PSCustomObject]@{
+            Source = $serviceHealthSource; Status = 'OVERGESLAGEN'; Items = 0
+            Detail = 'Geen kortlevend Graph-token beschikbaar'
+        })
+    }
+    else {
+        try {
+            $headers = @{ Authorization = "Bearer $GraphAccessToken"; Accept = 'application/json' }
+            $uri = 'https://graph.microsoft.com/v1.0/admin/serviceAnnouncement/issues?$filter=isResolved%20eq%20false'
+            $includedClassifications = @($serviceHealthConfig.includeClassifications | ForEach-Object { ([string]$_).ToLowerInvariant() })
+            $serviceHealthCount = 0
+
+            do {
+                $page = Invoke-RestMethod -Method Get -Uri $uri -Headers $headers -TimeoutSec ([int]$settings.timeoutSec)
+                foreach ($issue in @($page.value)) {
+                    if ([bool]$issue.isResolved) { continue }
+                    $classification = ([string]$issue.classification).ToLowerInvariant()
+                    if ($includedClassifications.Count -gt 0 -and $classification -notin $includedClassifications) { continue }
+
+                    $service = if ([string]::IsNullOrWhiteSpace([string]$issue.service)) { 'Microsoft 365' } else { [string]$issue.service }
+                    $status = if ([string]::IsNullOrWhiteSpace([string]$issue.status)) { 'active' } else { [string]$issue.status }
+                    $published = ConvertTo-DateTimeSafe $issue.lastModifiedDateTime
+                    if (-not $published) { $published = ConvertTo-DateTimeSafe $issue.startDateTime }
+                    if (-not $published) { $published = (Get-Date).ToUniversalTime() }
+
+                    # Alleen de hash verlaat de runner. Het echte Microsoft issue-id
+                    # wordt niet in de publieke repository of HTML opgenomen.
+                    $publicId = (Get-TextHash "service-health:$([string]$issue.id)").Substring(0, 24)
+                    $title = "Active Microsoft 365 incident for $service"
+                    $summary = "Microsoft reports an active service incident for $service that may affect this tenant. Open Service Health for current impact and updates."
+                    $actionText = 'Controleer Microsoft 365 Service Health voordat je lokaal gaat troubleshooten of wijzigingen uitvoert.'
+                    $score = [int]$settings.actionThreshold + 5
+
+                    $items.Add([PSCustomObject]@{
+                        Id         = "SH:$publicId"
+                        Title      = $title
+                        Link       = [string]$serviceHealthConfig.link
+                        Source     = $serviceHealthSource
+                        Tag        = 'Tenant'
+                        Published  = $published
+                        Summary    = $summary
+                        Score      = $score
+                        ScoreBreakdown = @([PSCustomObject]@{
+                            label = 'Microsoft 365 Service Health: actief incident'; points = $score; location = 'tenantmetadata'
+                        })
+                        Tier       = 'action'
+                        Demote     = $null
+                        ActionCtx  = @([PSCustomObject]@{ text = $actionText })
+                        Keywords   = @('service health', 'incident', $status)
+                        Categories = @(Get-Categories -Title $service -Text "$service $status")
+                        NativeTags = @($service, $classification, $status)
+                        KeyDate    = $null
+                        AllDates   = @()
+                        Kind       = 'servicehealth'
+                        Channel    = 'tenant'
+                        FullText   = "$title. $summary Status: $status."
+                        Enriched   = $true
+                        Boost      = 0
+                        Deadline   = $null
+                        IsNew      = -not $state.ContainsKey("SH:$publicId")
+                    })
+                    $serviceHealthCount++
+                }
+                $uri = $page.'@odata.nextLink'
+            } while ($uri)
+
+            $feedStatus.Add([PSCustomObject]@{
+                Source = $serviceHealthSource; Status = 'OK'; Items = $serviceHealthCount
+                Detail = $(if ($serviceHealthCount) { 'Actieve incidenten; details vereisen Microsoft 365-aanmelding' } else { 'Geen actieve incidenten' })
+            })
+        }
+        catch {
+            Write-Warning "Service Health: $($_.Exception.Message)"
+            $feedStatus.Add([PSCustomObject]@{
+                Source = $serviceHealthSource; Status = 'FOUT'; Items = 0
+                Detail = 'Service Health kon niet veilig worden opgehaald'
+            })
+        }
+    }
+}
+
 }
 
 #endregion
@@ -1244,6 +1338,7 @@ if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -g
                 contentHash = $_.ContentHash
                 title = $_.Title
                 source = $_.Source
+                kind = $_.Kind
                 channel = $_.Channel
                 published = $_.Published.ToString('yyyy-MM-dd')
                 text = $_.FullText
@@ -1457,7 +1552,8 @@ $payload = [PSCustomObject]@{
                 channel = $(if ($_.tag -eq 'Microsoft') { 'official' } elseif ($_.tag -eq 'News') { 'news' } else { 'community' })
             }
         }) +
-        @([PSCustomObject]@{ name = 'Message Center'; channel = 'tenant' })
+        @([PSCustomObject]@{ name = 'Message Center'; channel = 'tenant' }) +
+        @([PSCustomObject]@{ name = 'Microsoft 365 Service Health'; channel = 'tenant' })
     )
     items      = @($sorted | ForEach-Object {
         [PSCustomObject]@{

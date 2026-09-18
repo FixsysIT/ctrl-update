@@ -32,7 +32,8 @@ $requiredFiles = @(
     '.github/workflows/pages.yml',
     '.github/workflows/quality.yml',
     '.github/workflows/refresh.yml',
-    '.github/codex/prompts/review-items.md'
+    '.github/codex/prompts/review-items.md',
+    'docs/service-health.md'
 )
 
 foreach ($relativePath in $requiredFiles) {
@@ -137,7 +138,7 @@ if ($published -notmatch '<!doctype html>') { Add-Failure 'dist/index.html is ge
 if ($failures.Count -eq 0) { Write-Pass 'Publicatie-output compleet' }
 
 $refreshWorkflow = Get-Content -LiteralPath (Join-Path $projectRoot '.github/workflows/refresh.yml') -Raw -Encoding UTF8
-foreach ($requiredFragment in @('timezone: "Europe/Amsterdam"', '30 6 * * *', '0 14 * * *', 'teams_test:', '-TestNotification', 'openai/codex-action@v1', 'OPENAI_API_KEY', 'TEAMS_WEBHOOK_URL', 'Send-CtrlUpdateTeamsNotification.ps1', 'data/notification-state.json', 'model: gpt-5.6-terra', '-UsePreparedSnapshot', '-RequireAgentReview', 'actions/upload-pages-artifact@v5', 'actions/deploy-pages@v5')) {
+foreach ($requiredFragment in @('timezone: "Europe/Amsterdam"', '30 6 * * *', '0 14 * * *', 'teams_test:', '-TestNotification', 'openai/codex-action@v1', 'OPENAI_API_KEY', 'TEAMS_WEBHOOK_URL', 'Send-CtrlUpdateTeamsNotification.ps1', 'data/notification-state.json', 'model: gpt-5.6-terra', '-UsePreparedSnapshot', '-RequireAgentReview', 'actions/upload-pages-artifact@v5', 'actions/deploy-pages@v5', 'azure/login@v3', 'CTRL_UPDATE_ENTRA_CLIENT_ID', 'CTRL_UPDATE_ENTRA_TENANT_ID', 'ServiceHealth.Read.All')) {
     if ($refreshWorkflow -notmatch [regex]::Escape($requiredFragment)) {
         Add-Failure "Refresh-workflow mist verplichte configuratie: $requiredFragment"
     }
@@ -153,7 +154,7 @@ foreach ($removedUi in @('id="density"', 'id="help-btn"', 'id="metric-health"', 
         Add-Failure "Verwijderde of dubbele UI is teruggekeerd: $removedUi"
     }
 }
-foreach ($requiredUi in @('id="source-status"', 'id="feeds-body"', 'id="fresh-state"')) {
+foreach ($requiredUi in @('id="source-status"', 'id="feeds-body"', 'id="fresh-state"', 'id="search-btn"', 'id="service-health-link"', 'id="q"')) {
     if ($template -notmatch [regex]::Escape($requiredUi)) {
         Add-Failure "Centrale update- en bronstatus mist: $requiredUi"
     }
@@ -181,9 +182,25 @@ if ($updater -notmatch '\$UsePreparedSnapshot' -or
     $updater -notmatch 'Publicatiemomentopname voorbereid') {
     Add-Failure 'Review en publicatie delen geen vaste bronmomentopname'
 }
+if (-not $config.serviceHealth.enabled -or
+    [string]$config.serviceHealth.link -ne 'https://admin.cloud.microsoft/#/servicehealth' -or
+    'incident' -notin @($config.serviceHealth.includeClassifications) -or
+    [string]$config.serviceHealth.privacyMode -ne 'generic' -or
+    $updater -notmatch 'admin/serviceAnnouncement/issues' -or
+    $updater -notmatch 'Service Health bevat tenantgebonden details' -or
+    $updater -match 'impactDescription') {
+    Add-Failure 'Service Health is niet minimaal, incidentgericht en privacyveilig geconfigureerd'
+}
+if ($template -notmatch 'searchBox\.scrollIntoView' -or $template -notmatch 'searchBox\.focus\(\)') {
+    Add-Failure 'De zichtbare zoekknop activeert de bestaande zoekfunctie niet'
+}
 if ($failures.Count -eq 0) { Write-Pass 'Cloudrefresh bevat lokale planning, veilige Codex-action, reviewgate en actualiteitsstatus' }
 
 $notificationScript = Join-Path $projectRoot 'scripts/Send-CtrlUpdateTeamsNotification.ps1'
+$notificationSource = Get-Content -LiteralPath $notificationScript -Raw -Encoding UTF8
+if ($notificationSource -notmatch "item\.kind\s*-eq\s*'servicehealth'") {
+    Add-Failure 'Actieve Service Health-incidenten worden niet als kritieke Teams-waarschuwing behandeld'
+}
 $notificationStatePath = Join-Path $projectRoot 'data/notification-state.json'
 $notificationStateBefore = Get-Content -LiteralPath $notificationStatePath -Raw -Encoding UTF8
 $notificationState = $notificationStateBefore | ConvertFrom-Json -AsHashtable

@@ -29,6 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TEAMS_WEBHOOK_CONFIGURED: ${{ secrets.TEAMS_WEBHOOK_URL != '' }}
+      SERVICE_HEALTH_CONFIGURED: ${{ vars.CTRL_UPDATE_ENTRA_CLIENT_ID != '' && vars.CTRL_UPDATE_ENTRA_TENANT_ID != '' }}
     timeout-minutes: 45
 
     steps:
@@ -49,6 +50,35 @@ jobs:
           if ($env:TEAMS_WEBHOOK_CONFIGURED -ne 'true') {
             Write-Warning 'Repository-secret TEAMS_WEBHOOK_URL ontbreekt. De refresh gaat door zonder Teams-meldingen.'
           }
+
+      - name: Aanmelden voor Microsoft 365 Service Health
+        if: ${{ env.SERVICE_HEALTH_CONFIGURED == 'true' }}
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.CTRL_UPDATE_ENTRA_CLIENT_ID }}
+          tenant-id: ${{ vars.CTRL_UPDATE_ENTRA_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: Kortlevend Graph-token ophalen
+        if: ${{ env.SERVICE_HEALTH_CONFIGURED == 'true' }}
+        shell: pwsh
+        run: |
+          $token = az account get-access-token --resource-type ms-graph --query accessToken -o tsv
+          if ([string]::IsNullOrWhiteSpace($token)) { throw 'Microsoft Graph-token ontbreekt.' }
+          Write-Output "::add-mask::$token"
+
+          $payload = $token.Split('.')[1].Replace('-', '+').Replace('_', '/')
+          while ($payload.Length % 4) { $payload += '=' }
+          $claims = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($payload)) | ConvertFrom-Json
+          $roles = @($claims.roles | ForEach-Object { [string]$_ })
+          if ('ServiceHealth.Read.All' -notin $roles) {
+            throw 'De Entra-app mist de applicatiepermissie ServiceHealth.Read.All.'
+          }
+          $excessiveRoles = @($roles | Where-Object { $_ -ne 'ServiceHealth.Read.All' })
+          if ($excessiveRoles.Count) {
+            throw "De Service Health-app heeft te ruime Graph-rechten: $($excessiveRoles -join ', ')."
+          }
+          "CTRL_UPDATE_GRAPH_TOKEN=$token" >> $env:GITHUB_ENV
 
       - name: Bronnen ophalen en reviewinput voorbereiden
         shell: pwsh

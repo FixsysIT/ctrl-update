@@ -253,6 +253,13 @@
       "severityHigh": 3,
       "severityCritical": 5
     }
+  },
+
+  "serviceHealth": {
+    "enabled": true,
+    "link": "https://admin.cloud.microsoft/#/servicehealth",
+    "includeClassifications": [ "incident" ],
+    "privacyMode": "generic"
   }
 }
 

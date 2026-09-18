@@ -9,7 +9,7 @@ CTRL UPDATE bundelt officiële Microsoft-updates, Message Center-berichten, rele
 
 ## Wat de radar doet
 
-- haalt RSS- en Atom-bronnen op en kan optioneel Microsoft 365 Message Center meenemen;
+- haalt RSS- en Atom-bronnen op en kan optioneel Microsoft 365 Service Health en Message Center meenemen;
 - ontdubbelt berichten en groepeert officiële updates, nieuws, gidsen en weekoverzichten;
 - scoort urgentie met uitlegbare regels;
 - laat Codex titels, samenvattingen, categorieën en actiestatus inhoudelijk controleren;
@@ -94,7 +94,9 @@ OPENAI_API_KEY
 TEAMS_WEBHOOK_URL  # optioneel; vereist voor Teams-meldingen
 ```
 
-De OpenAI-sleutel wordt alleen rechtstreeks aan `openai/codex-action` aangeboden. De Teams-webhook wordt alleen aan de meldingsstap aangeboden. Geen van beide secrets wordt in een bestand of in de repository opgeslagen. Een ontbrekende of ongeldige Teams-koppeling blokkeert de nieuwsactualisatie niet. Message Center is niet onderdeel van deze publieke cloudrun omdat daarvoor tenantgebonden Microsoft Graph-authenticatie en afzonderlijk beheer van least-privilege credentials nodig zijn.
+De OpenAI-sleutel wordt alleen rechtstreeks aan `openai/codex-action` aangeboden. De Teams-webhook wordt alleen aan de meldingsstap aangeboden. Geen van beide secrets wordt in een bestand of in de repository opgeslagen. Een ontbrekende of ongeldige Teams-koppeling blokkeert de nieuwsactualisatie niet.
+
+Microsoft 365 Service Health kan zonder client secret via GitHub OIDC worden aangesloten. Hiervoor gebruikt een aparte single-tenant Entra-app uitsluitend de application permission `ServiceHealth.Read.All`; de publieke site ontvangt alleen een generiek incidentsignaal en nooit issue-id's of ruwe tenantdetails. De inrichting, validatie en rollback staan in [Microsoft 365 Service Health](docs/service-health.md). Message Center blijft een afzonderlijke optionele capability met `ServiceMessage.Read.All` en is niet onderdeel van de cloudrun.
 
 Een beheerder kan bij een handmatige workflowrun `teams_test` inschakelen. Na alle kwaliteitscontroles verstuurt die run precies één herkenbare testkaart en slaat de normale inhoudsmelding over. Geplande runs gebruiken deze testmodus nooit.
 

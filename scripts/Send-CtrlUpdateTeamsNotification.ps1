@@ -398,7 +398,8 @@ foreach ($item in @($payload.items)) {
     # kritiek. Losse trefwoorden diep in een artikel mogen een gewone lifecycle-
     # actie of beperkte storing niet onterecht opschalen.
     $criticalText = "$([string]$item.originalTitle) $([string]$item.title) $([string]$item.summary)"
-    $isCriticalIncident = @($criticalIncidentPatterns | Where-Object { $criticalText -match $_ }).Count -gt 0
+    $isCriticalIncident = [string]$item.kind -eq 'servicehealth' -or
+        @($criticalIncidentPatterns | Where-Object { $criticalText -match $_ }).Count -gt 0
 
     $eventType = $null
     if (-not $previous) { $eventType = $(if ($isCriticalIncident) { 'Kritieke waarschuwing' } else { 'Nieuwe actie' }) }
