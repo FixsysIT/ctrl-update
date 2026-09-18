@@ -23,7 +23,9 @@ param(
     [Parameter(Mandatory, ParameterSetName = 'Failure')]
     [string] $FailureMessage,
 
-    [Parameter(ParameterSetName = 'Failure')]
+    [Parameter(Mandatory, ParameterSetName = 'Test')]
+    [switch] $TestNotification,
+
     [string] $RunUrl,
 
     [switch] $PreviewOnly,
@@ -178,6 +180,29 @@ function Get-ShortText {
     param([string] $Text, [int] $Length = 220)
     if ([string]::IsNullOrWhiteSpace($Text) -or $Text.Length -le $Length) { return $Text }
     return $Text.Substring(0, $Length - 1).TrimEnd() + '…'
+}
+
+if ($PSCmdlet.ParameterSetName -eq 'Test') {
+    $body = @(
+        New-TextBlock -Text 'CTRL UPDATE' -Weight Bolder -Size Medium
+        New-TextBlock -Text 'Teams-koppeling actief' -Weight Bolder -Color Good -Size Large
+        New-TextBlock -Text 'Deze gecontroleerde testmelding is door GitHub Actions verzonden.'
+        New-TextBlock -Text 'Voortaan meldt dit kanaal alleen nieuwe Actie-items, gewijzigde actiedatums, nieuwe bronstoringen en mislukte refreshes.' -Color Default
+        New-TextBlock -Text 'TESTMELDING · geen beheeractie vereist' -Weight Bolder -Color Accent -Spacing Medium
+    )
+    $actions = @(
+        [ordered]@{ type = 'Action.OpenUrl'; title = 'CTRL UPDATE openen'; url = $SiteUrl }
+    )
+    if ($RunUrl) {
+        $actions += [ordered]@{ type = 'Action.OpenUrl'; title = 'GitHub-run bekijken'; url = $RunUrl }
+    }
+    $testEnvelope = New-TeamsEnvelope -Body $body -Actions $actions
+    if ($PreviewOnly) {
+        $testEnvelope | ConvertTo-Json -Depth 20
+        return
+    }
+    Send-TeamsEnvelope -Envelope $testEnvelope -Url $WebhookUrl
+    return
 }
 
 if ($PSCmdlet.ParameterSetName -eq 'Failure') {

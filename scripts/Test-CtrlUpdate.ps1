@@ -117,7 +117,7 @@ if ($published -notmatch '<!doctype html>') { Add-Failure 'dist/index.html is ge
 if ($failures.Count -eq 0) { Write-Pass 'Publicatie-output compleet' }
 
 $refreshWorkflow = Get-Content -LiteralPath (Join-Path $projectRoot '.github/workflows/refresh.yml') -Raw -Encoding UTF8
-foreach ($requiredFragment in @('timezone: "Europe/Amsterdam"', '30 6 * * *', '0 14 * * *', 'openai/codex-action@v1', 'OPENAI_API_KEY', 'TEAMS_WEBHOOK_URL', 'Send-CtrlUpdateTeamsNotification.ps1', 'data/notification-state.json', 'model: gpt-5.6-terra', '-RequireAgentReview', 'actions/upload-pages-artifact@v5', 'actions/deploy-pages@v5')) {
+foreach ($requiredFragment in @('timezone: "Europe/Amsterdam"', '30 6 * * *', '0 14 * * *', 'teams_test:', '-TestNotification', 'openai/codex-action@v1', 'OPENAI_API_KEY', 'TEAMS_WEBHOOK_URL', 'Send-CtrlUpdateTeamsNotification.ps1', 'data/notification-state.json', 'model: gpt-5.6-terra', '-RequireAgentReview', 'actions/upload-pages-artifact@v5', 'actions/deploy-pages@v5')) {
     if ($refreshWorkflow -notmatch [regex]::Escape($requiredFragment)) {
         Add-Failure "Refresh-workflow mist verplichte configuratie: $requiredFragment"
     }
@@ -161,6 +161,19 @@ $notificationStateBefore = Get-Content -LiteralPath $notificationStatePath -Raw 
 $notificationState = $notificationStateBefore | ConvertFrom-Json -AsHashtable
 if ([int]$notificationState.version -ne 1 -or $notificationState.items.Count -eq 0 -or $notificationState.feeds.Count -eq 0) {
     Add-Failure 'Teams-nulmeting bevat geen geldige item- en bronstatus'
+}
+
+$testPreviewText = & $notificationScript -TestNotification -RunUrl 'https://github.com/FixsysIT/ctrl-update/actions/runs/1' -PreviewOnly | Out-String
+try { $testPreview = $testPreviewText | ConvertFrom-Json -AsHashtable }
+catch { $testPreview = $null; Add-Failure "Teams-testpreview is geen geldige Adaptive Card: $($_.Exception.Message)" }
+if ($testPreview) {
+    $testCardText = @($testPreview.attachments[0].content.body | ForEach-Object { [string]$_.text }) -join "`n"
+    $testActions = @($testPreview.attachments[0].content.actions)
+    if ($testCardText -notmatch 'Teams-koppeling actief' -or
+        $testCardText -notmatch 'geen beheeractie vereist' -or
+        $testActions.Count -ne 2) {
+        Add-Failure 'Teams-testpreview bevat niet de verwachte status en acties'
+    }
 }
 
 $notificationTestDirectory = Join-Path $projectRoot '.tmp/test-teams-notification'

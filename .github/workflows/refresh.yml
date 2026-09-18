@@ -7,6 +7,12 @@ on:
     - cron: "0 14 * * *"
       timezone: "Europe/Amsterdam"
   workflow_dispatch:
+    inputs:
+      teams_test:
+        description: "Stuur één gecontroleerde Teams-testmelding"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -82,8 +88,18 @@ jobs:
         shell: pwsh
         run: ./scripts/Test-CtrlUpdate.ps1
 
+      - name: Teams-koppeling testen
+        if: ${{ env.TEAMS_WEBHOOK_CONFIGURED == 'true' && inputs.teams_test == true }}
+        shell: pwsh
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        run: >-
+          ./scripts/Send-CtrlUpdateTeamsNotification.ps1
+          -TestNotification
+          -RunUrl '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+
       - name: Teams melden bij nieuwe acties of problemen
-        if: ${{ env.TEAMS_WEBHOOK_CONFIGURED == 'true' }}
+        if: ${{ env.TEAMS_WEBHOOK_CONFIGURED == 'true' && inputs.teams_test != true }}
         continue-on-error: true
         shell: pwsh
         env:

@@ -94,6 +94,8 @@ TEAMS_WEBHOOK_URL  # optioneel; vereist voor Teams-meldingen
 
 De OpenAI-sleutel wordt alleen rechtstreeks aan `openai/codex-action` aangeboden. De Teams-webhook wordt alleen aan de meldingsstap aangeboden. Geen van beide secrets wordt in een bestand of in de repository opgeslagen. Een ontbrekende of ongeldige Teams-koppeling blokkeert de nieuwsactualisatie niet. Message Center is niet onderdeel van deze publieke cloudrun omdat daarvoor tenantgebonden Microsoft Graph-authenticatie en afzonderlijk beheer van least-privilege credentials nodig zijn.
 
+Een beheerder kan bij een handmatige workflowrun `teams_test` inschakelen. Na alle kwaliteitscontroles verstuurt die run precies één herkenbare testkaart en slaat de normale inhoudsmelding over. Geplande runs gebruiken deze testmodus nooit.
+
 ## Valideren
 
 ```powershell
