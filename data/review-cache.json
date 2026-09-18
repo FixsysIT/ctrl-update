@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-18T08:05:32.5001675Z",
+  "generated": "2026-09-18T08:26:10.6492924Z",
   "items": [
     {
       "id": "https://andrewstaylor.com/2026/09/04/intune-newsletter-4th-september-2026/",
@@ -244,45 +244,39 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/overview",
-      "contentHash": "09b6c319542788db36bfc1bca3b256fd4df25a0ae50de75e11b51d2f6682e9a2",
-      "titleNl": "Wat is er nieuw in .NET 11",
-      "summaryNl": ".NET 11 RC 1 introduceert wijzigingen in de runtime, libraries, SDK en ontwikkelplatforms. De algemene beschikbaarheid wordt verwacht in november 2026.",
-      "whyNl": [
-        "De minimale hardwarevereisten voor x86/x64 en Arm64 worden verhoogd.",
-        "Algemene beschikbaarheid wordt verwacht in november 2026."
-      ],
-      "titleEn": "What's new in .NET 11",
-      "summaryEn": ".NET 11 RC 1 introduces changes to the runtime, libraries, SDK, and development platforms. General availability is expected in November 2026.",
-      "whyEn": [
-        "Minimum hardware requirements for x86/x64 and Arm64 are increasing.",
-        "General availability is expected in November 2026."
-      ],
-      "categories": [
-        "Apps & Packaging"
-      ],
-      "kind": "nieuws",
-      "tier": "info",
-      "confidence": 0.94,
-      "reasonNl": "Dit is een overzicht van een release candidate zonder verplichte beheeractie of harde migratiedeadline.",
-      "reasonEn": "This is an overview of a release candidate without a required administrative action or firm migration deadline."
-    },
-    {
-      "id": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15",
-      "contentHash": "fbaa0a71ef898dad13948935c3d54ac3ff859b49a1b54eaf5e359a77412b7cb6",
-      "titleNl": "Wat is er nieuw in C# 15",
-      "summaryNl": "C# 15 is als preview beschikbaar via de .NET 11 preview SDK en Visual Studio 2026 Insiders. De preview bevat onder meer union types, closed hierarchies, extension indexers en wijzigingen voor geheugenveiligheid.",
+      "contentHash": "fb26d9ff75bd000e18abc46dad2b7544120417bcda5b3b8675f81a0e3dc486fb",
+      "titleNl": "Wat is nieuw in .NET 11",
+      "summaryNl": "Overzicht van nieuwe functies in de .NET 11-runtime, bibliotheken en SDK, met verwijzingen naar andere onderdelen zoals ASP.NET Core.",
       "whyNl": [],
-      "titleEn": "What's new in C# 15",
-      "summaryEn": "C# 15 is available in preview through the .NET 11 preview SDK and Visual Studio 2026 Insiders. The preview includes union types, closed hierarchies, extension indexers, and memory-safety changes.",
+      "titleEn": "What's new in .NET 11",
+      "summaryEn": "Overview of new features in the .NET 11 runtime, libraries, and SDK, with links to other areas such as ASP.NET Core.",
       "whyEn": [],
       "categories": [
         "Scripting & Graph"
       ],
-      "kind": "nieuws",
+      "kind": "naslag",
       "tier": "info",
-      "confidence": 0.96,
-      "reasonNl": "Het betreft ontwikkelaarsinformatie over previewfuncties, zonder concrete beheeractie of deadline.",
-      "reasonEn": "This is developer information about preview features, with no concrete administrative action or deadline."
+      "confidence": 0.93,
+      "reasonNl": "Dit is een algemeen overzicht van productfuncties zonder concrete beheerimpact of actie.",
+      "reasonEn": "This is a general product-feature overview with no concrete administrative impact or action."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15",
+      "contentHash": "de0830ec88995ab68f734357980005381b0b99b7e0bf0fef7519774832e10bdf",
+      "titleNl": "Wat is nieuw in C# 15",
+      "summaryNl": "Overzicht van nieuwe taalfeatures in C# 15, waaronder union types, de closed-modifier, extension indexers en versoepelingen voor pointers.",
+      "whyNl": [],
+      "titleEn": "What's new in C# 15",
+      "summaryEn": "Overview of new language features in C# 15, including union types, the closed modifier, extension indexers, and pointer relaxations.",
+      "whyEn": [],
+      "categories": [
+        "Scripting & Graph"
+      ],
+      "kind": "naslag",
+      "tier": "info",
+      "confidence": 0.94,
+      "reasonNl": "Dit is referentiedocumentatie over programmeertaalfeatures zonder concrete beheeractie.",
+      "reasonEn": "This is reference documentation about programming-language features without a concrete administrative action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/fundamentals/what-is-entra",
@@ -352,6 +346,32 @@
       "confidence": 0.99,
       "reasonNl": "Het artikel documenteert bestaand gedrag en bevat geen verplichte wijziging of deadline.",
       "reasonEn": "The article documents existing behavior and contains no mandatory change or deadline."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-install-roadmap",
+      "contentHash": "d40143165c78e1e87b4e8538eff11dbe1f124d62113d2a478a2760c8a37055dc",
+      "titleNl": "Installatieroadmap voor Microsoft Entra Connect en Microsoft Entra Connect Health",
+      "summaryNl": "Deze handleiding beschrijft installatie, upgrade en operationele voorbereiding voor Microsoft Entra Connect. Ook worden synchronisatie-, aanmeldings- en writebackopties toegelicht.",
+      "whyNl": [
+        "Wijzig Microsoft Entra Connect Sync alleen via formeel gedocumenteerde handelingen; andere wijzigingen kunnen een niet-ondersteunde toestand veroorzaken.",
+        "Overweeg een stand-byserver of staging-modeserver voor failover en frequente configuratiewijzigingen."
+      ],
+      "titleEn": "Installation roadmap for Microsoft Entra Connect and Microsoft Entra Connect Health",
+      "summaryEn": "This guide covers installation, upgrade, and operational preparation for Microsoft Entra Connect. It also explains synchronization, sign-in, and writeback options.",
+      "whyEn": [
+        "Change Microsoft Entra Connect Sync only through formally documented actions; other changes can cause an unsupported state.",
+        "Consider a standby server or staging-mode server for failover and frequent configuration changes."
+      ],
+      "categories": [
+        "Enrollment",
+        "Identiteit & MFA",
+        "Conditional Access"
+      ],
+      "kind": "handleiding",
+      "tier": "info",
+      "confidence": 0.96,
+      "reasonNl": "Dit is een installatie- en naslaghandleiding, geen aangekondigde wijziging of tijdgebonden beheeractie.",
+      "reasonEn": "This is an installation and reference guide, not an announced change or time-bound administrative action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/verified-id/",
@@ -506,21 +526,31 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/known-issues",
-      "contentHash": "5829690857b34aee43c1fc008ceb87d259ba960c3b79017535274a62f30e93ea",
+      "contentHash": "e131e654ae16f7db7880f723377bbc28b3921a6d8db6ab9b63784c73fd2d5b31",
       "titleNl": "Bekende problemen met Microsoft Intune",
-      "summaryNl": "Deze pagina verzamelt bekende problemen met Microsoft Intune, inclusief tijdelijke oplossingen en bijgewerkte oplossingen. De aangeleverde brontekst noemt geen afzonderlijke problemen.",
-      "whyNl": [],
-      "titleEn": "Known issues with Microsoft Intune",
-      "summaryEn": "This page collects known issues with Microsoft Intune, including workarounds and updated fixes. The supplied source text does not identify any individual issues.",
-      "whyEn": [],
-      "categories": [
-        "Reporting"
+      "summaryNl": "Microsoft meldt meerdere actieve bekende problemen in Intune, onder meer rond Microsoft Store-apps, Company Portal en instellingenbeleid. De pagina bevat ook opgeloste problemen en bijbehorende herstelmaatregelen.",
+      "whyNl": [
+        "Regionale selectie voor Microsoft Store-apps is tijdelijk niet beschikbaar; Intune gebruikt bij zoeken en toevoegen de Amerikaanse catalogus.",
+        "Bij meerdere toegestane OS-buildbereiken toont Company Portal slechts het eerste bereik in de herstelmelding, terwijl het compliancebeleid wel correct wordt afgedwongen.",
+        "Voor apparaten die niet voldoen, moet de OS-build binnen een geconfigureerd toegestaan bereik worden bijgewerkt."
       ],
-      "kind": "naslag",
-      "tier": "info",
-      "confidence": 0.62,
-      "reasonNl": "De beperkte brontekst beschrijft alleen een naslagpagina en bevat geen concreet operationeel probleem of vereiste actie.",
-      "reasonEn": "The limited source text only describes a reference page and contains no specific operational issue or required action."
+      "titleEn": "Known issues with Microsoft Intune",
+      "summaryEn": "Microsoft reports several active known issues in Intune, including issues with Microsoft Store apps, Company Portal, and settings policies. The page also includes resolved issues and related remediation measures.",
+      "whyEn": [
+        "Regional selection for Microsoft Store apps is temporarily unavailable; Intune uses the United States catalog when searching for and adding apps.",
+        "When multiple allowed OS build ranges are configured, Company Portal shows only the first range in its remediation message, while the compliance policy is still enforced correctly.",
+        "For noncompliant devices, update the OS build to a configured acceptable range."
+      ],
+      "categories": [
+        "Apps & Packaging",
+        "Compliance",
+        "Enrollment"
+      ],
+      "kind": "nieuws",
+      "tier": "action",
+      "confidence": 0.95,
+      "reasonNl": "Actieve operationele problemen kunnen appbeheer en complianceherstel beïnvloeden en vragen in specifieke gevallen om beheeractie.",
+      "reasonEn": "Active operational issues can affect app management and compliance remediation and require administrative action in specific cases."
     },
     {
       "id": "https://msendpointmgr.com/2026/09/05/1phonemirror-levels-up-webcam-stats-better-screenshots-and-signed/",
