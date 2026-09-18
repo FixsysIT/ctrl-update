@@ -1191,7 +1191,8 @@
   var jump = document.getElementById('status-jump');
 
   function syncOverview() {
-    var monitoredSources = data.feeds.filter(function (f) { return f.kind !== 'processing'; });
+    var monitoredSources = data.feeds.filter(function (f) { return f.kind !== 'processing' && f.Status !== 'OVERGESLAGEN'; });
+    var skippedSources = data.feeds.filter(function (f) { return f.kind !== 'processing' && f.Status === 'OVERGESLAGEN'; }).length;
     var okSources = monitoredSources.filter(function (f) { return f.Status === 'OK'; }).length;
     document.getElementById('metric-review-v').textContent = counts.review;
     document.getElementById('metric-followup-v').textContent = counts.followup;
@@ -1199,7 +1200,7 @@
     document.getElementById('metric-health-v').textContent = okSources + '/' + monitoredSources.length;
     var failedSources = monitoredSources.length - okSources;
     document.getElementById('metric-health-s').textContent = failedSources === 0
-      ? (language === 'en' ? 'all sources available' : 'alle bronnen bereikbaar')
+      ? (language === 'en' ? 'all active sources available' : 'alle actieve bronnen bereikbaar') + (skippedSources ? ' · ' + skippedSources + (language === 'en' ? ' intentionally skipped' : ' bewust overgeslagen') : '')
       : failedSources + (language === 'en' ? (failedSources === 1 ? ' source has an issue' : ' sources have issues') : (failedSources === 1 ? ' bron met een probleem' : ' bronnen met problemen'));
     document.getElementById('metric-health').className = 'metric ' + (okSources === monitoredSources.length ? 'health' : 'attention');
   }
@@ -2002,4 +2003,3 @@
 </script>
 </body>
 </html>
-

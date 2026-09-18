@@ -121,6 +121,9 @@ foreach ($requiredFragment in @('timezone: "Europe/Amsterdam"', '30 6 * * *', '0
 if ($template -notmatch 'staleAfterHours' -or $template -notmatch 'fresh-next-value') {
     Add-Failure 'Template mist zichtbare actualiteitsbewaking of de volgende automatische run'
 }
+if ($template -notmatch "f.Status !== 'OVERGESLAGEN'") {
+    Add-Failure 'Bewust overgeslagen bronnen worden ten onrechte als bronstoring geteld'
+}
 if ($failures.Count -eq 0) { Write-Pass 'Cloudrefresh bevat lokale planning, veilige Codex-action, reviewgate en actualiteitsstatus' }
 
 $testDirectory = Join-Path $projectRoot '.tmp/test-review-pipeline'
