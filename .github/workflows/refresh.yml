@@ -21,6 +21,8 @@ jobs:
   refresh:
     name: Bronnen, agentreview en publicatie
     runs-on: ubuntu-latest
+    env:
+      TEAMS_WEBHOOK_CONFIGURED: ${{ secrets.TEAMS_WEBHOOK_URL != '' }}
     timeout-minutes: 45
 
     steps:
@@ -30,17 +32,16 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Vereiste secrets controleren
+      - name: Vereiste secret controleren
         shell: pwsh
         env:
           OPENAI_KEY_PRESENT: ${{ secrets.OPENAI_API_KEY != '' }}
-          TEAMS_WEBHOOK_PRESENT: ${{ secrets.TEAMS_WEBHOOK_URL != '' }}
         run: |
           if ($env:OPENAI_KEY_PRESENT -ne 'true') {
             throw 'Repository-secret OPENAI_API_KEY ontbreekt. De bestaande productieversie blijft online.'
           }
-          if ($env:TEAMS_WEBHOOK_PRESENT -ne 'true') {
-            throw 'Repository-secret TEAMS_WEBHOOK_URL ontbreekt. De bestaande productieversie blijft online.'
+          if ($env:TEAMS_WEBHOOK_CONFIGURED -ne 'true') {
+            Write-Warning 'Repository-secret TEAMS_WEBHOOK_URL ontbreekt. De refresh gaat door zonder Teams-meldingen.'
           }
 
       - name: Bronnen ophalen en reviewinput voorbereiden
@@ -82,6 +83,7 @@ jobs:
         run: ./scripts/Test-CtrlUpdate.ps1
 
       - name: Teams melden bij nieuwe acties of problemen
+        if: ${{ env.TEAMS_WEBHOOK_CONFIGURED == 'true' }}
         continue-on-error: true
         shell: pwsh
         env:
@@ -113,7 +115,7 @@ jobs:
           git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
 
       - name: Teams melden wanneer de refresh mislukt
-        if: ${{ failure() }}
+        if: ${{ failure() && env.TEAMS_WEBHOOK_CONFIGURED == 'true' }}
         continue-on-error: true
         shell: pwsh
         env:

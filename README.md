@@ -85,14 +85,14 @@ GitHub Actions voert `.github/workflows/refresh.yml` dagelijks om 06:30 en 14:00
 
 De site toont bovenaan de laatste succesvolle publicatie en waarschuwt wanneer de data ouder is dan 26 uur. Teams ontvangt maximaal één Adaptive Card per run en uitsluitend bij een nieuw of gepromoveerd Actie-item, een gewijzigde harde actiedatum, een nieuwe bronstoring of een mislukte refresh. De versiebeheerbare nulmeting in `data/notification-state.json` voorkomt een eerste spamgolf en herhaalde meldingen.
 
-De repository moet hiervoor twee Actions-secrets bevatten:
+De repository gebruikt hiervoor één verplichte en één optionele Actions-secret:
 
 ```text
 OPENAI_API_KEY
-TEAMS_WEBHOOK_URL
+TEAMS_WEBHOOK_URL  # optioneel; vereist voor Teams-meldingen
 ```
 
-De OpenAI-sleutel wordt alleen rechtstreeks aan `openai/codex-action` aangeboden. De Teams-webhook wordt alleen aan de meldingsstap aangeboden. Geen van beide secrets wordt in een bestand of in de repository opgeslagen. Message Center is niet onderdeel van deze publieke cloudrun omdat daarvoor tenantgebonden Microsoft Graph-authenticatie en afzonderlijk beheer van least-privilege credentials nodig zijn.
+De OpenAI-sleutel wordt alleen rechtstreeks aan `openai/codex-action` aangeboden. De Teams-webhook wordt alleen aan de meldingsstap aangeboden. Geen van beide secrets wordt in een bestand of in de repository opgeslagen. Een ontbrekende of ongeldige Teams-koppeling blokkeert de nieuwsactualisatie niet. Message Center is niet onderdeel van deze publieke cloudrun omdat daarvoor tenantgebonden Microsoft Graph-authenticatie en afzonderlijk beheer van least-privilege credentials nodig zijn.
 
 ## Valideren
 
