@@ -136,8 +136,8 @@
   /* ===================== kop ===================== */
 
   .masthead {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 18px; flex-wrap: wrap; padding: 27px 0 18px;
+    display: grid; grid-template-columns: minmax(260px, 1fr) auto;
+    align-items: start; gap: 24px; padding: 27px 0 18px;
   }
   .brand { display: flex; align-items: center; gap: 13px; }
   .logo {
@@ -149,24 +149,26 @@
   .brand .eyebrow { color: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 3px; }
   .brand .tagline { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
 
+  .mast-actions { display: flex; flex-direction: column; align-items: flex-end; min-width: 0; }
+
   .freshness {
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px; margin: 0 0 14px;
+    display: flex; justify-content: flex-end; flex-wrap: wrap;
+    gap: 5px; margin-top: 7px;
   }
   .freshness-item {
-    min-width: 0; display: flex; align-items: center; gap: 9px;
-    padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px;
-    background: var(--panel); color: var(--text-soft); box-shadow: var(--shadow);
+    min-width: 0; display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 8px; border: 1px solid var(--border); border-radius: 999px;
+    background: var(--panel); color: var(--text-soft);
   }
-  .freshness-item svg { flex: none; color: var(--muted); }
-  .freshness-copy { min-width: 0; }
+  .freshness-item svg { flex: none; width: 12px; height: 12px; color: var(--muted); }
+  .freshness-copy { min-width: 0; display: inline-flex; align-items: baseline; gap: 4px; }
   .freshness-label {
-    display: block; color: var(--muted); font-size: 9.5px; font-weight: 800;
-    letter-spacing: .1em; text-transform: uppercase;
+    display: inline; color: var(--muted); font-size: 10px; font-weight: 760;
+    letter-spacing: .04em; text-transform: uppercase;
   }
   .freshness-value {
-    display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    font-size: 12.5px; font-weight: 620;
+    display: inline; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-size: 11.5px; font-weight: 620;
   }
   .freshness-item.current svg, .freshness-item.current .freshness-value { color: var(--ok); }
   .freshness-item.stale {
@@ -175,7 +177,7 @@
   }
   .freshness-item.stale svg, .freshness-item.stale .freshness-value { color: var(--warn); }
 
-  .toolbar { display: flex; gap: 6px; align-items: center; }
+  .toolbar { display: flex; gap: 6px; align-items: center; justify-content: flex-end; }
   .tool {
     background: var(--panel); border: 1px solid var(--border); color: var(--text-soft);
     border-radius: var(--r-sm); height: 31px; padding: 0 10px; cursor: pointer;
@@ -588,6 +590,9 @@
   /* ===================== smal scherm ===================== */
 
   @media (max-width: 900px) {
+    .masthead { grid-template-columns: 1fr; gap: 12px; }
+    .mast-actions { width: 100%; align-items: flex-start; }
+    .toolbar, .freshness { justify-content: flex-start; }
     .overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .layout { grid-template-columns: 1fr; gap: 16px; }
     .side { position: static; max-height: none; overflow: visible; padding-right: 0; }
@@ -610,7 +615,7 @@
     .settings-grid { grid-template-columns: 1fr; }
     .channelbar { width: 100%; }
     .channelbar button { flex: 1 1 auto; }
-    .freshness { grid-template-columns: 1fr; }
+    .freshness-item { max-width: 100%; }
   }
   dialog.settings .bd { padding: 16px 18px 19px; overflow: auto; max-height: calc(100vh - 95px); }
   .settings p { color: var(--text-soft); font-size: 13px; margin: 0 0 14px; }
@@ -654,30 +659,31 @@
         <div class="tagline" id="tagline"></div>
       </div>
     </div>
-    <div class="toolbar">
-      <button class="tool filters-toggle" id="filters-toggle">Filters</button>
-      <button class="tool" id="settings-btn" data-i18n="preferences">Voorkeuren</button>
-      <button class="tool" id="language" title="Taal wijzigen" aria-label="Taal wijzigen">EN</button>
-      <button class="tool" id="density" title="Regelhoogte">Compact</button>
-      <button class="tool icon-only" id="help-btn" title="Sneltoetsen" aria-label="Sneltoetsen">?</button>
-      <button class="tool icon-only" id="theme" title="Licht of donker" aria-label="Licht of donker">&#9680;</button>
+    <div class="mast-actions">
+      <div class="toolbar">
+        <button class="tool filters-toggle" id="filters-toggle">Filters</button>
+        <button class="tool" id="settings-btn" data-i18n="preferences">Voorkeuren</button>
+        <button class="tool" id="language" title="Taal wijzigen" aria-label="Taal wijzigen">EN</button>
+        <button class="tool" id="density" title="Regelhoogte">Compact</button>
+        <button class="tool icon-only" id="help-btn" title="Sneltoetsen" aria-label="Sneltoetsen">?</button>
+        <button class="tool icon-only" id="theme" title="Licht of donker" aria-label="Licht of donker">&#9680;</button>
+      </div>
+      <section class="freshness" aria-label="Actualiteit van de radar">
+        <div class="freshness-item" id="fresh-last">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
+          <span class="freshness-copy"><span class="freshness-label" id="fresh-last-label">Bijgewerkt</span><span class="freshness-value" id="fresh-last-value">—</span></span>
+        </div>
+        <div class="freshness-item" id="fresh-next">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 3.5v3M17 3.5v3M4 9h16M5.5 5h13A1.5 1.5 0 0 1 20 6.5v12A1.5 1.5 0 0 1 18.5 20h-13A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5Z"></path></svg>
+          <span class="freshness-copy"><span class="freshness-label" id="fresh-next-label">Volgende run</span><span class="freshness-value" id="fresh-next-value">—</span></span>
+        </div>
+        <div class="freshness-item" id="fresh-state">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"></circle><path d="m8.5 12 2.2 2.2 4.8-5"></path></svg>
+          <span class="freshness-copy"><span class="freshness-label" id="fresh-state-label">Status</span><span class="freshness-value" id="fresh-state-value">Controleren…</span></span>
+        </div>
+      </section>
     </div>
   </header>
-
-  <section class="freshness" aria-label="Actualiteit van de radar">
-    <div class="freshness-item" id="fresh-last">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
-      <span class="freshness-copy"><span class="freshness-label" id="fresh-last-label">Laatst succesvol bijgewerkt</span><span class="freshness-value" id="fresh-last-value">—</span></span>
-    </div>
-    <div class="freshness-item" id="fresh-next">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 3.5v3M17 3.5v3M4 9h16M5.5 5h13A1.5 1.5 0 0 1 20 6.5v12A1.5 1.5 0 0 1 18.5 20h-13A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5Z"></path></svg>
-      <span class="freshness-copy"><span class="freshness-label" id="fresh-next-label">Volgende automatische run</span><span class="freshness-value" id="fresh-next-value">—</span></span>
-    </div>
-    <div class="freshness-item" id="fresh-state">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"></circle><path d="m8.5 12 2.2 2.2 4.8-5"></path></svg>
-      <span class="freshness-copy"><span class="freshness-label" id="fresh-state-label">Actualiteit</span><span class="freshness-value" id="fresh-state-value">Wordt gecontroleerd…</span></span>
-    </div>
-  </section>
 
   <section class="overview" aria-label="Ochtendoverzicht">
     <button class="metric attention" id="metric-review" type="button" aria-pressed="false">
@@ -1147,10 +1153,10 @@
       timeZone: schedule.timezone, dateStyle: 'medium', timeStyle: 'short'
     }).format(generated) : (language === 'en' ? 'Unknown' : 'Onbekend');
 
-    document.getElementById('fresh-last-label').textContent = language === 'en' ? 'Last successful update' : 'Laatst succesvol bijgewerkt';
+    document.getElementById('fresh-last-label').textContent = language === 'en' ? 'Updated' : 'Bijgewerkt';
     document.getElementById('fresh-last-value').textContent = lastValue;
-    document.getElementById('fresh-next-label').textContent = language === 'en' ? 'Next automatic run' : 'Volgende automatische run';
-    document.getElementById('fresh-state-label').textContent = language === 'en' ? 'Freshness' : 'Actualiteit';
+    document.getElementById('fresh-next-label').textContent = language === 'en' ? 'Next run' : 'Volgende run';
+    document.getElementById('fresh-state-label').textContent = 'Status';
     document.querySelector('.freshness').setAttribute('aria-label', language === 'en' ? 'Radar freshness' : 'Actualiteit van de radar');
 
     var now = getZonedNow(schedule.timezone);
@@ -1162,7 +1168,8 @@
     var tomorrow = !next;
     next = next || times[0] || '06:30';
     document.getElementById('fresh-next-value').textContent =
-      (tomorrow ? (language === 'en' ? 'Tomorrow ' : 'Morgen ') : (language === 'en' ? 'Today ' : 'Vandaag ')) + next + ' · ' + schedule.timezone;
+      (tomorrow ? (language === 'en' ? 'Tomorrow ' : 'Morgen ') : (language === 'en' ? 'Today ' : 'Vandaag ')) + next;
+    document.getElementById('fresh-next').title = (language === 'en' ? 'Timezone: ' : 'Tijdzone: ') + schedule.timezone;
 
     var staleAfter = Number(schedule.staleAfterHours || 26);
     var ageHours = validGenerated ? (Date.now() - generated.getTime()) / 3600000 : Number.POSITIVE_INFINITY;
@@ -1172,7 +1179,7 @@
     state.classList.toggle('stale', stale);
     document.getElementById('fresh-state-value').textContent = stale
       ? (language === 'en' ? 'Outdated · last success ' + Math.floor(ageHours) + ' hours ago' : 'Verouderd · laatste succes ' + Math.floor(ageHours) + ' uur geleden')
-      : (language === 'en' ? 'Current · outdated after ' + staleAfter + ' hours' : 'Actueel · verouderd na ' + staleAfter + ' uur');
+      : (language === 'en' ? 'Current · ' + staleAfter + 'h limit' : 'Actueel · grens ' + staleAfter + ' uur');
   }
 
   renderFreshness();
