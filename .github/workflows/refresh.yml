@@ -10,6 +10,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: ctrl-update-refresh
@@ -75,6 +77,14 @@ jobs:
         shell: pwsh
         run: ./scripts/Test-CtrlUpdate.ps1
 
+      - name: GitHub Pages configureren
+        uses: actions/configure-pages@v5
+
+      - name: Website voor publicatie uploaden
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./dist
+
       - name: Gewijzigde data publiceren
         shell: bash
         env:
@@ -90,3 +100,16 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Automatische nieuwsupdate"
           git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
+
+  deploy:
+    name: Publiceer de geslaagde refresh
+    needs: refresh
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Website publiceren
+        id: deployment
+        uses: actions/deploy-pages@v5
