@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-18T11:49:14.7191202Z",
+  "generated": "2026-09-18T12:52:07.7204040Z",
   "items": [
     {
       "id": "https://andrewstaylor.com/2026/09/11/intune-newsletter-11th-september-2026/",
@@ -77,21 +77,22 @@
     },
     {
       "id": "https://jannikreinhard.com/azure-api-management-mcp-control-plane/",
-      "contentHash": "c06ac01cd96c1f46b64923a09e426ee3b3777bfbbf54372fd7a91779ce4bc98d",
-      "titleNl": "Azure API Management als beheerlaag voor MCP-tools",
-      "summaryNl": "Praktische analyse van het plaatsen van identity-, limiet- en monitoringcontroles vóór MCP-tools met Azure API Management.",
+      "contentHash": "5d0c25329cbef69ad128573c79ccb65b376e5594531f818d545d94f45b92022b",
+      "titleNl": "Azure API Management MCP als beheervlak voor agenttools",
+      "summaryNl": "Praktische analyse van Azure API Management MCP als gateway voor MCP-servers en REST-API's. Het artikel behandelt identiteitscontrole, beperkte toolexpositie, rate limiting en logging.",
       "whyNl": [],
-      "titleEn": "Azure API Management as a control plane for MCP tools",
-      "summaryEn": "A practical analysis of placing identity, rate-limit, and monitoring controls in front of MCP tools with Azure API Management.",
+      "titleEn": "Azure API Management MCP as a control plane for agent tools",
+      "summaryEn": "Practical analysis of Azure API Management MCP as a gateway for MCP servers and REST APIs. It covers identity controls, limited tool exposure, rate limiting, and logging.",
       "whyEn": [],
       "categories": [
+        "Identiteit & MFA",
         "Scripting & Graph"
       ],
-      "kind": "analyse",
+      "kind": "handleiding",
       "tier": "info",
-      "confidence": 0.82,
-      "reasonNl": "Dit is een technische analyse zonder aangekondigde productwijziging of vereiste actie.",
-      "reasonEn": "This is a technical analysis with no announced product change or required action."
+      "confidence": 0.9,
+      "reasonNl": "Dit is een praktische ontwerp- en beheerhandleiding, geen productwijziging of verplichte actie.",
+      "reasonEn": "This is practical design and administration guidance, not a product change or required action."
     },
     {
       "id": "https://jannikreinhard.com/copilot-vs-cowork-vs-agents/",
@@ -264,22 +265,21 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/fundamentals/what-is-entra",
-      "contentHash": "282a43ebec96bb01a5803cd1413d5f0b2037ab358af6f322da681ebd7bce555f",
+      "contentHash": "38e7836ef957b55a742a333ac4d843fc6a86cfd2299446749ac53373c9690b95",
       "titleNl": "Wat is Microsoft Entra?",
-      "summaryNl": "Dit naslagartikel beschrijft de Microsoft Entra-productfamilie voor identiteit, toegang, governance en beveiliging. Het licht de voornaamste producten en bijbehorende gebruiksscenario's toe.",
+      "summaryNl": "Naslagpagina over Microsoft Entra als productfamilie voor identiteit en netwerktoegang binnen een Zero Trust-strategie.",
       "whyNl": [],
       "titleEn": "What is Microsoft Entra?",
-      "summaryEn": "This reference article describes the Microsoft Entra product family for identity, access, governance, and security. It explains the main products and their associated scenarios.",
+      "summaryEn": "Reference page covering Microsoft Entra as a family of identity and network access products for a Zero Trust strategy.",
       "whyEn": [],
       "categories": [
-        "Identiteit & MFA",
-        "Conditional Access"
+        "Identiteit & MFA"
       ],
       "kind": "naslag",
       "tier": "info",
-      "confidence": 0.99,
-      "reasonNl": "Het artikel biedt productoriëntatie en bevat geen aangekondigde wijziging of vereiste actie.",
-      "reasonEn": "The article provides product orientation and contains no announced change or required action."
+      "confidence": 0.96,
+      "reasonNl": "De tekst geeft algemene productuitleg zonder wijziging of beheeractie.",
+      "reasonEn": "The text provides general product information without a change or administrative action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/id-governance/licensing-fundamentals",
@@ -325,59 +325,46 @@
       "reasonEn": "The article documents existing behavior and contains no mandatory change or deadline."
     },
     {
-      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-install-roadmap",
-      "contentHash": "1999fa335ca2f92aca8f2b0916a7fa0abe1aadc70fb2104e186e07a0f104e49e",
-      "titleNl": "Installatieroadmap voor Microsoft Entra Connect en Connect Health",
-      "summaryNl": "Overzicht van installatieopties en implementatiepaden voor Microsoft Entra Connect en Connect Health.",
-      "whyNl": [],
-      "titleEn": "Installation roadmap for Microsoft Entra Connect and Connect Health",
-      "summaryEn": "An overview of installation options and deployment paths for Microsoft Entra Connect and Connect Health.",
-      "whyEn": [],
+      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq",
+      "contentHash": "f3b5afa49dbd80012ecb02ed10f7afc162cdae3e317b0cfdea2d92781162b1a2",
+      "titleNl": "Veelgestelde vragen over Seamless SSO in Microsoft Entra Connect",
+      "summaryNl": "Deze naslagpagina licht Seamless SSO, ondersteunde aanmeldmethoden en het gebruik naast Microsoft Entra join toe. Ook beschrijft zij het rouleren van de Kerberos-ontsleutelingssleutel van het AZUREADSSO-account.",
+      "whyNl": [
+        "Rouleer de Kerberos-ontsleutelingssleutel van het AZUREADSSO-computeraccount minimaal elke 30 dagen. "
+      ],
+      "titleEn": "Microsoft Entra Connect Seamless SSO frequently asked questions",
+      "summaryEn": "This reference page explains Seamless SSO, supported sign-in methods, and its use alongside Microsoft Entra join. It also describes rotating the Kerberos decryption key for the AZUREADSSO account.",
+      "whyEn": [
+        "Rotate the Kerberos decryption key for the AZUREADSSO computer account at least every 30 days."
+      ],
       "categories": [
-        "Enrollment"
+        "Identiteit & MFA",
+        "Enrollment",
+        "Scripting & Graph"
       ],
       "kind": "naslag",
-      "tier": "info",
-      "confidence": 0.9,
-      "reasonNl": "Dit is een overzichtsdocument zonder aangekondigde wijziging, deadline of verplichte actie.",
-      "reasonEn": "This is an overview document with no announced change, deadline, or required action."
+      "tier": "action",
+      "confidence": 0.95,
+      "reasonNl": "De pagina adviseert een concrete, terugkerende beheeractie voor de Kerberos-sleutel.",
+      "reasonEn": "The page recommends a concrete, recurring administrative action for the Kerberos key."
     },
     {
-      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq",
-      "contentHash": "a2c9cf34b9ac7225d230d11106fd16bdbe0b1a58a657b625aa600c5e656d713e",
-      "titleNl": "Veelgestelde vragen over naadloze eenmalige aanmelding met Microsoft Entra Connect",
-      "summaryNl": "Antwoorden op veelgestelde vragen over Microsoft Entra seamless single sign-on.",
+      "id": "https://learn.microsoft.com/en-us/entra/verified-id/",
+      "contentHash": "c2b995b1158259569d97c837ff72de0fb2dcac9be3f025121858407652f07071",
+      "titleNl": "Documentatie voor Microsoft Entra Verified ID",
+      "summaryNl": "Overzicht van documentatie voor het instellen, bouwen, integreren en gebruiken van Microsoft Entra Verified ID.",
       "whyNl": [],
-      "titleEn": "Frequently asked questions about seamless single sign-on with Microsoft Entra Connect",
-      "summaryEn": "Answers to frequently asked questions about Microsoft Entra seamless single sign-on.",
+      "titleEn": "Microsoft Entra Verified ID documentation",
+      "summaryEn": "Overview of documentation for setting up, building with, integrating, and using Microsoft Entra Verified ID.",
       "whyEn": [],
       "categories": [
         "Identiteit & MFA"
       ],
       "kind": "naslag",
       "tier": "info",
-      "confidence": 0.94,
-      "reasonNl": "De bron is naslag over single sign-on en bevat geen wijziging of vereiste actie.",
-      "reasonEn": "The source is reference material about single sign-on and contains no change or required action."
-    },
-    {
-      "id": "https://learn.microsoft.com/en-us/entra/verified-id/",
-      "contentHash": "280239b883a622839993265497e0a339c12cebfc2757cbb24dfaf545148ca9bc",
-      "titleNl": "Documentatie voor Microsoft Entra Verified ID",
-      "summaryNl": "Deze documentatiebundel verwijst naar configuratie, architectuur, API's en gebruiksscenario's voor Microsoft Entra Verified ID. De inhoud is bedoeld voor beheerders, ontwikkelaars, partners en eindgebruikers.",
-      "whyNl": [],
-      "titleEn": "Microsoft Entra Verified ID documentation",
-      "summaryEn": "This documentation hub links to configuration, architecture, APIs, and scenarios for Microsoft Entra Verified ID. It is intended for administrators, developers, partners, and end users.",
-      "whyEn": [],
-      "categories": [
-        "Identiteit & MFA",
-        "Scripting & Graph"
-      ],
-      "kind": "naslag",
-      "tier": "info",
-      "confidence": 0.99,
-      "reasonNl": "Dit is een documentatieoverzicht zonder concrete wijziging of vereiste beheeractie.",
-      "reasonEn": "This is a documentation overview with no concrete change or required administrative action."
+      "confidence": 0.92,
+      "reasonNl": "Dit is een documentatieoverzicht zonder aangekondigde wijziging of actie.",
+      "reasonEn": "This is a documentation overview without an announced change or action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/intune/app-management/ref-protected-apps",
@@ -648,48 +635,28 @@
       "reasonEn": "The targeted population can expand without a policy change, requiring a scope review and support preparation."
     },
     {
-      "id": "https://ourcloudnetwork.com/microsoft-graph-hints-at-external-tenant-reporting/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-graph-hints-at-external-tenant-reporting",
-      "contentHash": "310f721d6c0a36bf6b9f5a78d75bc6492b6f695cf55abe1af922dc97420178da",
-      "titleNl": "Microsoft Graph-metadata wijst mogelijk op rapportage over externe tenants",
-      "summaryNl": "Metadata voor User.Read.All noemt een nog ongedocumenteerde GET /users/{id}/accessibleTenants-aanroep. Het endpoint is nog niet beschikbaar voor beheerders en het doel, de uitkomst, API-versie en releasedatum zijn niet bevestigd.",
-      "whyNl": [
-        "Er is nog geen gedocumenteerd endpoint, antwoordschema of Microsoft Graph PowerShell-opdracht.",
-        "De metadata bewijst niet dat het endpoint een volledige lijst van B2B-gastlidmaatschappen zal leveren."
-      ],
-      "titleEn": "Microsoft Graph metadata may point to external tenant reporting",
-      "summaryEn": "Metadata for User.Read.All references an undocumented GET /users/{id}/accessibleTenants request. The endpoint is not yet available to administrators, and its purpose, output, API version, and release date remain unconfirmed.",
-      "whyEn": [
-        "There is no documented endpoint, response schema, or Microsoft Graph PowerShell command yet.",
-        "The metadata does not prove that the endpoint will return a complete list of B2B guest memberships."
-      ],
-      "categories": [
-        "Scripting & Graph",
-        "Reporting",
-        "Identiteit & MFA"
-      ],
-      "kind": "analyse",
-      "tier": "watch",
-      "confidence": 0.66,
-      "reasonNl": "Dit is een mogelijk relevante toekomstige rapportagefunctie, maar de bron beschrijft alleen een onbevestigde aanwijzing in metadata.",
-      "reasonEn": "This could become a relevant reporting capability, but the source only describes an unconfirmed metadata clue."
-    },
-    {
       "id": "https://ourcloudnetwork.com/microsoft-outlook-adds-meeting-organiser-transfers/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-outlook-adds-meeting-organiser-transfers",
-      "contentHash": "1bc60786fb7c3edee89867140373bb3338b7a78e03b567318a83f37b165cb623",
+      "contentHash": "f1db3ff91884f578915397eb689182c02be0f4e49a1e909c375526140a327a67",
       "titleNl": "Outlook krijgt overdracht van vergaderorganisator",
-      "summaryNl": "Outlook gaat gebruikers toestaan het eigenaarschap van vergaderingen over te dragen. Voor Teams-vergaderingen volgt dit in een latere releasefase.",
-      "whyNl": [],
+      "summaryNl": "Volgens dit bericht kunnen organisatoren geschikte niet-onlinevergaderingen en terugkerende reeksen overdragen aan een andere organisator in dezelfde tenant. De eerste uitrol is gepland van eind september tot eind oktober 2026; Teams-vergaderingen vallen nog buiten deze fase.",
+      "whyNl": [
+        "De eerste uitrol is gepland van eind september tot eind oktober 2026.",
+        "Externe en on-premises deelnemers ontvangen een annulering en nieuwe uitnodiging."
+      ],
       "titleEn": "Outlook gains meeting organizer transfer",
-      "summaryEn": "Outlook will allow users to transfer meeting ownership. Teams meetings will follow in a later release phase.",
-      "whyEn": [],
+      "summaryEn": "According to this report, organizers can transfer eligible non-online meetings and recurring series to another organizer in the same tenant. The first rollout is planned from late September through late October 2026; Teams meetings are not included in this phase.",
+      "whyEn": [
+        "The first rollout is planned from late September through late October 2026.",
+        "External and on-premises attendees receive a cancellation and replacement invitation."
+      ],
       "categories": [
-        "Apps & Packaging"
+        "Scripting & Graph"
       ],
       "kind": "nieuws",
       "tier": "watch",
-      "confidence": 0.8,
-      "reasonNl": "Dit is een relevante productontwikkeling zonder beheeractie of datum.",
-      "reasonEn": "This is a relevant product development without an administrative action or date."
+      "confidence": 0.78,
+      "reasonNl": "De geplande functie kan gevolgen hebben voor vergaderoverdrachten, maar de bron beschrijft geen verplichte beheeractie.",
+      "reasonEn": "The planned feature can affect meeting transfers, but the source does not describe a required administrative action."
     },
     {
       "id": "https://patchmypc.com/blog/autopilot-device-preparation-vs-device-association-vs-autopilot/",
@@ -1151,23 +1118,26 @@
       "reasonEn": "This is relevant threat intelligence, but the reported campaign targets specific victims."
     },
     {
-      "id": "https://www.bleepingcomputer.com/news/security/malware-bypasses-browser-checks-to-force-install-chrome-edge-extensions/",
-      "contentHash": "72a1e343f2ff3ff5fe3c62f8c5df2024cb9a7915672122c493954c6a00482bfa",
-      "titleNl": "Malware omzeilt browsercontroles om Chrome- en Edge-extensies te installeren",
-      "summaryNl": "De KREMLIN-toolkit kan schadelijke extensies ongemerkt installeren in Chrome en Edge en browsergegevens stelen. Elastic meldde 1.515 geïnfecteerde systemen, vrijwel allemaal in Brazilië.",
-      "whyNl": [],
-      "titleEn": "Malware bypasses browser checks to install Chrome and Edge extensions",
-      "summaryEn": "The KREMLIN toolkit can silently install malicious extensions in Chrome and Edge and steal browser data. Elastic reported 1,515 infected systems, almost all in Brazil.",
-      "whyEn": [],
+      "id": "https://www.bleepingcomputer.com/news/security/microsoft-fixes-bug-behind-defender-antivirus-is-turned-off-alerts/",
+      "contentHash": "d030cf38529857bf60793650fc84f7d942c387770757731ef84f017a4ede681e",
+      "titleNl": "Microsoft herstelt onjuiste meldingen dat Defender Antivirus is uitgeschakeld",
+      "summaryNl": "Microsoft Defender Antivirus-update 4.18.26080.4 van 17 september 2026 verhelpt onjuiste meldingen dat antivirus is uitgeschakeld. Defender Antivirus bleef volgens de melding actief.",
+      "whyNl": [
+        "De oplossing is opgenomen in Microsoft Defender Antivirus-update 4.18.26080.4 van 17 september 2026."
+      ],
+      "titleEn": "Microsoft fixes false Defender Antivirus turned-off alerts",
+      "summaryEn": "Microsoft Defender Antivirus update 4.18.26080.4, released on September 17, 2026, resolves false alerts that antivirus is turned off. Defender Antivirus remained active according to the report.",
+      "whyEn": [
+        "The fix is included in Microsoft Defender Antivirus update 4.18.26080.4, released on September 17, 2026."
+      ],
       "categories": [
-        "Defender & Security",
-        "Apps & Packaging"
+        "Defender & Security"
       ],
       "kind": "nieuws",
-      "tier": "watch",
-      "confidence": 0.84,
-      "reasonNl": "Dit is relevante dreigingsinformatie met beperkte, geografisch geconcentreerde meldingen.",
-      "reasonEn": "This is relevant threat intelligence with limited, geographically concentrated reports."
+      "tier": "info",
+      "confidence": 0.94,
+      "reasonNl": "De gemelde fout is opgelost en de bron noemt geen vereiste beheeractie of brede actuele storing.",
+      "reasonEn": "The reported issue is resolved, and the source does not state a required administrative action or an active widespread outage."
     },
     {
       "id": "https://www.microsoft.com/en-us/security/blog/2026/09/04/secure-edge-ai-customer-owned-environments/",
