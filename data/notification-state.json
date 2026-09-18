@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-18T11:44:26.6787916+00:00",
+  "updatedAt": "2026-09-18T11:49:16.8387132+00:00",
   "items": {
     "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-broken-copy-and-paste-for-excel-2016-users/": {
       "tier": "action",
@@ -23,12 +23,6 @@
       "dateKind": "start",
       "hardDates": []
     },
-    "https://techcommunity.microsoft.com/t5/intune-customer-success/moving-from-windows-autopilot-to-windows-autopilot-device/ba-p/4557269": {
-      "tier": "action",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
     "https://ourcloudnetwork.com/microsoft-delays-entra-sms-and-voice-retirement-dates/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-delays-entra-sms-and-voice-retirement-dates": {
       "tier": "action",
       "dateIso": "2027-02-01",
@@ -37,6 +31,12 @@
         "deadline:2027-02-01",
         "deadline:2027-07-01"
       ]
+    },
+    "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-emergency-windows-updates-to-fix-rds-failures/": {
+      "tier": "action",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
     },
     "https://patchmypc.com/blog/defender-is-on-intune-says-noncompliant/?utm_term=rss": {
       "tier": "action",
@@ -141,12 +141,18 @@
       "hardDates": []
     },
     "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq": {
-      "tier": "watch",
+      "tier": "info",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
     "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/replace-vpn-access-with-identity-driven-security/ba-p/4529309": {
+      "tier": "info",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-install-roadmap": {
       "tier": "info",
       "dateIso": null,
       "dateKind": null,
@@ -256,6 +262,12 @@
     },
     "https://jannikreinhard.com/azure-api-management-mcp-control-plane/": {
       "tier": "info",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://www.bleepingcomputer.com/news/microsoft/september-windows-server-updates-break-remote-desktop-services/": {
+      "tier": "watch",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []

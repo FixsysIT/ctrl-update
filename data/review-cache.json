@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-18T11:44:24.3189287Z",
+  "generated": "2026-09-18T11:49:14.7191202Z",
   "items": [
     {
       "id": "https://andrewstaylor.com/2026/09/11/intune-newsletter-11th-september-2026/",
@@ -77,31 +77,21 @@
     },
     {
       "id": "https://jannikreinhard.com/azure-api-management-mcp-control-plane/",
-      "contentHash": "5d0c25329cbef69ad128573c79ccb65b376e5594531f818d545d94f45b92022b",
-      "titleNl": "Azure API Management als control plane voor MCP-tools",
-      "summaryNl": "Het artikel beschrijft hoe Azure API Management vóór MCP-servers kan worden geplaatst voor identiteit, beperking van het toolaanbod, limieten en bewaking. Het benadrukt dat de gateway de autorisatie van de MCP-server en achterliggende systemen niet vervangt.",
-      "whyNl": [
-        "Beperk per agent de zichtbare tools en gebruik bij voorkeur Microsoft Entra ID en OAuth.",
-        "Voorkom het uitlezen of loggen van response bodies, omdat dit MCP-streaming kan verstoren en gevoelige uitvoer kan opslaan.",
-        "Leg alleen noodzakelijke metadata vast voor traceerbaarheid."
-      ],
+      "contentHash": "c06ac01cd96c1f46b64923a09e426ee3b3777bfbbf54372fd7a91779ce4bc98d",
+      "titleNl": "Azure API Management als beheerlaag voor MCP-tools",
+      "summaryNl": "Praktische analyse van het plaatsen van identity-, limiet- en monitoringcontroles vóór MCP-tools met Azure API Management.",
+      "whyNl": [],
       "titleEn": "Azure API Management as a control plane for MCP tools",
-      "summaryEn": "The article describes how Azure API Management can sit in front of MCP servers to provide identity controls, a restricted tool surface, limits, and monitoring. It emphasizes that the gateway doesn't replace authorization in the MCP server and backend systems.",
-      "whyEn": [
-        "Limit the tools visible to each agent and preferably use Microsoft Entra ID and OAuth.",
-        "Avoid reading or logging response bodies because this can disrupt MCP streaming and store sensitive output.",
-        "Record only the metadata needed for traceability."
-      ],
+      "summaryEn": "A practical analysis of placing identity, rate-limit, and monitoring controls in front of MCP tools with Azure API Management.",
+      "whyEn": [],
       "categories": [
-        "Scripting & Graph",
-        "Identiteit & MFA",
-        "Reporting"
+        "Scripting & Graph"
       ],
       "kind": "analyse",
       "tier": "info",
-      "confidence": 0.94,
-      "reasonNl": "Dit is architectuur- en governanceadvies zonder aangekondigde productwijziging, deadline of verplichte beheeractie.",
-      "reasonEn": "This is architecture and governance guidance without an announced product change, deadline, or mandatory administrative action."
+      "confidence": 0.82,
+      "reasonNl": "Dit is een technische analyse zonder aangekondigde productwijziging of vereiste actie.",
+      "reasonEn": "This is a technical analysis with no announced product change or required action."
     },
     {
       "id": "https://jannikreinhard.com/copilot-vs-cowork-vs-agents/",
@@ -293,22 +283,21 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/id-governance/licensing-fundamentals",
-      "contentHash": "fb16780bfaf3e1d663d1a1e55dc2fed939dfb87be498edcbe270f94c9749f089",
-      "titleNl": "Basisprincipes van licenties voor Microsoft Entra ID Governance",
-      "summaryNl": "Dit artikel is bedoeld als introductie tot licenties voor Microsoft Entra ID Governance. De aangeleverde tekst noemt governance voor agent- en service-principalidentiteiten.",
+      "contentHash": "1266305be5ee806ed434a87f259d987b433cac3cde303a27cc966be8724fcd73",
+      "titleNl": "Licentiegrondslagen voor Microsoft Entra ID Governance",
+      "summaryNl": "Naslag over beschikbare Microsoft Entra ID Governance-licenties, vereisten en inbegrepen mogelijkheden. Behandelt ook licenties voor Microsoft Entra Suite en Microsoft Agent 365.",
       "whyNl": [],
       "titleEn": "Microsoft Entra ID Governance licensing fundamentals",
-      "summaryEn": "This article is an introduction to Microsoft Entra ID Governance licensing. The supplied text mentions governance for agent and service principal identities.",
+      "summaryEn": "Reference material on available Microsoft Entra ID Governance licenses, prerequisites, and included capabilities. It also covers licensing for Microsoft Entra Suite and Microsoft Agent 365.",
       "whyEn": [],
       "categories": [
-        "Licensing",
-        "Identiteit & MFA"
+        "Licensing"
       ],
       "kind": "naslag",
       "tier": "info",
-      "confidence": 0.66,
-      "reasonNl": "De beperkte brontekst wijst op algemene licentiedocumentatie, zonder actie of wijziging.",
-      "reasonEn": "The limited source text indicates general licensing documentation, with no action or change."
+      "confidence": 0.95,
+      "reasonNl": "De bron legt licentiemodellen uit en kondigt geen wijziging of deadline aan.",
+      "reasonEn": "The source explains licensing models and announces no change or deadline."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/identity/authentication/concept-sspr-policy",
@@ -336,27 +325,40 @@
       "reasonEn": "The article documents existing behavior and contains no mandatory change or deadline."
     },
     {
-      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq",
-      "contentHash": "f3b5afa49dbd80012ecb02ed10f7afc162cdae3e317b0cfdea2d92781162b1a2",
-      "titleNl": "Veelgestelde vragen over Microsoft Entra seamless single sign-on",
-      "summaryNl": "De FAQ beschrijft compatibiliteit, werking en beheer van Microsoft Entra seamless single sign-on. Voor ingeschakelde forests wordt aanbevolen de Kerberos-ontsleutelingssleutel van het AZUREADSSO-account minstens elke 30 dagen te roteren.",
-      "whyNl": [
-        "Roteer voor iedere forest met Seamless SSO de Kerberos-ontsleutelingssleutel van het AZUREADSSO-account minstens elke 30 dagen."
-      ],
-      "titleEn": "Frequently asked questions about Microsoft Entra seamless single sign-on",
-      "summaryEn": "The FAQ describes compatibility, operation, and administration of Microsoft Entra seamless single sign-on. For enabled forests, it recommends rotating the Kerberos decryption key for the AZUREADSSO account at least every 30 days.",
-      "whyEn": [
-        "For every forest using Seamless SSO, rotate the Kerberos decryption key for the AZUREADSSO account at least every 30 days."
-      ],
+      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-install-roadmap",
+      "contentHash": "1999fa335ca2f92aca8f2b0916a7fa0abe1aadc70fb2104e186e07a0f104e49e",
+      "titleNl": "Installatieroadmap voor Microsoft Entra Connect en Connect Health",
+      "summaryNl": "Overzicht van installatieopties en implementatiepaden voor Microsoft Entra Connect en Connect Health.",
+      "whyNl": [],
+      "titleEn": "Installation roadmap for Microsoft Entra Connect and Connect Health",
+      "summaryEn": "An overview of installation options and deployment paths for Microsoft Entra Connect and Connect Health.",
+      "whyEn": [],
       "categories": [
-        "Identiteit & MFA",
-        "Scripting & Graph"
+        "Enrollment"
       ],
       "kind": "naslag",
-      "tier": "action",
-      "confidence": 0.96,
-      "reasonNl": "De documentatie bevat een concrete terugkerende beheeractie voor omgevingen met Seamless SSO.",
-      "reasonEn": "The documentation contains a concrete recurring administrative action for environments using Seamless SSO."
+      "tier": "info",
+      "confidence": 0.9,
+      "reasonNl": "Dit is een overzichtsdocument zonder aangekondigde wijziging, deadline of verplichte actie.",
+      "reasonEn": "This is an overview document with no announced change, deadline, or required action."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq",
+      "contentHash": "a2c9cf34b9ac7225d230d11106fd16bdbe0b1a58a657b625aa600c5e656d713e",
+      "titleNl": "Veelgestelde vragen over naadloze eenmalige aanmelding met Microsoft Entra Connect",
+      "summaryNl": "Antwoorden op veelgestelde vragen over Microsoft Entra seamless single sign-on.",
+      "whyNl": [],
+      "titleEn": "Frequently asked questions about seamless single sign-on with Microsoft Entra Connect",
+      "summaryEn": "Answers to frequently asked questions about Microsoft Entra seamless single sign-on.",
+      "whyEn": [],
+      "categories": [
+        "Identiteit & MFA"
+      ],
+      "kind": "naslag",
+      "tier": "info",
+      "confidence": 0.94,
+      "reasonNl": "De bron is naslag over single sign-on en bevat geen wijziging of vereiste actie.",
+      "reasonEn": "The source is reference material about single sign-on and contains no change or required action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/verified-id/",
@@ -823,34 +825,6 @@
       "reasonEn": "This is technical guidance and reference material without an announced change, deadline, or mandatory migration."
     },
     {
-      "id": "https://techcommunity.microsoft.com/t5/intune-customer-success/moving-from-windows-autopilot-to-windows-autopilot-device/ba-p/4557269",
-      "contentHash": "bd57d298534a68837c5bba5db0a149380b31a13d443f58595397339ed11f6f68",
-      "titleNl": "Gefaseerd overstappen op Windows Autopilot device preparation",
-      "summaryNl": "Microsoft adviseert Windows Autopilot device preparation voor geschikte, gebruikersgestuurde scenario's en richt toekomstige investeringen hierop. Bestaand Windows Autopilot blijft nodig voor onder meer pre-provisioning, self-deploying mode, Hybrid Microsoft Entra join en Autopilot met co-management.",
-      "whyNl": [
-        "Breng geschikte Windows 11-populaties, instellingen, apps, scripts en toewijzingen in kaart voordat je migreert.",
-        "Voer de overstap in gecontroleerde golven uit en valideer de volledige inrichtingservaring.",
-        "Laat niet-ondersteunde scenario's voorlopig op Windows Autopilot staan."
-      ],
-      "titleEn": "Phased transition to Windows Autopilot device preparation",
-      "summaryEn": "Microsoft recommends Windows Autopilot device preparation for eligible user-driven scenarios and is directing future investment toward it. Existing Windows Autopilot remains necessary for scenarios including pre-provisioning, self-deploying mode, Hybrid Microsoft Entra join, and Autopilot with co-management.",
-      "whyEn": [
-        "Inventory eligible Windows 11 populations, settings, applications, scripts, and assignments before migrating.",
-        "Move in controlled waves and validate the complete provisioning experience.",
-        "Keep unsupported scenarios on Windows Autopilot for now."
-      ],
-      "categories": [
-        "Autopilot",
-        "Enrollment",
-        "Windows 11"
-      ],
-      "kind": "wijziging",
-      "tier": "action",
-      "confidence": 0.99,
-      "reasonNl": "Microsoft geeft een concrete migratierichting en een gefaseerde aanpak voor geschikte implementaties, ook al wordt geen verplichte einddatum genoemd.",
-      "reasonEn": "Microsoft provides a concrete migration direction and phased approach for eligible deployments, although no mandatory end date is stated."
-    },
-    {
       "id": "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/replace-vpn-access-with-identity-driven-security/ba-p/4529309",
       "contentHash": "fa39e6968201a462b848ee9a47b7884ffe9b29395b394008189a8b862798e9ff",
       "titleNl": "VPN-toegang gefaseerd vervangen met Microsoft Entra Private Access",
@@ -1030,6 +1004,34 @@
       "reasonEn": "Microsoft has released a specific update for a confirmed issue that administrators should assess."
     },
     {
+      "id": "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-emergency-windows-updates-to-fix-rds-failures/",
+      "contentHash": "2ac61300283fb9169bf9e71d11f14af5acd5d01eb0f42c45aa4ea97b01efd4f5",
+      "titleNl": "Microsoft brengt noodupdates uit voor RDS-storingen",
+      "summaryNl": "Microsoft heeft out-of-band-updates uitgebracht voor RDS-verbindings- en aanmeldingsproblemen die door de beveiligingsupdates van september 2026 zijn veroorzaakt. De updates verhelpen daarnaast bepaalde Hyper-V- en USB-audioproblemen.",
+      "whyNl": [
+        "Beoordeel de out-of-band-updates voor getroffen RDS-systemen.",
+        "De updates zijn uitgebracht op 14 september 2026.",
+        "RDS-problemen treffen Windows Server 2019, 2022 en 2025."
+      ],
+      "titleEn": "Microsoft releases emergency updates for RDS failures",
+      "summaryEn": "Microsoft has released out-of-band updates for RDS connection and sign-in issues caused by the September 2026 security updates. The updates also address certain Hyper-V and USB audio issues.",
+      "whyEn": [
+        "Assess the out-of-band updates for affected RDS systems.",
+        "The updates were released on September 14, 2026.",
+        "The RDS issues affect Windows Server 2019, 2022, and 2025."
+      ],
+      "categories": [
+        "Windows Update",
+        "Windows 365 & AVD",
+        "Windows 11"
+      ],
+      "kind": "wijziging",
+      "tier": "action",
+      "confidence": 0.93,
+      "reasonNl": "Microsoft heeft noodupdates uitgebracht die beheerders van getroffen RDS-omgevingen moeten beoordelen.",
+      "reasonEn": "Microsoft has released emergency updates that administrators of affected RDS environments should assess."
+    },
+    {
       "id": "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-workaround-for-windows-domain-login-authentication-issues/",
       "contentHash": "ceff60463d3024160b170aa946b5b5db2562a15e2367ad9237c289d75315b94c",
       "titleNl": "Microsoft deelt workaround voor domeinaanmeldingsproblemen in Windows",
@@ -1054,6 +1056,31 @@
       "confidence": 0.93,
       "reasonNl": "Microsoft bevestigt het probleem en geeft een concrete beheermaatregel.",
       "reasonEn": "Microsoft confirms the issue and provides a concrete administrative mitigation."
+    },
+    {
+      "id": "https://www.bleepingcomputer.com/news/microsoft/september-windows-server-updates-break-remote-desktop-services/",
+      "contentHash": "385485db24a35310c1ae5a6f0e5e47a77f7c9908f6281741c514087d90905b2b",
+      "titleNl": "Meldingen: Windows Server-updates van september verstoren Remote Desktop Services",
+      "summaryNl": "Beheerders melden RDS-verbindingsproblemen en vastlopende servers na cumulatieve Windows Server-updates van september 2026. Microsoft onderzoekt de meldingen volgens de bron.",
+      "whyNl": [
+        "Meldingen betreffen Windows Server 2019, 2022 en 2025.",
+        "Getroffen updates zijn KB5122876, KB5122882 en KB5122871."
+      ],
+      "titleEn": "Reports: September Windows Server updates disrupt Remote Desktop Services",
+      "summaryEn": "Administrators report RDS connection failures and unresponsive servers after the September 2026 cumulative Windows Server updates. According to the source, Microsoft is investigating the reports.",
+      "whyEn": [
+        "Reports concern Windows Server 2019, 2022, and 2025.",
+        "Affected updates are KB5122876, KB5122882, and KB5122871."
+      ],
+      "categories": [
+        "Windows Update",
+        "Windows 365 & AVD"
+      ],
+      "kind": "nieuws",
+      "tier": "watch",
+      "confidence": 0.86,
+      "reasonNl": "De storing is gebaseerd op meldingen en Microsoft onderzocht deze nog; de bron bevestigt geen definitieve brede storing.",
+      "reasonEn": "The issue is based on reports and Microsoft was still investigating it; the source does not confirm a definitive widespread outage."
     },
     {
       "id": "https://www.bleepingcomputer.com/news/microsoft/windows-11-24h2-home-and-pro-reach-end-of-support-in-october/",
