@@ -121,8 +121,18 @@ foreach ($requiredFragment in @('timezone: "Europe/Amsterdam"', '30 6 * * *', '0
 if ($template -notmatch 'staleAfterHours' -or $template -notmatch 'fresh-next-value') {
     Add-Failure 'Template mist zichtbare actualiteitsbewaking of de volgende automatische run'
 }
-if ($template -notmatch "f.Status !== 'OVERGESLAGEN'") {
+if ($template -notmatch "f.Status === 'OVERGESLAGEN'") {
     Add-Failure 'Bewust overgeslagen bronnen worden ten onrechte als bronstoring geteld'
+}
+foreach ($removedUi in @('id="density"', 'id="help-btn"', 'id="metric-health"', 'id="status"', 'id="src"', 'CAT_VISIBLE')) {
+    if ($template -match [regex]::Escape($removedUi)) {
+        Add-Failure "Verwijderde of dubbele UI is teruggekeerd: $removedUi"
+    }
+}
+foreach ($requiredUi in @('id="source-status"', 'id="feeds-body"', 'id="fresh-last"')) {
+    if ($template -notmatch [regex]::Escape($requiredUi)) {
+        Add-Failure "Centrale update- en bronstatus mist: $requiredUi"
+    }
 }
 if ($failures.Count -eq 0) { Write-Pass 'Cloudrefresh bevat lokale planning, veilige Codex-action, reviewgate en actualiteitsstatus' }
 

@@ -114,8 +114,6 @@
     --shadow-lg: 0 2px 6px rgba(0,0,0,.5), 0 18px 40px -26px rgba(0,0,0,1);
   }
 
-  :root[data-density="compact"] { --row-pad: 11px; }
-
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
@@ -158,8 +156,10 @@
   .freshness-item {
     min-width: 0; display: inline-flex; align-items: center; gap: 6px;
     padding: 4px 8px; border: 1px solid var(--border); border-radius: 999px;
-    background: var(--panel); color: var(--text-soft);
+    background: var(--panel); color: var(--text-soft); font: inherit;
   }
+  button.freshness-item { cursor: pointer; }
+  button.freshness-item:hover { border-color: var(--accent); color: var(--accent); }
   .freshness-item svg { flex: none; width: 12px; height: 12px; color: var(--muted); }
   .freshness-copy { min-width: 0; display: inline-flex; align-items: baseline; gap: 4px; }
   .freshness-label {
@@ -189,7 +189,7 @@
   /* ===================== ochtendoverzicht ===================== */
 
   .overview {
-    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px; margin-bottom: 12px;
   }
   .metric {
@@ -203,42 +203,18 @@
   .metric .v { display: block; margin-top: 4px; font-size: 24px; line-height: 1; font-weight: 760; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
   .metric .s { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .metric.attention .v { color: var(--crit); }
+  .metric.attention {
+    background: var(--crit-soft);
+    border-color: color-mix(in srgb, var(--crit) 32%, var(--border));
+  }
+  .metric.attention[aria-pressed="true"] {
+    border-color: var(--crit);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--crit) 16%, transparent), var(--shadow);
+  }
   .metric.followup .v { color: var(--warn); }
   .metric.signal .v { color: var(--accent); }
   .metric.health .v { color: var(--ok); }
   .metric[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft), var(--shadow); }
-
-  /* ===================== statusbalk =====================
-     Eén regel die de enige vraag beantwoordt die telt:
-     moet ik nu iets doen? Zo werkt een statuspagina ook. */
-
-  .status {
-    display: flex; align-items: center; gap: 13px;
-    border: 1px solid var(--border); border-left: 4px solid var(--neutral);
-    background: var(--panel); border-radius: var(--r);
-    padding: 17px 19px; margin-bottom: 24px; box-shadow: var(--shadow);
-  }
-  .status.crit { border-left-color: var(--crit); background: var(--crit-soft); border-color: color-mix(in srgb, var(--crit) 26%, var(--border)); }
-  .status.warn { border-left-color: var(--warn); background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 26%, var(--border)); }
-  .status.ok   { border-left-color: var(--ok);   background: var(--ok-soft);   border-color: color-mix(in srgb, var(--ok) 26%, var(--border)); }
-
-  .status .ico { flex: none; display: grid; place-items: center; }
-  .status.crit .ico { color: var(--crit); }
-  .status.warn .ico { color: var(--warn); }
-  .status.ok   .ico { color: var(--ok); }
-
-  .status .msg { min-width: 0; }
-  .status .headline { display: block; font-size: 16.5px; font-weight: 700; letter-spacing: -0.02em; }
-  .status.crit .headline { color: var(--crit); }
-  .status.warn .headline { color: var(--warn); }
-  .status.ok   .headline { color: var(--ok); }
-  .status .detail { display: block; color: var(--text-soft); font-size: 13px; margin-top: 3px; }
-  .status .jump {
-    margin-left: auto; flex: none; font-size: 12.5px; font-weight: 560;
-    background: none; border: none; cursor: pointer; font-family: inherit;
-    color: inherit; opacity: .75; text-decoration: underline; text-underline-offset: 3px;
-  }
-  .status .jump:hover { opacity: 1; }
 
   /* ===================== agenda ===================== */
 
@@ -481,7 +457,6 @@
   .workflow .trust { margin-left: auto; color: var(--faint); font-size: 11.5px; }
 
   .summary { color: var(--text-soft); font-size: 13.5px; margin-top: 9px; }
-  :root[data-density="compact"] .summary { display: none; }
 
   .why {
     margin-top: 11px; border-radius: 10px; overflow: hidden;
@@ -525,7 +500,6 @@
   .score-explain { margin-top: 7px; color: var(--faint); font-size: 11.5px; }
 
   .tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
-  :root[data-density="compact"] .tags { margin-top: 7px; }
   .cat {
     font-size: 11.5px; padding: 2px 9px; border-radius: 999px; font-family: inherit;
     background: var(--bg-soft); color: var(--text-soft); border: 1px solid transparent; cursor: pointer;
@@ -552,40 +526,33 @@
 
   .empty { color: var(--muted); text-align: center; padding: 70px 0; font-size: 14px; }
 
-  /* ===================== hulp ===================== */
+  /* ===================== vensters ===================== */
 
-  dialog.help, dialog.settings {
+  dialog.settings, dialog.source-status {
     border: 1px solid var(--border); border-radius: var(--r); padding: 0;
     background: var(--panel); color: var(--text); box-shadow: var(--shadow-lg);
-    max-width: 380px; width: calc(100% - 32px);
+    width: calc(100% - 32px);
   }
   dialog.settings { max-width: 720px; max-height: min(840px, calc(100vh - 32px)); }
-  dialog.help::backdrop, dialog.settings::backdrop { background: rgba(0,0,0,.42); backdrop-filter: blur(2px); }
-  dialog.help .hd, dialog.settings .hd {
+  dialog.source-status { max-width: 920px; max-height: min(760px, calc(100vh - 32px)); }
+  dialog.settings::backdrop, dialog.source-status::backdrop { background: rgba(0,0,0,.42); backdrop-filter: blur(2px); }
+  dialog.settings .hd, dialog.source-status .hd {
     padding: 15px 18px 11px; border-bottom: 1px solid var(--border);
     font-weight: 640; font-size: 15px; letter-spacing: -0.015em;
   }
-  dialog.help .bd { padding: 13px 18px 17px; }
-  dialog.help dl { margin: 0; display: grid; grid-template-columns: 62px 1fr; gap: 8px 12px; font-size: 13.5px; }
-  dialog.help dt { margin: 0; }
-  dialog.help dd { margin: 0; color: var(--text-soft); }
-  dialog.help kbd {
-    font: 11.5px ui-monospace, Consolas, monospace; background: var(--bg-soft);
-    border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px; padding: 1px 6px;
-  }
+  dialog.source-status .bd { padding: 14px 18px 18px; overflow: auto; max-height: calc(100vh - 110px); }
+  .source-status-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .source-status-close { border: 0; background: none; color: var(--muted); font: inherit; cursor: pointer; }
+  .source-status-summary { color: var(--text-soft); font-size: 13px; margin: 0 0 12px; }
 
   /* ===================== voet ===================== */
 
-  details.feeds { margin-top: 44px; border-top: 1px solid var(--border); padding-top: 18px; }
-  details.feeds summary { cursor: pointer; color: var(--muted); font-size: 12.5px; list-style: none; user-select: none; }
-  details.feeds summary::-webkit-details-marker { display: none; }
-  details.feeds summary::before { content: "\25B8  "; }
-  details.feeds[open] summary::before { content: "\25BE  "; }
   table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 12.5px; }
   th, td { text-align: left; padding: 6px 9px; border-bottom: 1px solid var(--border); }
   th { color: var(--muted); font-weight: 620; }
   td.n { font-variant-numeric: tabular-nums; color: var(--muted); }
   td.bad { color: var(--crit); font-weight: 620; }
+  td.skipped { color: var(--muted); font-weight: 620; }
 
   /* ===================== smal scherm ===================== */
 
@@ -593,7 +560,7 @@
     .masthead { grid-template-columns: 1fr; gap: 12px; }
     .mast-actions { width: 100%; align-items: flex-start; }
     .toolbar, .freshness { justify-content: flex-start; }
-    .overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .overview { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .layout { grid-template-columns: 1fr; gap: 16px; }
     .side { position: static; max-height: none; overflow: visible; padding-right: 0; }
     .side-block.facets-block { display: none; }
@@ -604,12 +571,10 @@
   @media (max-width: 620px) {
     .wrap { padding: 0 14px 80px; }
     .masthead { padding: 22px 0 14px; }
-    .overview { grid-template-columns: 1fr 1fr; gap: 7px; }
+    .overview { grid-template-columns: 1fr; gap: 7px; }
     .metric { padding: 12px; }
     .metric .v { font-size: 21px; }
     .metric .s { white-space: normal; line-height: 1.3; }
-    .status { flex-wrap: wrap; }
-    .status .jump { margin-left: 0; }
     .result-count { margin-left: 0; width: 100%; }
     .workflow .trust { width: 100%; margin-left: 0; }
     .settings-grid { grid-template-columns: 1fr; }
@@ -664,15 +629,13 @@
         <button class="tool filters-toggle" id="filters-toggle">Filters</button>
         <button class="tool" id="settings-btn" data-i18n="preferences">Voorkeuren</button>
         <button class="tool" id="language" title="Taal wijzigen" aria-label="Taal wijzigen">EN</button>
-        <button class="tool" id="density" title="Regelhoogte">Compact</button>
-        <button class="tool icon-only" id="help-btn" title="Sneltoetsen" aria-label="Sneltoetsen">?</button>
         <button class="tool icon-only" id="theme" title="Licht of donker" aria-label="Licht of donker">&#9680;</button>
       </div>
       <section class="freshness" aria-label="Actualiteit van de radar">
-        <div class="freshness-item" id="fresh-last">
+        <button class="freshness-item" id="fresh-last" type="button">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg>
           <span class="freshness-copy"><span class="freshness-label" id="fresh-last-label">Bijgewerkt</span><span class="freshness-value" id="fresh-last-value">—</span></span>
-        </div>
+        </button>
         <div class="freshness-item" id="fresh-next">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 3.5v3M17 3.5v3M4 9h16M5.5 5h13A1.5 1.5 0 0 1 20 6.5v12A1.5 1.5 0 0 1 18.5 20h-13A1.5 1.5 0 0 1 4 18.5v-12A1.5 1.5 0 0 1 5.5 5Z"></path></svg>
           <span class="freshness-copy"><span class="freshness-label" id="fresh-next-label">Volgende run</span><span class="freshness-value" id="fresh-next-value">—</span></span>
@@ -695,18 +658,6 @@
     <button class="metric signal" id="metric-new" type="button" aria-pressed="false">
       <span class="k" data-i18n="newSignals">Nieuwe signalen</span><span class="v" id="metric-new-v">0</span><span class="s" data-i18n="sinceLastRun">sinds de vorige run</span>
     </button>
-    <button class="metric health" id="metric-health" type="button" aria-pressed="false">
-      <span class="k" data-i18n="sources">Bronnen</span><span class="v" id="metric-health-v">0/0</span><span class="s" id="metric-health-s">status onbekend</span>
-    </button>
-  </section>
-
-  <section class="status" id="status" aria-live="polite">
-    <span class="ico" id="status-ico"></span>
-    <span class="msg">
-      <span class="headline" id="status-headline"></span>
-      <span class="detail" id="status-detail"></span>
-    </span>
-    <button class="jump" id="status-jump" hidden>Bekijk</button>
   </section>
 
   <section class="agenda" id="agenda" hidden>
@@ -727,10 +678,6 @@
       <div class="side-block facets-block">
         <h3 data-i18n="category">Categorie</h3>
         <div class="facets" id="cats"></div>
-      </div>
-      <div class="side-block facets-block">
-        <h3 data-i18n="source">Bron</h3>
-        <select id="src"><option value="" data-i18n="allSources">Alle bronnen</option></select>
         <button class="reset" id="reset" data-i18n="clearFilters">Filters wissen</button>
       </div>
     </aside>
@@ -762,31 +709,21 @@
       <div id="list"></div>
       <button class="more" id="more" hidden></button>
 
-      <details class="feeds">
-        <summary id="feeds-summary">Bronnen</summary>
-        <table>
-          <thead><tr><th data-i18n="source">Bron</th><th>Status</th><th>Items</th><th data-i18n="details">Toelichting</th></tr></thead>
-          <tbody id="feeds-body"></tbody>
-        </table>
-      </details>
     </main>
   </div>
 </div>
 
-<dialog class="help" id="help">
-  <div class="hd" data-i18n="shortcuts">Sneltoetsen</div>
+<dialog class="source-status" id="source-status">
+  <div class="hd source-status-head">
+    <span id="source-status-title">Update &amp; bronnen</span>
+    <button class="source-status-close" id="source-status-close" type="button" aria-label="Sluiten">Sluiten</button>
+  </div>
   <div class="bd">
-    <dl>
-      <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd data-i18n="nextPrevious">Volgend / vorig item</dd>
-      <dt><kbd>o</kbd></dt><dd data-i18n="openItem">Item openen in nieuw tabblad</dd>
-      <dt><kbd>m</kbd></dt><dd data-i18n="markRead">Gelezen of ongelezen markeren</dd>
-      <dt><kbd>e</kbd></dt><dd data-i18n="toggleExplanation">Uitleg open- of dichtklappen</dd>
-      <dt><kbd>/</kbd></dt><dd data-i18n="focusSearch">Naar het zoekveld</dd>
-      <dt><kbd>a</kbd></dt><dd data-i18n="reviewActions">Acties die nog beoordeeld moeten worden</dd>
-      <dt><kbd>v</kbd></dt><dd data-i18n="confirmedActions">Bevestigde acties met opvolging</dd>
-      <dt><kbd>r</kbd></dt><dd data-i18n="clearFilters">Filters wissen</dd>
-      <dt><kbd>Esc</kbd></dt><dd data-i18n="clearSearch">Zoekveld leegmaken</dd>
-    </dl>
+    <p class="source-status-summary" id="feeds-summary"></p>
+    <table>
+      <thead><tr><th data-i18n="source">Bron</th><th id="source-status-col-status">Status</th><th id="source-status-col-items">Items</th><th data-i18n="details">Toelichting</th></tr></thead>
+      <tbody id="feeds-body"></tbody>
+    </table>
   </div>
 </dialog>
 
@@ -837,7 +774,6 @@
 
   var READ_KEY    = 'intuneradar.read';
   var THEME_KEY   = 'intuneradar.theme';
-  var DENSITY_KEY = 'intuneradar.density';
   var TRIAGE_KEY  = 'intuneradar.triage';
   var PREF_KEY    = 'intuneradar.preferences.v2';
   var LANG_KEY    = 'intuneradar.language';
@@ -933,14 +869,17 @@
     languageButton.textContent = language === 'en' ? 'NL' : 'EN';
     languageButton.title = language === 'en' ? 'Switch to Dutch' : 'Vertaal alles naar Engels';
     languageButton.setAttribute('aria-label', languageButton.title);
-    document.getElementById('help-btn').title = language === 'en' ? 'Keyboard shortcuts' : 'Sneltoetsen';
-    document.getElementById('help-btn').setAttribute('aria-label', document.getElementById('help-btn').title);
     document.getElementById('theme').title = language === 'en' ? 'Light or dark' : 'Licht of donker';
     document.getElementById('theme').setAttribute('aria-label', document.getElementById('theme').title);
     document.querySelector('.overview').setAttribute('aria-label', language === 'en' ? 'Morning overview' : 'Ochtendoverzicht');
     document.getElementById('channels').setAttribute('aria-label', language === 'en' ? 'Content type' : 'Soort bron');
     document.getElementById('q').setAttribute('aria-label', language === 'en' ? 'Search' : 'Zoeken');
     document.querySelector('.seg').setAttribute('aria-label', language === 'en' ? 'Order' : 'Volgorde');
+    document.getElementById('source-status-title').textContent = language === 'en' ? 'Update & sources' : 'Update & bronnen';
+    document.getElementById('source-status-close').textContent = language === 'en' ? 'Close' : 'Sluiten';
+    document.getElementById('source-status-close').setAttribute('aria-label', language === 'en' ? 'Close' : 'Sluiten');
+    document.getElementById('source-status-col-status').textContent = 'Status';
+    document.getElementById('source-status-col-items').textContent = language === 'en' ? 'Items' : 'Items';
     if (language === 'en') { document.getElementById('rss-name').placeholder = 'For example Veeam Blog'; }
   }
   applyStaticLanguage();
@@ -984,22 +923,6 @@
   var savedTheme = store(THEME_KEY, null);
   if (savedTheme) { document.documentElement.setAttribute('data-theme', savedTheme); }
 
-  var density = store(DENSITY_KEY, 'comfortabel');
-  document.documentElement.setAttribute('data-density', density);
-
-  var densityBtn = document.getElementById('density');
-  function syncDensity() {
-    densityBtn.textContent = density === 'compact' ? (language === 'en' ? 'Comfortable' : 'Ruim') : 'Compact';
-    densityBtn.title = density === 'compact' ? (language === 'en' ? 'Return to comfortable view' : 'Terug naar ruime weergave') : (language === 'en' ? 'Compact view' : 'Compacte weergave');
-  }
-  syncDensity();
-  densityBtn.addEventListener('click', function () {
-    density = density === 'compact' ? 'comfortabel' : 'compact';
-    document.documentElement.setAttribute('data-density', density);
-    persist(DENSITY_KEY, density);
-    syncDensity();
-  });
-
   document.getElementById('theme').addEventListener('click', function () {
     var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     var now  = document.documentElement.getAttribute('data-theme') || (systemDark ? 'dark' : 'light');
@@ -1008,9 +931,10 @@
     persist(THEME_KEY, next);
   });
 
-  var helpDialog = document.getElementById('help');
-  document.getElementById('help-btn').addEventListener('click', function () { helpDialog.showModal(); });
-  helpDialog.addEventListener('click', function (e) { if (e.target === helpDialog) { helpDialog.close(); } });
+  var sourceStatusDialog = document.getElementById('source-status');
+  document.getElementById('fresh-last').addEventListener('click', function () { sourceStatusDialog.showModal(); });
+  document.getElementById('source-status-close').addEventListener('click', function () { sourceStatusDialog.close(); });
+  sourceStatusDialog.addEventListener('click', function (e) { if (e.target === sourceStatusDialog) { sourceStatusDialog.close(); } });
 
   var settingsDialog = document.getElementById('settings');
   var interestSettings = document.getElementById('interest-settings');
@@ -1155,6 +1079,8 @@
 
     document.getElementById('fresh-last-label').textContent = language === 'en' ? 'Updated' : 'Bijgewerkt';
     document.getElementById('fresh-last-value').textContent = lastValue;
+    document.getElementById('fresh-last').title = language === 'en' ? 'View update and source status' : 'Bekijk update- en bronstatus';
+    document.getElementById('fresh-last').setAttribute('aria-label', (language === 'en' ? 'View update and source status. Last successful update: ' : 'Bekijk update- en bronstatus. Laatst succesvol bijgewerkt: ') + lastValue);
     document.getElementById('fresh-next-label').textContent = language === 'en' ? 'Next run' : 'Volgende run';
     document.getElementById('fresh-state-label').textContent = 'Status';
     document.querySelector('.freshness').setAttribute('aria-label', language === 'en' ? 'Radar freshness' : 'Actualiteit van de radar');
@@ -1189,63 +1115,15 @@
     (data.duplicates > 0 ? ' · ' + data.duplicates + (language === 'en' ? ' duplicates removed' : ' dubbel gefilterd') : '') +
     ' · agent ' + data.review.reviewed + '/' + data.review.total;
 
-  /* ---------- ochtendoverzicht en status ---------- */
-
-  var running = data.agenda.filter(function (a) { return a.date.urgency === 'running'; });
-  var urgent  = data.agenda.filter(function (a) { return a.date.urgency === 'urgent'; });
-
-  var statusEl = document.getElementById('status');
-  var jump = document.getElementById('status-jump');
+  /* ---------- ochtendoverzicht ---------- */
 
   function syncOverview() {
-    var monitoredSources = data.feeds.filter(function (f) { return f.kind !== 'processing' && f.Status !== 'OVERGESLAGEN'; });
-    var skippedSources = data.feeds.filter(function (f) { return f.kind !== 'processing' && f.Status === 'OVERGESLAGEN'; }).length;
-    var okSources = monitoredSources.filter(function (f) { return f.Status === 'OK'; }).length;
     document.getElementById('metric-review-v').textContent = counts.review;
     document.getElementById('metric-followup-v').textContent = counts.followup;
     document.getElementById('metric-new-v').textContent = counts.nieuw;
-    document.getElementById('metric-health-v').textContent = okSources + '/' + monitoredSources.length;
-    var failedSources = monitoredSources.length - okSources;
-    document.getElementById('metric-health-s').textContent = failedSources === 0
-      ? (language === 'en' ? 'all active sources available' : 'alle actieve bronnen bereikbaar') + (skippedSources ? ' · ' + skippedSources + (language === 'en' ? ' intentionally skipped' : ' bewust overgeslagen') : '')
-      : failedSources + (language === 'en' ? (failedSources === 1 ? ' source has an issue' : ' sources have issues') : (failedSources === 1 ? ' bron met een probleem' : ' bronnen met problemen'));
-    document.getElementById('metric-health').className = 'metric ' + (okSources === monitoredSources.length ? 'health' : 'attention');
-  }
-
-  function renderStatus() {
-    var level, headline, detail, target = '';
-    if (counts.review > 0) {
-      level = 'crit';
-      headline = counts.review + (language === 'en' ? (counts.review === 1 ? ' action signal requires review' : ' action signals require review') : (counts.review === 1 ? ' actiesignaal moet worden beoordeeld' : ' actiesignalen moeten worden beoordeeld'));
-      detail = language === 'en' ? 'These signals were content-reviewed, but do not prove tenant impact. Verify the source, scope and applicability.' : 'Deze signalen zijn inhoudelijk beoordeeld, maar bewijzen nog geen tenantimpact. Controleer bron, scope en toepasbaarheid.';
-      target = 'todo';
-    } else if (counts.followup > 0) {
-      level = 'warn';
-      headline = counts.followup + (language === 'en' ? (counts.followup === 1 ? ' confirmed action needs follow-up' : ' confirmed actions need follow-up') : (counts.followup === 1 ? ' bevestigde actie vraagt opvolging' : ' bevestigde acties vragen opvolging'));
-      detail = language === 'en' ? 'You marked these signals as relevant. Complete them after the change has been handled.' : 'Je hebt deze signalen als relevant aangemerkt. Rond ze af zodra de wijziging is verwerkt.';
-      target = 'followup';
-    } else if (running.length || urgent.length) {
-      level = 'warn';
-      headline = language === 'en' ? 'No open actions, but a change is approaching' : 'Geen open acties, wel een wijziging in de buurt';
-      detail = language === 'en' ? ((running.length ? running.length + ' already in progress. ' : '') + (urgent.length ? urgent.length + ' within three weeks.' : '')) : ((running.length ? running.length + ' loopt al. ' : '') + (urgent.length ? urgent.length + ' valt binnen drie weken.' : ''));
-      target = 'dated';
-    } else {
-      level = 'ok';
-      headline = language === 'en' ? 'Action list is up to date' : 'Actielijst is bijgewerkt';
-      detail = language === 'en' ? counts.watch + ' signals to monitor and ' + counts.nieuw + ' new since the previous run.' : counts.watch + ' signalen om in de gaten te houden en ' + counts.nieuw + ' nieuw sinds de vorige run.';
-    }
-
-    statusEl.className = 'status ' + level;
-    document.getElementById('status-ico').innerHTML = ICON[level];
-    document.getElementById('status-headline').textContent = headline;
-    document.getElementById('status-detail').textContent = detail;
-    jump.hidden = !target;
-    jump.textContent = target === 'todo' ? (language === 'en' ? 'Review now' : 'Beoordeel nu') : (target === 'followup' ? (language === 'en' ? 'View follow-up' : 'Bekijk opvolging') : (language === 'en' ? 'View calendar' : 'Bekijk kalender'));
-    jump.onclick = target ? function () { setTier(target); } : null;
   }
 
   syncOverview();
-  renderStatus();
 
   /* ---------- agenda ---------- */
 
@@ -1324,7 +1202,7 @@
 
   /* ---------- filters ---------- */
 
-  var filters = { tier: preferences.channel === 'personal' && counts.review > 0 ? 'todo' : 'all', q: '', src: '', cats: [] };
+  var filters = { tier: preferences.channel === 'personal' && counts.review > 0 ? 'todo' : 'all', q: '', cats: [] };
   var view = 'urgentie';
   var shownLimit = PAGE;
 
@@ -1385,7 +1263,6 @@
     document.getElementById('metric-review').setAttribute('aria-pressed', String(key === 'todo'));
     document.getElementById('metric-followup').setAttribute('aria-pressed', String(key === 'followup'));
     document.getElementById('metric-new').setAttribute('aria-pressed', String(key === 'new'));
-    document.getElementById('metric-health').setAttribute('aria-pressed', 'false');
     shownLimit = PAGE;
     render();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1401,44 +1278,22 @@
   document.getElementById('metric-review').addEventListener('click', function () { setTier('todo'); });
   document.getElementById('metric-followup').addEventListener('click', function () { setTier('followup'); });
   document.getElementById('metric-new').addEventListener('click', function () { setTier('new'); });
-  document.getElementById('metric-health').addEventListener('click', function () {
-    var feeds = document.querySelector('details.feeds');
-    feeds.open = true;
-    feeds.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
   document.getElementById('metric-review').setAttribute('aria-pressed', String(filters.tier === 'todo'));
 
-  /* Vijftien categorieen maken de zijbalk langer dan het scherm. De negen
-     grootste staan open, de rest achter een knop. */
-  var CAT_VISIBLE = 9;
+  /* Alle categorieën staan direct open: geen verborgen +x-laag. */
   var catBox = document.getElementById('cats');
 
-  data.categories.forEach(function (c, index) {
+  data.categories.forEach(function (c) {
     var b = document.createElement('button');
     b.className = 'facet';
     b.dataset.cat = c.name;
     b.setAttribute('aria-pressed', 'false');
-    if (index >= CAT_VISIBLE) { b.dataset.overflow = '1'; b.hidden = true; }
     b.innerHTML = '<span class="dot" style="visibility:hidden"></span><span class="nm"></span><span class="ct"></span>';
     b.querySelector('.nm').textContent = categoryLabel(c.name);
     b.querySelector('.ct').textContent = c.count;
     b.addEventListener('click', function () { toggleCat(c.name); });
     catBox.appendChild(b);
   });
-
-  if (data.categories.length > CAT_VISIBLE) {
-    var catToggle = document.createElement('button');
-    catToggle.className = 'facet';
-    catToggle.style.color = 'var(--muted)';
-    var expanded = false;
-    catToggle.textContent = '+ ' + (data.categories.length - CAT_VISIBLE) + (language === 'en' ? ' more' : ' meer');
-    catToggle.addEventListener('click', function () {
-      expanded = !expanded;
-      Array.prototype.forEach.call(catBox.querySelectorAll('[data-overflow]'), function (b) { b.hidden = !expanded; });
-      catToggle.textContent = expanded ? (language === 'en' ? 'Show less' : 'Minder tonen') : '+ ' + (data.categories.length - CAT_VISIBLE) + (language === 'en' ? ' more' : ' meer');
-    });
-    catBox.appendChild(catToggle);
-  }
 
   function toggleCat(name) {
     var at = filters.cats.indexOf(name);
@@ -1450,19 +1305,6 @@
     render();
   }
 
-  var sel = document.getElementById('src');
-  data.items.map(function (i) { return i.source; })
-    .filter(function (v, i, a) { return a.indexOf(v) === i; })
-    .sort()
-    .forEach(function (s) {
-      var o = document.createElement('option');
-      o.value = s; o.textContent = s;
-      sel.appendChild(o);
-    });
-  sel.addEventListener('change', function (e) {
-    filters.src = e.target.value; shownLimit = PAGE; render();
-  });
-
   var searchBox = document.getElementById('q');
   searchBox.addEventListener('input', function (e) {
     filters.q = e.target.value.toLowerCase().trim(); shownLimit = PAGE; render();
@@ -1470,8 +1312,8 @@
 
   document.getElementById('reset').addEventListener('click', resetFilters);
   function resetFilters() {
-    filters = { tier: 'all', q: '', src: '', cats: [] };
-    searchBox.value = ''; sel.value = '';
+    filters = { tier: 'all', q: '', cats: [] };
+    searchBox.value = '';
     Array.prototype.forEach.call(document.querySelectorAll('[data-cat]'), function (b) { b.setAttribute('aria-pressed', 'false'); });
     setTier('all');
   }
@@ -1529,8 +1371,6 @@
     if (filters.tier === 'dated'  && !item.keyDate)          { return false; }
     if (filters.tier === 'new'    && !item.isNew)            { return false; }
     if (filters.tier === 'unread' && read[item.id])          { return false; }
-    if (filters.src && item.source !== filters.src)          { return false; }
-
     if (filters.cats.length) {
       var hit = filters.cats.some(function (c) { return item.categories.indexOf(c) !== -1; });
       if (!hit) { return false; }
@@ -1937,7 +1777,7 @@
       return;
     }
     if (typing || e.metaKey || e.ctrlKey || e.altKey) { return; }
-    if (helpDialog.open) { return; }
+    if (sourceStatusDialog.open || settingsDialog.open) { return; }
 
     switch (e.key) {
       case '/': e.preventDefault(); searchBox.focus(); break;
@@ -1969,7 +1809,6 @@
       case 'a': setTier(filters.tier === 'todo' ? 'all' : 'todo'); break;
       case 'v': setTier(filters.tier === 'followup' ? 'all' : 'followup'); break;
       case 'r': resetFilters(); break;
-      case '?': helpDialog.showModal(); break;
     }
   });
 
@@ -1978,16 +1817,22 @@
   var tbody = document.getElementById('feeds-body');
   var broken = 0;
   var sourceTotal = 0;
+  var sourceOk = 0;
+  var skipped = 0;
   data.feeds.forEach(function (f) {
     if (f.kind !== 'processing') {
-      sourceTotal++;
-      if (f.Status !== 'OK') { broken++; }
+      if (f.Status === 'OVERGESLAGEN') { skipped++; }
+      else {
+        sourceTotal++;
+        if (f.Status === 'OK') { sourceOk++; } else { broken++; }
+      }
     }
     var tr = document.createElement('tr');
     tr.innerHTML = '<td></td><td></td><td class="n"></td><td class="n"></td>';
     tr.children[0].textContent = language === 'en' && f.Source === 'Artikelen verrijkt' ? 'Articles enriched' : f.Source;
     tr.children[1].textContent = language === 'en' ? ({ 'OVERGESLAGEN': 'SKIPPED', 'FOUT': 'ERROR', 'OK': 'OK' }[f.Status] || f.Status) : f.Status;
-    if (f.Status !== 'OK') { tr.children[1].className = 'bad'; }
+    if (f.Status === 'FOUT') { tr.children[1].className = 'bad'; }
+    else if (f.Status === 'OVERGESLAGEN') { tr.children[1].className = 'skipped'; }
     tr.children[2].textContent = f.Items;
     var feedDetail = f.Detail || '';
     if (language === 'en' && f.Source === 'Message Center' && f.Status === 'OVERGESLAGEN') {
@@ -2002,8 +1847,8 @@
     tbody.appendChild(tr);
   });
   document.getElementById('feeds-summary').textContent = language === 'en'
-    ? 'Sources (' + sourceTotal + (broken ? ', ' + broken + ' with issues or skipped' : ', all OK') + ')'
-    : 'Bronnen (' + sourceTotal + (broken ? ', ' + broken + ' met problemen of overgeslagen' : ', alles OK') + ')';
+    ? sourceOk + '/' + sourceTotal + ' active sources available' + (broken ? ' · ' + broken + ' with issues' : '') + (skipped ? ' · ' + skipped + ' intentionally skipped' : '')
+    : sourceOk + '/' + sourceTotal + ' actieve bronnen bereikbaar' + (broken ? ' · ' + broken + ' met problemen' : '') + (skipped ? ' · ' + skipped + ' bewust overgeslagen' : '');
 
   render();
 })();
