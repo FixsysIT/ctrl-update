@@ -29,14 +29,14 @@ jobs:
 
     steps:
       - name: Repository ophalen
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Repository controleren
         shell: pwsh
         run: ./scripts/Test-CtrlUpdate.ps1
 
       - name: GitHub Pages configureren
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Website uploaden
         uses: actions/upload-pages-artifact@v5
