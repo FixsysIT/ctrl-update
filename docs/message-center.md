@@ -39,6 +39,15 @@ De site publiceert alleen:
 - `Bevestigd in referentietenant`;
 - actieerbaarheid, categorieën en een eventueel handelingsadvies.
 
+## Productiestatus
+
+Message Center is actief. Op 18 september 2026 is met een echte GitHub OIDC-run
+bevestigd dat het kortlevende token uitsluitend de toegestane Graph-rollen bevat,
+de bron succesvol kan worden gelezen en ieder gepubliceerd tenantbericht een
+volledige agentreview krijgt. De gegenereerde payload en live Pages-site zijn
+gecontroleerd op gehashte publieke ids, generieke links en het ontbreken van ruwe
+bericht-id's, oorspronkelijke titelvelden, tenanttags en GUIDs.
+
 ## Gecontroleerde activering
 
 1. Publiceer en valideer eerst de feature-gated code terwijl de variabele ontbreekt.

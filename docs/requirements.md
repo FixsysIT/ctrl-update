@@ -202,8 +202,13 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 
 | Punt | Waarom nog niet |
 |---|---|
-| Message Center cloudactivering | Implementatie is feature-gated voorbereid; admin consent voor `ServiceMessage.Read.All`, repositoryvariabele en live privacyvalidatie ontbreken nog. |
 | Meerdere klanttenants | Message Center is nu een tenant. Voor meerdere klanten is app-only auth per tenant nodig. |
+
+## Opgeleverd
+
+| Punt | Bewijs |
+|---|---|
+| Message Center cloudactivering | `ServiceMessage.Read.All`, admin consent en de featureflag zijn actief. Een echte GitHub OIDC-run heeft de vereiste rollen, Graph-ophaalactie, volledige agentreview, privacycontroles, Teams-delta en Pages-publicatie end-to-end doorlopen. |
 
 ## V12 - Veilige automatische actualisatie
 

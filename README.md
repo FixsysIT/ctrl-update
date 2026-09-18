@@ -99,7 +99,7 @@ De OpenAI-sleutel wordt alleen rechtstreeks aan `openai/codex-action` aangeboden
 
 Microsoft 365 Service Health kan zonder client secret via GitHub OIDC worden aangesloten. Hiervoor gebruikt een aparte single-tenant Entra-app de application permission `ServiceHealth.Read.All`; de publieke site ontvangt alleen een generiek incidentsignaal en nooit issue-id's of ruwe tenantdetails. De inrichting, validatie en rollback staan in [Microsoft 365 Service Health](docs/service-health.md).
 
-Message Center is als afzonderlijk feature-gated capability voorbereid met `ServiceMessage.Read.All`. Activering vereist expliciete admin consent én repositoryvariabele `CTRL_UPDATE_MESSAGE_CENTER_ENABLED=true`. De runner gebruikt alleen afgeleide redactie; echte bericht-id's en ruwe tenanttekst worden niet gepubliceerd. Zie [Message Center](docs/message-center.md).
+Message Center is als afzonderlijke read-only capability actief met `ServiceMessage.Read.All`, expliciete admin consent en repositoryvariabele `CTRL_UPDATE_MESSAGE_CENTER_ENABLED=true`. De runner gebruikt alleen afgeleide redactie; echte bericht-id's en ruwe tenanttekst worden niet gepubliceerd. De rolcontrole, cloudrun, privacygrens en Pages-publicatie zijn end-to-end gevalideerd. Zie [Message Center](docs/message-center.md).
 
 Een beheerder kan bij een handmatige workflowrun `teams_test` inschakelen. Na alle kwaliteitscontroles verstuurt die run precies één herkenbare testkaart en slaat de normale inhoudsmelding over. Geplande runs gebruiken deze testmodus nooit.
 
