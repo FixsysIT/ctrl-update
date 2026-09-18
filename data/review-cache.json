@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-18T12:52:07.7204040Z",
+  "generated": "2026-09-18T13:00:33.8130267Z",
   "items": [
     {
       "id": "https://andrewstaylor.com/2026/09/11/intune-newsletter-11th-september-2026/",
@@ -77,22 +77,22 @@
     },
     {
       "id": "https://jannikreinhard.com/azure-api-management-mcp-control-plane/",
-      "contentHash": "5d0c25329cbef69ad128573c79ccb65b376e5594531f818d545d94f45b92022b",
-      "titleNl": "Azure API Management MCP als beheervlak voor agenttools",
-      "summaryNl": "Praktische analyse van Azure API Management MCP als gateway voor MCP-servers en REST-API's. Het artikel behandelt identiteitscontrole, beperkte toolexpositie, rate limiting en logging.",
+      "contentHash": "c06ac01cd96c1f46b64923a09e426ee3b3777bfbbf54372fd7a91779ce4bc98d",
+      "titleNl": "Azure API Management als control plane voor MCP-tools",
+      "summaryNl": "Praktische uitleg over het plaatsen van identity-, limiet- en monitoringcontroles vóór MCP-tools met Azure API Management.",
       "whyNl": [],
-      "titleEn": "Azure API Management MCP as a control plane for agent tools",
-      "summaryEn": "Practical analysis of Azure API Management MCP as a gateway for MCP servers and REST APIs. It covers identity controls, limited tool exposure, rate limiting, and logging.",
+      "titleEn": "Azure API Management as a control plane for MCP tools",
+      "summaryEn": "Practical guidance on placing identity, limit, and monitoring controls in front of MCP tools with Azure API Management.",
       "whyEn": [],
       "categories": [
         "Identiteit & MFA",
-        "Scripting & Graph"
+        "Reporting"
       ],
       "kind": "handleiding",
       "tier": "info",
       "confidence": 0.9,
-      "reasonNl": "Dit is een praktische ontwerp- en beheerhandleiding, geen productwijziging of verplichte actie.",
-      "reasonEn": "This is practical design and administration guidance, not a product change or required action."
+      "reasonNl": "Dit is een algemene technische uitleg zonder aangekondigde productwijziging of vereiste actie.",
+      "reasonEn": "This is general technical guidance with no announced product change or required action."
     },
     {
       "id": "https://jannikreinhard.com/copilot-vs-cowork-vs-agents/",
@@ -120,31 +120,22 @@
     },
     {
       "id": "https://jannikreinhard.com/five-gates-mcp-tool-production/",
-      "contentHash": "4e56f04db7ecd81687ffc043b07bded414d6c29a04798752c02727cf4bc9a8c5",
-      "titleNl": "Vijf controles voordat een MCP-tool naar productie gaat",
-      "summaryNl": "Het artikel beschrijft vijf productiecontroles voor MCP-tools: identiteit, bereik, limieten, goedkeuring en bewijs. Azure API Management kan hierbij als handhavingslaag dienen, maar de MCP-server en achterliggende systemen moeten zelf autorisatie en invoercontroles blijven afdwingen.",
-      "whyNl": [
-        "Maak de identiteit van gebruiker, agent en achterliggende toegang over de volledige keten traceerbaar.",
-        "Beperk tools en gegevens per agent en stel snelheids-, quota- en kostenlimieten in.",
-        "Vereis menselijke goedkeuring voor acties met grote impact en leg voldoende bewijs vast om oproepen te herleiden en toegang in te trekken."
-      ],
+      "contentHash": "799494aeddf7853a9e1b14d3d7b67cdcd9684dc34bee7915f35b636f62c5f047",
+      "titleNl": "Vijf controles vóór een MCP-tool in productie gaat",
+      "summaryNl": "De uitleg beschrijft vijf beveiligingscontroles voor identity, bereik, limieten, goedkeuring en bewijsvoering bij MCP-tools.",
+      "whyNl": [],
       "titleEn": "Five controls before an MCP tool reaches production",
-      "summaryEn": "The article describes five production controls for MCP tools: identity, scope, limits, approval, and evidence. Azure API Management can act as an enforcement layer, but the MCP server and backend systems must continue to enforce their own authorization and input validation.",
-      "whyEn": [
-        "Make the identities of the user, agent, and backend access traceable across the entire chain.",
-        "Limit tools and data per agent and configure rate, quota, and cost boundaries.",
-        "Require human approval for high-impact actions and retain enough evidence to trace calls and revoke access."
-      ],
+      "summaryEn": "The guidance describes five security controls for identity, scope, limits, approval, and evidence for MCP tools.",
+      "whyEn": [],
       "categories": [
-        "Compliance",
-        "Scripting & Graph",
-        "Reporting"
+        "Identiteit & MFA",
+        "Defender & Security"
       ],
-      "kind": "analyse",
+      "kind": "handleiding",
       "tier": "info",
-      "confidence": 0.96,
-      "reasonNl": "Dit is een governancekader voor productieontwerpen en bevat geen concrete productdeadline of verplichte migratie.",
-      "reasonEn": "This is a governance framework for production designs and contains no concrete product deadline or mandatory migration."
+      "confidence": 0.88,
+      "reasonNl": "Dit is algemene beveiligingsrichtlijn zonder concrete productwijziging of verplichte actie.",
+      "reasonEn": "This is general security guidance with no specific product change or mandatory action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-reference",
@@ -265,64 +256,76 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/fundamentals/what-is-entra",
-      "contentHash": "38e7836ef957b55a742a333ac4d843fc6a86cfd2299446749ac53373c9690b95",
+      "contentHash": "282a43ebec96bb01a5803cd1413d5f0b2037ab358af6f322da681ebd7bce555f",
       "titleNl": "Wat is Microsoft Entra?",
-      "summaryNl": "Naslagpagina over Microsoft Entra als productfamilie voor identiteit en netwerktoegang binnen een Zero Trust-strategie.",
+      "summaryNl": "Naslag over de Microsoft Entra-productfamilie voor identity, toegang, governance en beveiliging. Het beschrijft onder meer Entra ID, Private Access, ID Governance en Agent ID.",
       "whyNl": [],
       "titleEn": "What is Microsoft Entra?",
-      "summaryEn": "Reference page covering Microsoft Entra as a family of identity and network access products for a Zero Trust strategy.",
+      "summaryEn": "Reference material on the Microsoft Entra product family for identity, access, governance, and security. It describes Entra ID, Private Access, ID Governance, and Agent ID among other products.",
       "whyEn": [],
       "categories": [
         "Identiteit & MFA"
       ],
       "kind": "naslag",
       "tier": "info",
-      "confidence": 0.96,
-      "reasonNl": "De tekst geeft algemene productuitleg zonder wijziging of beheeractie.",
-      "reasonEn": "The text provides general product information without a change or administrative action."
+      "confidence": 0.98,
+      "reasonNl": "Dit is productnaslag en bevat geen aangekondigde wijziging of vereiste actie.",
+      "reasonEn": "This is product reference material and contains no announced change or required action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/id-governance/licensing-fundamentals",
-      "contentHash": "1266305be5ee806ed434a87f259d987b433cac3cde303a27cc966be8724fcd73",
-      "titleNl": "Licentiegrondslagen voor Microsoft Entra ID Governance",
-      "summaryNl": "Naslag over beschikbare Microsoft Entra ID Governance-licenties, vereisten en inbegrepen mogelijkheden. Behandelt ook licenties voor Microsoft Entra Suite en Microsoft Agent 365.",
+      "contentHash": "fb16780bfaf3e1d663d1a1e55dc2fed939dfb87be498edcbe270f94c9749f089",
+      "titleNl": "Basisprincipes van licenties voor Microsoft Entra ID Governance",
+      "summaryNl": "Naslag voor besluitvormers en beheerders over licenties voor Microsoft Entra ID Governance. De aangeleverde tekst noemt ook governance voor agentidentiteiten.",
       "whyNl": [],
       "titleEn": "Microsoft Entra ID Governance licensing fundamentals",
-      "summaryEn": "Reference material on available Microsoft Entra ID Governance licenses, prerequisites, and included capabilities. It also covers licensing for Microsoft Entra Suite and Microsoft Agent 365.",
+      "summaryEn": "Reference material for decision makers and administrators on Microsoft Entra ID Governance licensing. The supplied text also mentions governance for agent identities.",
       "whyEn": [],
       "categories": [
         "Licensing"
       ],
       "kind": "naslag",
       "tier": "info",
-      "confidence": 0.95,
-      "reasonNl": "De bron legt licentiemodellen uit en kondigt geen wijziging of deadline aan.",
-      "reasonEn": "The source explains licensing models and announces no change or deadline."
+      "confidence": 0.7,
+      "reasonNl": "De beperkte brontekst wijst op licentienaslag, zonder concrete wijziging of actie.",
+      "reasonEn": "The limited source text indicates licensing reference material, without a concrete change or action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/identity/authentication/concept-sspr-policy",
-      "contentHash": "0e536856bbc7a8529e8fb083a0ff056be307fe3fbff7c359b981846883f3789c",
-      "titleNl": "Wachtwoordbeleid en accountbeperkingen in Microsoft Entra ID",
-      "summaryNl": "Dit artikel beschrijft UPN- en wachtwoordvereisten, smart lockout en uitzonderingen rond wachtwoordwijzigingen en -resets. Het legt ook uit hoe beheerders wachtwoordverloop met Microsoft Graph PowerShell controleren of instellen.",
-      "whyNl": [
-        "Bij gesynchroniseerde accounts kunnen verschillen tussen lokaal en cloudwachtwoordbeleid tot nieuwe wijzigingsprompts of vergrendeling leiden.",
-        "Cloud-only wachtwoordresets kunnen hergebruik van het vorige wachtwoord niet voorkomen."
-      ],
-      "titleEn": "Password policies and account restrictions in Microsoft Entra ID",
-      "summaryEn": "This article describes UPN and password requirements, smart lockout, and exceptions for password changes and resets. It also explains how administrators can check or configure password expiration with Microsoft Graph PowerShell.",
-      "whyEn": [
-        "For synchronized accounts, differences between on-premises and cloud password policies can cause additional change prompts or lockouts.",
-        "Cloud-only password resets cannot prevent reuse of the previous password."
-      ],
+      "contentHash": "2409f2eea035b84fb25dcc65139092a941d61e4c9e89fdd5df73b0a9527e0d0b",
+      "titleNl": "Beleid voor self-service password reset in Microsoft Entra ID",
+      "summaryNl": "Naslag over wachtwoordbeleid en accountbeperkingen in Microsoft Entra ID, inclusief hybride omgevingen.",
+      "whyNl": [],
+      "titleEn": "Self-service password reset policies in Microsoft Entra ID",
+      "summaryEn": "Reference material on password policies and account restrictions in Microsoft Entra ID, including hybrid environments.",
+      "whyEn": [],
       "categories": [
-        "Identiteit & MFA",
-        "Scripting & Graph"
+        "Identiteit & MFA"
       ],
       "kind": "naslag",
       "tier": "info",
-      "confidence": 0.99,
-      "reasonNl": "Het artikel documenteert bestaand gedrag en bevat geen verplichte wijziging of deadline.",
-      "reasonEn": "The article documents existing behavior and contains no mandatory change or deadline."
+      "confidence": 0.82,
+      "reasonNl": "Dit is naslag over bestaand wachtwoord- en accountbeleid zonder aangekondigde wijziging.",
+      "reasonEn": "This is reference material on existing password and account policy, with no announced change."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-install-roadmap",
+      "contentHash": "d40143165c78e1e87b4e8538eff11dbe1f124d62113d2a478a2760c8a37055dc",
+      "titleNl": "Installatieroutekaart voor Microsoft Entra Connect en Connect Health",
+      "summaryNl": "Deze routekaart behandelt installatie, upgrades, synchronisatieopties en operationele planning voor Microsoft Entra Connect. De documentatie waarschuwt dat niet-gedocumenteerde wijzigingen een niet-ondersteunde configuratie kunnen opleveren.",
+      "whyNl": [],
+      "titleEn": "Installation roadmap for Microsoft Entra Connect and Connect Health",
+      "summaryEn": "This roadmap covers installation, upgrades, synchronization options, and operational planning for Microsoft Entra Connect. The documentation warns that undocumented modifications can result in an unsupported configuration.",
+      "whyEn": [],
+      "categories": [
+        "Identiteit & MFA",
+        "Conditional Access"
+      ],
+      "kind": "handleiding",
+      "tier": "info",
+      "confidence": 0.95,
+      "reasonNl": "Dit is installatiedocumentatie en geen nieuwe vereiste of productwijziging.",
+      "reasonEn": "This is installation documentation, not a new requirement or product change."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq",
@@ -538,21 +541,29 @@
     },
     {
       "id": "https://ourcloudnetwork.com/microsoft-adds-basic-permissions-for-groups-in-graph/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-adds-basic-permissions-for-groups-in-graph",
-      "contentHash": "4f346a05f73fdf6dd6bbd47854d7cc18796dfc8e68e6fa1b7753ea6c5566d316",
-      "titleNl": "Microsoft voegt basisrechten voor groepen toe aan Graph",
-      "summaryNl": "Microsoft Graph krijgt nieuwe rechten voor basisgegevens van groepen, het lezen van lidmaatschappen en het bijwerken van de voorkeurslocatie voor gegevens. Daardoor kan de afhankelijkheid van Group.Read.All afnemen.",
-      "whyNl": [],
-      "titleEn": "Microsoft adds basic group permissions to Graph",
-      "summaryEn": "Microsoft Graph is gaining new permissions for basic group data, membership reads, and preferred data location updates. This can reduce reliance on Group.Read.All.",
-      "whyEn": [],
+      "contentHash": "18f8c5d87f653bc23a41ccf3d0a790034df438199df67c06daefd18616b6dc13",
+      "titleNl": "Nieuwe beperkte Graph-machtigingen voor groepen",
+      "summaryNl": "Volgens dit bericht zijn Group.ReadBasic.All, GroupMember.ReadBasic.All en Group-PreferredDataLocation.ReadWrite.All toegevoegd voor beperktere toegang tot groepsgegevens. Alle drie vereisen beheerdersgoedkeuring.",
+      "whyNl": [
+        "Beoordeel apps met brede Group.Read.All- of Group.ReadWrite.All-toestemming.",
+        "Test de nieuwe scopes voordat bestaande toestemming wordt vervangen.",
+        "De machtigingen werden volgens het bericht op 16 september 2026 toegevoegd."
+      ],
+      "titleEn": "New least-privileged Graph permissions for groups",
+      "summaryEn": "According to this report, Group.ReadBasic.All, GroupMember.ReadBasic.All, and Group-PreferredDataLocation.ReadWrite.All were added for narrower access to group data. All three require administrator consent.",
+      "whyEn": [
+        "Review apps with broad Group.Read.All or Group.ReadWrite.All consent.",
+        "Test the new scopes before replacing existing consent.",
+        "According to the report, the permissions were added on September 16, 2026."
+      ],
       "categories": [
         "Scripting & Graph"
       ],
       "kind": "nieuws",
       "tier": "watch",
-      "confidence": 0.75,
-      "reasonNl": "De wijziging is relevant voor Graph-applicaties, maar de tekst noemt geen verplichte actie.",
-      "reasonEn": "The change is relevant to Graph applications, but the text states no required action."
+      "confidence": 0.85,
+      "reasonNl": "De nieuwe machtigingen zijn relevant voor least-privilegebeheer, maar de onderbouwing komt uit een communitybron.",
+      "reasonEn": "The new permissions are relevant to least-privilege administration, but the evidence comes from a community source."
     },
     {
       "id": "https://ourcloudnetwork.com/microsoft-closes-a-data-access-gap-for-graph-api-permission/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-closes-a-data-access-gap-for-graph-api-permission",
@@ -790,6 +801,34 @@
       "confidence": 0.97,
       "reasonNl": "Dit is technische uitleg en naslag zonder aangekondigde wijziging, deadline of verplichte migratie.",
       "reasonEn": "This is technical guidance and reference material without an announced change, deadline, or mandatory migration."
+    },
+    {
+      "id": "https://techcommunity.microsoft.com/t5/intune-customer-success/moving-from-windows-autopilot-to-windows-autopilot-device/ba-p/4557269",
+      "contentHash": "bd57d298534a68837c5bba5db0a149380b31a13d443f58595397339ed11f6f68",
+      "titleNl": "Overstappen van Windows Autopilot naar Windows Autopilot device preparation",
+      "summaryNl": "Windows Autopilot device preparation is de aanbevolen route voor geschikte user-driven scenario's. Windows Autopilot en device preparation kunnen naast elkaar bestaan; pre-provisioning, self-deploying, hybride Entra join en co-management blijven op Windows Autopilot.",
+      "whyNl": [
+        "Beoordeel corporate Windows 11-apparaten met user-driven Microsoft Entra join op geschiktheid.",
+        "Richt device preparation policies en enrollment time grouping in voor migrerende populaties.",
+        "Er is geen verplichte migratiedatum genoemd."
+      ],
+      "titleEn": "Moving from Windows Autopilot to Windows Autopilot device preparation",
+      "summaryEn": "Windows Autopilot device preparation is the recommended path for eligible user-driven scenarios. Windows Autopilot and device preparation can coexist; pre-provisioning, self-deploying, hybrid Entra join, and co-management remain on Windows Autopilot.",
+      "whyEn": [
+        "Assess corporate Windows 11 devices using user-driven Microsoft Entra join for eligibility.",
+        "Configure device preparation policies and enrollment time grouping for migrating populations.",
+        "No mandatory migration date is stated."
+      ],
+      "categories": [
+        "Autopilot",
+        "Enrollment",
+        "Windows 11"
+      ],
+      "kind": "handleiding",
+      "tier": "watch",
+      "confidence": 0.98,
+      "reasonNl": "Microsoft adviseert een relevante gefaseerde overgang, maar noemt geen verplichte migratie of deadline.",
+      "reasonEn": "Microsoft recommends a relevant phased transition, but states no mandatory migration or deadline."
     },
     {
       "id": "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/replace-vpn-access-with-identity-driven-security/ba-p/4529309",
