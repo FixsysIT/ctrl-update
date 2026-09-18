@@ -191,14 +191,34 @@ if ([int]$notificationState.version -ne 1 -or $notificationState.items.Count -eq
     Add-Failure 'Teams-nulmeting bevat geen geldige item- en bronstatus'
 }
 
+function Get-AdaptiveCardText {
+    param($Nodes)
+    $texts = [System.Collections.Generic.List[string]]::new()
+    foreach ($node in @($Nodes)) {
+        if ($node.text) { $texts.Add([string]$node.text) }
+        if ($node.items) {
+            foreach ($nested in @(Get-AdaptiveCardText -Nodes $node.items)) { $texts.Add($nested) }
+        }
+        if ($node.columns) {
+            foreach ($column in @($node.columns)) {
+                foreach ($nested in @(Get-AdaptiveCardText -Nodes $column.items)) { $texts.Add($nested) }
+            }
+        }
+    }
+    return @($texts)
+}
+
 $testPreviewText = & $notificationScript -TestNotification -RunUrl 'https://github.com/FixsysIT/ctrl-update/actions/runs/1' -PreviewOnly | Out-String
 try { $testPreview = $testPreviewText | ConvertFrom-Json -AsHashtable }
 catch { $testPreview = $null; Add-Failure "Teams-testpreview is geen geldige Adaptive Card: $($_.Exception.Message)" }
 if ($testPreview) {
-    $testCardText = @($testPreview.attachments[0].content.body | ForEach-Object { [string]$_.text }) -join "`n"
+    $testCardText = @(Get-AdaptiveCardText -Nodes $testPreview.attachments[0].content.body) -join "`n"
     $testActions = @($testPreview.attachments[0].content.actions)
-    if ($testCardText -notmatch 'Teams-koppeling actief' -or
+    if ($testCardText -notmatch 'ONTWERPVOORBEELD' -or
+        $testCardText -notmatch 'Kritieke waarschuwing' -or
+        $testCardText -notmatch 'Te beoordelen' -or
         $testCardText -notmatch 'geen beheeractie vereist' -or
+        [string]$testPreview.attachments[0].content.msteams.width -ne 'Full' -or
         $testActions.Count -ne 2) {
         Add-Failure 'Teams-testpreview bevat niet de verwachte status en acties'
     }
@@ -233,7 +253,7 @@ else {
     catch { $preview = $null; Add-Failure "Teams-preview is geen geldige Adaptive Card: $($_.Exception.Message)" }
 
     if ($preview) {
-        $cardText = @($preview.attachments[0].content.body | ForEach-Object { [string]$_.text }) -join "`n"
+        $cardText = @(Get-AdaptiveCardText -Nodes $preview.attachments[0].content.body) -join "`n"
         if ([string]$preview.type -ne 'message' -or
             [string]$preview.attachments[0].contentType -ne 'application/vnd.microsoft.card.adaptive' -or
             $cardText -notmatch 'NAAR ACTIE GEPROMOVEERD' -or
@@ -255,10 +275,13 @@ else {
             id = 'ctrl-update-critical-notification-fixture'
             tier = 'action'
             title = 'Emergency update voor brede productiestoring'
+            originalTitle = 'Emergency out-of-band update for widespread service disruption'
             summary = 'Beheerders moeten de noodupdate beoordelen en gecontroleerd uitrollen.'
             source = 'Gecontroleerde nieuwsbron'
             link = 'https://example.invalid/critical-warning'
             keywords = @('out-of-band')
+            actionCtx = @([ordered]@{ text = 'Beoordeel de noodupdate voor getroffen systemen.' })
+            dateText = '18 sep'
             keyDate = $null
             allDates = @()
         })
@@ -271,10 +294,44 @@ else {
     try { $criticalPreview = $criticalPreviewText | ConvertFrom-Json -AsHashtable }
     catch { $criticalPreview = $null; Add-Failure "Kritieke Teams-preview is ongeldig: $($_.Exception.Message)" }
     if ($criticalPreview) {
-        $criticalCardText = @($criticalPreview.attachments[0].content.body | ForEach-Object { [string]$_.text }) -join "`n"
-        if ($criticalCardText -notmatch 'KRITIEKE WAARSCHUWING' -or
-            $criticalCardText -notmatch '1 kritieke waarschuwing') {
+        $criticalCardText = @(Get-AdaptiveCardText -Nodes $criticalPreview.attachments[0].content.body) -join "`n"
+        $criticalActions = @($criticalPreview.attachments[0].content.actions)
+        if (@([regex]::Matches($criticalCardText, 'Kritieke waarschuwing', 'IgnoreCase')).Count -ne 1 -or
+            $criticalCardText -notmatch 'Te beoordelen' -or
+            $criticalActions.Count -ne 2 -or
+            [string]$criticalActions[0].title -ne 'Bekijk bron') {
             Add-Failure 'Incidentactie wordt niet als kritieke Teams-waarschuwing weergegeven'
+        }
+    }
+
+    $multiActionItems = @(1..3 | ForEach-Object {
+        [ordered]@{
+            id = "ctrl-update-compact-action-fixture-$_"
+            tier = 'action'
+            title = "Lifecycle-actie $_"
+            originalTitle = "Lifecycle action $_"
+            summary = "Deze lange samenvatting $_ hoort niet op een compacte kaart met meerdere acties."
+            source = 'Gecontroleerde bron'
+            link = "https://example.invalid/action-$_"
+            keywords = @('failure')
+            actionCtx = @()
+            dateText = '18 sep'
+            keyDate = $null
+            allDates = @()
+        }
+    })
+    $multiActionJson = [ordered]@{ items = $multiActionItems; feeds = @() } | ConvertTo-Json -Depth 30 -Compress
+    "<script id=`"payload`" type=`"application/json`">$multiActionJson</script>" |
+        Set-Content -LiteralPath $notificationPublishedPath -Encoding UTF8
+    $multiActionPreviewText = & $notificationScript -PublishedPath $notificationPublishedPath -StatePath $notificationStatePath -PreviewOnly | Out-String
+    try { $multiActionPreview = $multiActionPreviewText | ConvertFrom-Json -AsHashtable }
+    catch { $multiActionPreview = $null; Add-Failure "Compacte Teams-preview is ongeldig: $($_.Exception.Message)" }
+    if ($multiActionPreview) {
+        $multiActionCardText = @(Get-AdaptiveCardText -Nodes $multiActionPreview.attachments[0].content.body) -join "`n"
+        if ($multiActionCardText -notmatch '3 acties vragen aandacht' -or
+            $multiActionCardText -match 'Kritieke waarschuwing' -or
+            $multiActionCardText -match 'hoort niet op een compacte kaart') {
+            Add-Failure 'Kaart met meerdere gewone acties is niet compact of wordt onterecht kritiek genoemd'
         }
     }
 }
