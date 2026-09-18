@@ -284,14 +284,24 @@ if ($testPreview) {
 $notificationTestDirectory = Join-Path $projectRoot '.tmp/test-teams-notification'
 $null = New-Item -ItemType Directory -Path $notificationTestDirectory -Force
 $notificationPublishedPath = Join-Path $notificationTestDirectory 'index.html'
+$notificationFixtureStatePath = Join-Path $notificationTestDirectory 'state.json'
+
+# Bouw de meldingsfixture op tegen een nulmeting van exact de huidige payload.
+# Daardoor testen nieuwe echte items uit een refresh niet onbedoeld mee als
+# extra gebeurtenissen naast de ene synthetische promotie en bronstoring.
+$published | Set-Content -LiteralPath $notificationPublishedPath -Encoding UTF8
+& $notificationScript -PublishedPath $notificationPublishedPath `
+    -StatePath $notificationFixtureStatePath -InitializeOnly | Out-Null
+$notificationFixtureStateBefore = Get-Content -LiteralPath $notificationFixtureStatePath -Raw -Encoding UTF8
+$notificationFixtureState = $notificationFixtureStateBefore | ConvertFrom-Json -AsHashtable
 
 $payloadMatch = [regex]::Match($published, '<script id="payload" type="application/json">(?<json>[\s\S]*?)</script>')
 $notificationPayload = $payloadMatch.Groups['json'].Value | ConvertFrom-Json -AsHashtable
 $promotedItem = @($notificationPayload.items | Where-Object {
     $itemId = [string]$_.id
     [string]$_.tier -ne 'action' -and
-        $notificationState.items.ContainsKey($itemId) -and
-        [string]$notificationState.items[$itemId].tier -ne 'action'
+        $notificationFixtureState.items.ContainsKey($itemId) -and
+        [string]$notificationFixtureState.items[$itemId].tier -ne 'action'
 })[0]
 $failedFeed = @($notificationPayload.feeds | Where-Object Status -eq 'OK')[0]
 if (-not $promotedItem -or -not $failedFeed) {
@@ -305,7 +315,7 @@ else {
     "<script id=`"payload`" type=`"application/json`">$notificationJson</script>" |
         Set-Content -LiteralPath $notificationPublishedPath -Encoding UTF8
 
-    $previewText = & $notificationScript -PublishedPath $notificationPublishedPath -StatePath $notificationStatePath -PreviewOnly | Out-String
+    $previewText = & $notificationScript -PublishedPath $notificationPublishedPath -StatePath $notificationFixtureStatePath -PreviewOnly | Out-String
     try { $preview = $previewText | ConvertFrom-Json -AsHashtable }
     catch { $preview = $null; Add-Failure "Teams-preview is geen geldige Adaptive Card: $($_.Exception.Message)" }
 
@@ -319,9 +329,9 @@ else {
         }
     }
 
-    $notificationStateAfter = Get-Content -LiteralPath $notificationStatePath -Raw -Encoding UTF8
-    if ($notificationStateAfter -ne $notificationStateBefore) {
-        Add-Failure 'PreviewOnly heeft de productie-nulmeting onbedoeld gewijzigd'
+    $notificationFixtureStateAfter = Get-Content -LiteralPath $notificationFixtureStatePath -Raw -Encoding UTF8
+    if ($notificationFixtureStateAfter -ne $notificationFixtureStateBefore) {
+        Add-Failure 'PreviewOnly heeft de tijdelijke nulmeting onbedoeld gewijzigd'
     }
 
     # Gebruik een volledig synthetisch nieuw actie-item. Dat maakt deze controle
@@ -347,7 +357,7 @@ else {
     $criticalJson = $criticalPayload | ConvertTo-Json -Depth 30 -Compress
     "<script id=`"payload`" type=`"application/json`">$criticalJson</script>" |
         Set-Content -LiteralPath $notificationPublishedPath -Encoding UTF8
-    $criticalPreviewText = & $notificationScript -PublishedPath $notificationPublishedPath -StatePath $notificationStatePath -PreviewOnly | Out-String
+    $criticalPreviewText = & $notificationScript -PublishedPath $notificationPublishedPath -StatePath $notificationFixtureStatePath -PreviewOnly | Out-String
     try { $criticalPreview = $criticalPreviewText | ConvertFrom-Json -AsHashtable }
     catch { $criticalPreview = $null; Add-Failure "Kritieke Teams-preview is ongeldig: $($_.Exception.Message)" }
     if ($criticalPreview) {
@@ -381,7 +391,7 @@ else {
     $criticalWatchJson = $criticalWatchPayload | ConvertTo-Json -Depth 30 -Compress
     "<script id=`"payload`" type=`"application/json`">$criticalWatchJson</script>" |
         Set-Content -LiteralPath $notificationPublishedPath -Encoding UTF8
-    $criticalWatchPreviewText = & $notificationScript -PublishedPath $notificationPublishedPath -StatePath $notificationStatePath -PreviewOnly | Out-String
+    $criticalWatchPreviewText = & $notificationScript -PublishedPath $notificationPublishedPath -StatePath $notificationFixtureStatePath -PreviewOnly | Out-String
     try { $criticalWatchPreview = $criticalWatchPreviewText | ConvertFrom-Json -AsHashtable }
     catch { $criticalWatchPreview = $null; Add-Failure "Kritieke Let op-preview is ongeldig: $($_.Exception.Message)" }
     if ($criticalWatchPreview) {
@@ -410,7 +420,7 @@ else {
     $multiActionJson = [ordered]@{ items = $multiActionItems; feeds = @() } | ConvertTo-Json -Depth 30 -Compress
     "<script id=`"payload`" type=`"application/json`">$multiActionJson</script>" |
         Set-Content -LiteralPath $notificationPublishedPath -Encoding UTF8
-    $multiActionPreviewText = & $notificationScript -PublishedPath $notificationPublishedPath -StatePath $notificationStatePath -PreviewOnly | Out-String
+    $multiActionPreviewText = & $notificationScript -PublishedPath $notificationPublishedPath -StatePath $notificationFixtureStatePath -PreviewOnly | Out-String
     try { $multiActionPreview = $multiActionPreviewText | ConvertFrom-Json -AsHashtable }
     catch { $multiActionPreview = $null; Add-Failure "Compacte Teams-preview is ongeldig: $($_.Exception.Message)" }
     if ($multiActionPreview) {
@@ -423,6 +433,10 @@ else {
         }
     }
 }
+foreach ($path in @($notificationPublishedPath, $notificationFixtureStatePath)) {
+    Remove-Item -LiteralPath $path -Force -ErrorAction SilentlyContinue
+}
+Remove-Item -LiteralPath $notificationTestDirectory -Force -ErrorAction SilentlyContinue
 if ($failures.Count -eq 0) { Write-Pass 'Teams-meldingen zijn actiegericht, kaartgeldig en zonder eerste spamgolf' }
 
 $testDirectory = Join-Path $projectRoot '.tmp/test-review-pipeline'
