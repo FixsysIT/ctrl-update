@@ -3,13 +3,13 @@
     Importeert de RSS-bronaanvragen uit een geëxporteerd voorkeurenbestand.
 
 .DESCRIPTION
-    Elke aangevraagde website- of feed-URL gaat door Add-NewsSource.ps1. Dat script
+    Elke aangevraagde website- of feed-URL gaat door Add-CtrlUpdateSource.ps1. Dat script
     zoekt RSS/Atom op, valideert dat de feed parsebaar en niet leeg is en schrijft
-    hem pas daarna naar sources.json. Persoonlijke onderwerp- en bronfilters blijven
+    hem pas daarna naar config/sources.json. Persoonlijke onderwerp- en bronfilters blijven
     browserinstellingen en worden niet centraal overgenomen.
 
 .EXAMPLE
-    .\Import-IntuneRadarPreferences.ps1 .\intune-radar-voorkeuren.json -WhatIf
+    .\scripts\Import-CtrlUpdatePreferences.ps1 .\ctrl-update-voorkeuren.json -WhatIf
 #>
 [CmdletBinding(SupportsShouldProcess)]
 param(
@@ -18,7 +18,7 @@ param(
     [int]    $Boost = 0,
     [ValidateSet('Community', 'Microsoft')]
     [string] $Tag = 'Community',
-    [string] $ConfigPath = (Join-Path $PSScriptRoot 'sources.json')
+    [string] $ConfigPath = (Join-Path (Split-Path -Parent $PSScriptRoot) 'config/sources.json')
 )
 
 $ErrorActionPreference = 'Stop'
@@ -37,7 +37,7 @@ foreach ($request in $requests) {
     $name = if ([string]::IsNullOrWhiteSpace([string]$request.name)) { $null } else { [string]$request.name }
 
     if ($PSCmdlet.ShouldProcess([string]$request.url, 'RSS-bron ontdekken, valideren en toevoegen')) {
-        & (Join-Path $PSScriptRoot 'Add-NewsSource.ps1') `
+        & (Join-Path $PSScriptRoot 'Add-CtrlUpdateSource.ps1') `
             -Url ([string]$request.url) -Name $name -Boost $Boost -Tag $Tag -ConfigPath $ConfigPath
     }
 }

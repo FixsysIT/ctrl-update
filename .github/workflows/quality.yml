@@ -1,0 +1,26 @@
+name: Controleer repository
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "dist/**"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: PowerShell, JSON en publicatie
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository ophalen
+        uses: actions/checkout@v6
+
+      - name: Kwaliteitscontroles uitvoeren
+        shell: pwsh
+        run: ./scripts/Test-CtrlUpdate.ps1

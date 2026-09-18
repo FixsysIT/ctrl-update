@@ -1,5 +1,5 @@
 {
-  "_comment": "Feeds staan in 'feeds'. Plak een blog- of categorie-URL erin via .\\Add-NewsSource.ps1 <url>, dan zoekt die zelf de RSS-feed op. boost telt op bij elke score van die bron (negatief = ruisbron dempen), enabled:false zet er een uit. Scoring: per keywordgroep tellen maximaal maxTerms treffers mee, titel-treffers wegen titleWeightMultiplier keer zwaarder. Een term matcht op hele woorden; zet er een * achter voor prefix-match (retir* vangt retire/retiring/retirement). Tier Actie vereist score >= actionThreshold EN, als requireActionSignal aanstaat, een treffer uit een groep met isActionSignal.",
+  "_comment": "Feeds staan in 'feeds'. Plak een blog- of categorie-URL erin via .\\scripts\\Add-CtrlUpdateSource.ps1 <url>, dan zoekt die zelf de RSS-feed op. boost telt op bij elke score van die bron (negatief = ruisbron dempen), enabled:false zet er een uit. Scoring: per keywordgroep tellen maximaal maxTerms treffers mee, titel-treffers wegen titleWeightMultiplier keer zwaarder. Een term matcht op hele woorden; zet er een * achter voor prefix-match (retir* vangt retire/retiring/retirement). Tier Actie vereist score >= actionThreshold EN, als requireActionSignal aanstaat, een treffer uit een groep met isActionSignal.",
 
   "settings": {
     "defaultDays": 14,
@@ -23,7 +23,7 @@
   "agentReview": {
     "enabled": true,
     "batchSize": 10,
-    "outputPath": "agent-review.json",
+    "outputPath": "data/review-cache.json",
     "minimumConfidence": 0.55
   },
 

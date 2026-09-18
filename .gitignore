@@ -1,3 +1,7 @@
 .sites-runtime/
 .openai/
-agent-review-input.json
+data/review-input.json
+data/*.tmp
+*.log
+.DS_Store
+Thumbs.db

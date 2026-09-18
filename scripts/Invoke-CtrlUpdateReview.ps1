@@ -10,17 +10,22 @@
 #>
 [CmdletBinding()]
 param(
-    [string] $InputPath  = (Join-Path $PSScriptRoot 'agent-review-input.json'),
-    [string] $OutputPath = (Join-Path $PSScriptRoot 'agent-review.json'),
-    [string] $ConfigPath = (Join-Path $PSScriptRoot 'sources.json'),
-    [string] $SchemaPath = (Join-Path $PSScriptRoot 'agent-review-schema.json'),
+    [string] $InputPath  = (Join-Path (Split-Path -Parent $PSScriptRoot) 'data/review-input.json'),
+    [string] $OutputPath = (Join-Path (Split-Path -Parent $PSScriptRoot) 'data/review-cache.json'),
+    [string] $ConfigPath = (Join-Path (Split-Path -Parent $PSScriptRoot) 'config/sources.json'),
+    [string] $SchemaPath = (Join-Path (Split-Path -Parent $PSScriptRoot) 'schemas/review.schema.json'),
     [int]    $BatchSize
 )
 
 $ErrorActionPreference = 'Stop'
 
+$outputDirectory = Split-Path -Parent $OutputPath
+if ($outputDirectory -and -not (Test-Path -LiteralPath $outputDirectory)) {
+    $null = New-Item -ItemType Directory -Path $outputDirectory -Force
+}
+
 if (-not (Get-Command codex -ErrorAction SilentlyContinue)) {
-    throw 'Codex CLI niet gevonden. Installeer Codex of gebruik Get-IntuneNews.ps1 -SkipAgentReview.'
+    throw 'Codex CLI niet gevonden. Installeer Codex of gebruik Update-CtrlUpdate.ps1 -SkipAgentReview.'
 }
 
 $inputData = Get-Content -LiteralPath $InputPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -94,7 +99,7 @@ ITEMS:
 $itemsJson
 "@
 
-    $batchPath = Join-Path ([IO.Path]::GetTempPath()) ("intune-radar-review-{0}-{1}.json" -f $PID, $number)
+    $batchPath = Join-Path ([IO.Path]::GetTempPath()) ("ctrl-update-review-{0}-{1}.json" -f $PID, $number)
     try {
         $log = $prompt | & codex exec --ephemeral --sandbox read-only --output-schema $SchemaPath -o $batchPath - 2>&1
         if ($LASTEXITCODE -ne 0) {

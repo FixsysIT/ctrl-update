@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-17T19:46:38.8933500Z",
+  "generated": "2026-09-18T08:05:32.5001675Z",
   "items": [
     {
       "id": "https://andrewstaylor.com/2026/09/04/intune-newsletter-4th-september-2026/",
@@ -244,39 +244,45 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/overview",
-      "contentHash": "fb26d9ff75bd000e18abc46dad2b7544120417bcda5b3b8675f81a0e3dc486fb",
-      "titleNl": "Nieuwe functies in .NET 11",
-      "summaryNl": "Dit overzicht beschrijft nieuwe functies in de runtime, libraries en SDK van .NET 11. Het verwijst ook naar vernieuwingen in onder meer ASP.NET Core.",
-      "whyNl": [],
-      "titleEn": "New features in .NET 11",
-      "summaryEn": "This overview describes new features in the .NET 11 runtime, libraries, and SDK. It also links to updates in areas including ASP.NET Core.",
-      "whyEn": [],
-      "categories": [
-        "Scripting & Graph"
+      "contentHash": "09b6c319542788db36bfc1bca3b256fd4df25a0ae50de75e11b51d2f6682e9a2",
+      "titleNl": "Wat is er nieuw in .NET 11",
+      "summaryNl": ".NET 11 RC 1 introduceert wijzigingen in de runtime, libraries, SDK en ontwikkelplatforms. De algemene beschikbaarheid wordt verwacht in november 2026.",
+      "whyNl": [
+        "De minimale hardwarevereisten voor x86/x64 en Arm64 worden verhoogd.",
+        "Algemene beschikbaarheid wordt verwacht in november 2026."
       ],
-      "kind": "naslag",
+      "titleEn": "What's new in .NET 11",
+      "summaryEn": ".NET 11 RC 1 introduces changes to the runtime, libraries, SDK, and development platforms. General availability is expected in November 2026.",
+      "whyEn": [
+        "Minimum hardware requirements for x86/x64 and Arm64 are increasing.",
+        "General availability is expected in November 2026."
+      ],
+      "categories": [
+        "Apps & Packaging"
+      ],
+      "kind": "nieuws",
       "tier": "info",
-      "confidence": 0.98,
-      "reasonNl": "Dit is een technisch overzicht zonder concrete beheeractie of deadline voor Intune- of Entra-beheerders.",
-      "reasonEn": "This is a technical overview without a concrete administrative action or deadline for Intune or Entra administrators."
+      "confidence": 0.94,
+      "reasonNl": "Dit is een overzicht van een release candidate zonder verplichte beheeractie of harde migratiedeadline.",
+      "reasonEn": "This is an overview of a release candidate without a required administrative action or firm migration deadline."
     },
     {
       "id": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15",
-      "contentHash": "de0830ec88995ab68f734357980005381b0b99b7e0bf0fef7519774832e10bdf",
-      "titleNl": "Nieuw in C# 15",
-      "summaryNl": "Dit overzicht introduceert nieuwe C# 15-functies, waaronder union types, de closed modifier, extension indexers en versoepelingen voor pointers.",
+      "contentHash": "fbaa0a71ef898dad13948935c3d54ac3ff859b49a1b54eaf5e359a77412b7cb6",
+      "titleNl": "Wat is er nieuw in C# 15",
+      "summaryNl": "C# 15 is als preview beschikbaar via de .NET 11 preview SDK en Visual Studio 2026 Insiders. De preview bevat onder meer union types, closed hierarchies, extension indexers en wijzigingen voor geheugenveiligheid.",
       "whyNl": [],
       "titleEn": "What's new in C# 15",
-      "summaryEn": "This overview introduces new C# 15 features, including union types, the closed modifier, extension indexers, and pointer relaxations.",
+      "summaryEn": "C# 15 is available in preview through the .NET 11 preview SDK and Visual Studio 2026 Insiders. The preview includes union types, closed hierarchies, extension indexers, and memory-safety changes.",
       "whyEn": [],
       "categories": [
         "Scripting & Graph"
       ],
       "kind": "nieuws",
       "tier": "info",
-      "confidence": 0.98,
-      "reasonNl": "Dit is een algemeen ontwikkelingsoverzicht zonder vereiste beheeractie.",
-      "reasonEn": "This is a general development overview with no required administrative action."
+      "confidence": 0.96,
+      "reasonNl": "Het betreft ontwikkelaarsinformatie over previewfuncties, zonder concrete beheeractie of deadline.",
+      "reasonEn": "This is developer information about preview features, with no concrete administrative action or deadline."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/fundamentals/what-is-entra",
@@ -500,31 +506,21 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/known-issues",
-      "contentHash": "e131e654ae16f7db7880f723377bbc28b3921a6d8db6ab9b63784c73fd2d5b31",
+      "contentHash": "5829690857b34aee43c1fc008ceb87d259ba960c3b79017535274a62f30e93ea",
       "titleNl": "Bekende problemen met Microsoft Intune",
-      "summaryNl": "Microsoft meldt meerdere actieve Intune-problemen rond Microsoft Store-apps, Company Portal en Settings catalog. Enkele oudere problemen, waaronder onverwachte uitschrijving van macOS-apparaten, zijn inmiddels opgelost.",
-      "whyNl": [
-        "Bij het toevoegen van Microsoft Store-apps gebruikt Intune tijdelijk de Amerikaanse catalogus; bestaande apps worden niet geraakt.",
-        "Company Portal toont bij meerdere toegestane Windows-buildreeksen alleen de eerste reeks, maar handhaaft het compliancebeleid wel correct.",
-        "Apps die via Configuration Manager zijn gepubliceerd, kunnen in Company Portal enkele seconden tot minuten nodig hebben om te laden."
-      ],
+      "summaryNl": "Deze pagina verzamelt bekende problemen met Microsoft Intune, inclusief tijdelijke oplossingen en bijgewerkte oplossingen. De aangeleverde brontekst noemt geen afzonderlijke problemen.",
+      "whyNl": [],
       "titleEn": "Known issues with Microsoft Intune",
-      "summaryEn": "Microsoft reports several active Intune issues involving Microsoft Store apps, Company Portal, and Settings catalog. Some older issues, including unexpected unenrollment of macOS devices, have now been resolved.",
-      "whyEn": [
-        "When adding Microsoft Store apps, Intune temporarily uses the United States catalog; existing apps are unaffected.",
-        "For multiple permitted Windows build ranges, Company Portal displays only the first range, but the compliance policy is still enforced correctly.",
-        "Apps published through Configuration Manager can take several seconds or minutes to load in Company Portal."
-      ],
+      "summaryEn": "This page collects known issues with Microsoft Intune, including workarounds and updated fixes. The supplied source text does not identify any individual issues.",
+      "whyEn": [],
       "categories": [
-        "Apps & Packaging",
-        "Compliance",
-        "Enrollment"
+        "Reporting"
       ],
       "kind": "naslag",
-      "tier": "watch",
-      "confidence": 0.97,
-      "reasonNl": "De pagina beschrijft actuele operationele problemen die beheerders moeten herkennen, maar bevat geen algemene deadline of verplichte migratie.",
-      "reasonEn": "The page documents current operational issues administrators should recognize, but it contains no general deadline or mandatory migration."
+      "tier": "info",
+      "confidence": 0.62,
+      "reasonNl": "De beperkte brontekst beschrijft alleen een naslagpagina en bevat geen concreet operationeel probleem of vereiste actie.",
+      "reasonEn": "The limited source text only describes a reference page and contains no specific operational issue or required action."
     },
     {
       "id": "https://msendpointmgr.com/2026/09/05/1phonemirror-levels-up-webcam-stats-better-screenshots-and-signed/",
@@ -798,58 +794,6 @@
       "reasonEn": "This operational issue can mark healthy devices as noncompliant and block users through Conditional Access, requiring targeted investigation."
     },
     {
-      "id": "https://patchmypc.com/blog/your-windows-compliance-report-is-lying-to-you/",
-      "contentHash": "34e5407438657bf450d2ce14afba4079b23f30580a48b262a49802e40298db80",
-      "titleNl": "Windows-compliance toont niet alle kwetsbaarheden",
-      "summaryNl": "De analyse stelt dat actuele Windows-updates geen volledig beeld geven van het beveiligingsrisico, omdat kwetsbare applicaties van derden buiten die meting kunnen vallen. Kortere hersteltermijnen en geautomatiseerde applicatie-updates worden als antwoord genoemd.",
-      "whyNl": [
-        "Een device kan voor Windows conform zijn en toch kwetsbare applicaties van derden bevatten.",
-        "Rapportage moet naast Windows-updates ook de patchstatus van applicaties omvatten."
-      ],
-      "titleEn": "Windows compliance does not show every vulnerability",
-      "summaryEn": "The analysis argues that current Windows updates do not provide a complete view of security risk because vulnerable third-party applications can fall outside that measurement. Shorter remediation times and automated application updates are presented as the response.",
-      "whyEn": [
-        "A device can be Windows-compliant while still containing vulnerable third-party applications.",
-        "Reporting should cover application patch status as well as Windows updates."
-      ],
-      "categories": [
-        "Apps & Packaging",
-        "Defender & Security",
-        "Reporting"
-      ],
-      "kind": "analyse",
-      "tier": "info",
-      "confidence": 0.96,
-      "reasonNl": "Dit is een algemene risicoanalyse zonder deadline, verplichte wijziging of specifiek operationeel incident.",
-      "reasonEn": "This is a general risk analysis without a deadline, mandatory change, or specific operational incident."
-    },
-    {
-      "id": "https://patchmypc.com/blog/your-windows-compliance-report-is-lying-to-you/?utm_term=rss",
-      "contentHash": "24c7e606e9691c7aa015a624e6812e2ecae6fe7053fcc711e92e9c7db2e317b9",
-      "titleNl": "Windows-compliance toont niet alle kwetsbaarheden",
-      "summaryNl": "De analyse stelt dat actuele Windows-updates geen volledig beeld geven van het beveiligingsrisico, omdat kwetsbare applicaties van derden buiten die meting kunnen vallen. Kortere hersteltermijnen en geautomatiseerde applicatie-updates worden als antwoord genoemd.",
-      "whyNl": [
-        "Een device kan voor Windows conform zijn en toch kwetsbare applicaties van derden bevatten.",
-        "Rapportage moet naast Windows-updates ook de patchstatus van applicaties omvatten."
-      ],
-      "titleEn": "Windows compliance does not show every vulnerability",
-      "summaryEn": "The analysis argues that current Windows updates do not provide a complete view of security risk because vulnerable third-party applications can fall outside that measurement. Shorter remediation times and automated application updates are presented as the response.",
-      "whyEn": [
-        "A device can be Windows-compliant while still containing vulnerable third-party applications.",
-        "Reporting should cover application patch status as well as Windows updates."
-      ],
-      "categories": [
-        "Apps & Packaging",
-        "Defender & Security",
-        "Reporting"
-      ],
-      "kind": "analyse",
-      "tier": "info",
-      "confidence": 0.96,
-      "reasonNl": "Dit is een algemene risicoanalyse zonder deadline, verplichte wijziging of specifiek operationeel incident.",
-      "reasonEn": "This is a general risk analysis without a deadline, mandatory change, or specific operational incident."
-    },
-    {
       "id": "https://petervanderwoude.nl/post/using-multiple-managed-accounts-with-app-protection-policies/",
       "contentHash": "be045a03bb7789cb25d101a3e8d818621dbdad6c9e0872e80b19b40002b0bfff",
       "titleNl": "App protection policies ondersteunen meerdere beheerde accounts",
@@ -925,6 +869,32 @@
       "confidence": 0.99,
       "reasonNl": "Microsoft geeft een concrete migratierichting en een gefaseerde aanpak voor geschikte implementaties, ook al wordt geen verplichte einddatum genoemd.",
       "reasonEn": "Microsoft provides a concrete migration direction and phased approach for eligible deployments, although no mandatory end date is stated."
+    },
+    {
+      "id": "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/public-preview-of-self-service-onboarding-for-new-microsoft/ba-p/4557199",
+      "contentHash": "8367a1c728211d03fa25a3efd78c0ca0df9ee623231430a8c4b50aa497f2f0e2",
+      "titleNl": "Public preview van self-service onboarding voor nieuwe Microsoft Entra App Gallery-applicaties",
+      "summaryNl": "Uitgevers kunnen nieuwe App Gallery-applicaties voortaan via een begeleide workflow valideren, indienen en volgen in het Microsoft Entra admin center. Microsoft beoordeelt iedere inzending nog steeds voordat deze wordt gepubliceerd.",
+      "whyNl": [
+        "De preview geldt alleen voor nieuwe App Gallery-applicaties.",
+        "Bestaande vermeldingen moeten via het huidige proces worden bijgewerkt of verwijderd.",
+        "Validatie wordt ondersteund voor OIDC- en SAML-SSO en user provisioning."
+      ],
+      "titleEn": "Public preview of self-service onboarding for new Microsoft Entra App Gallery applications",
+      "summaryEn": "Publishers can now validate, submit, and track new App Gallery applications through a guided workflow in the Microsoft Entra admin center. Microsoft still reviews every submission before publication.",
+      "whyEn": [
+        "The preview applies only to new App Gallery applications.",
+        "Existing listings must continue to use the current update or removal process.",
+        "Validation is supported for OIDC and SAML SSO and user provisioning."
+      ],
+      "categories": [
+        "Identiteit & MFA"
+      ],
+      "kind": "wijziging",
+      "tier": "watch",
+      "confidence": 0.98,
+      "reasonNl": "De public preview is relevant voor applicatie-uitgevers, maar vereist geen migratie en bevat geen deadline.",
+      "reasonEn": "The public preview is relevant to application publishers but requires no migration and has no deadline."
     },
     {
       "id": "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/replace-vpn-access-with-identity-driven-security/ba-p/4529309",

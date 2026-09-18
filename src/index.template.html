@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Intune Radar — acties, wijzigingen en vaknieuws</title>
+<title>CTRL UPDATE — acties, wijzigingen en vaknieuws</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='none' stroke='%233641d6' stroke-width='9'/><circle cx='50' cy='50' r='15' fill='%233641d6'/></svg>">
 <style>
   /* ============================================================
@@ -623,7 +623,7 @@
       </div>
       <div>
         <div class="eyebrow" data-i18n="eyebrow">Endpoint-informatie</div>
-        <h1>Intune Radar</h1>
+        <h1>CTRL UPDATE</h1>
         <div class="tagline" id="tagline"></div>
       </div>
     </div>
@@ -872,7 +872,7 @@
 
   function applyStaticLanguage() {
     document.documentElement.lang = language;
-    document.title = language === 'en' ? 'Intune Radar — actions, changes and expert news' : 'Intune Radar — acties, wijzigingen en vaknieuws';
+    document.title = language === 'en' ? 'CTRL UPDATE — actions, changes and expert news' : 'CTRL UPDATE — acties, wijzigingen en vaknieuws';
     Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'), function (el) {
       var key = el.dataset.i18n;
       if (language === 'en' && EN[key]) { el.textContent = EN[key]; }
@@ -1039,7 +1039,7 @@
     var packet = { version: 2, exported: new Date().toISOString(), preferences: preferences };
     var blob = new Blob([JSON.stringify(packet, null, 2)], { type: 'application/json' });
     var link = document.createElement('a');
-    link.href = URL.createObjectURL(blob); link.download = 'intune-radar-voorkeuren.json'; link.click();
+    link.href = URL.createObjectURL(blob); link.download = 'ctrl-update-voorkeuren.json'; link.click();
     setTimeout(function () { URL.revokeObjectURL(link.href); }, 1000);
   });
 

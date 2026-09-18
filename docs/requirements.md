@@ -1,4 +1,4 @@
-# Intune Radar - Eisen
+# CTRL UPDATE - Eisen
 
 Vastgelegd op 16-09-2026. Dit document is leidend: wijkt de code hiervan af, dan is de code fout.
 
@@ -78,18 +78,18 @@ De post die er echt over gaat staat los in de lijst en is wel rood. Zonder deze 
 
 Let op: de herkenning gaat op de titel. Een how-to met een titel die er niet op lijkt ("Remove Any
 Preinstalled Microsoft Store App with Intune Settings Catalog") glipt erlangs. Term toevoegen aan
-`digest.guideTerms` in `sources.json` lost dat op.
+`digest.guideTerms` in `config/sources.json` lost dat op.
 
 ### T8 - Eigen bronnen toevoegen zonder RSS te zoeken
-`.\Add-NewsSource.ps1 <url>` accepteert een gewone blog- of categorie-URL en vindt de feed zelf, via
+`.\scripts\Add-CtrlUpdateSource.ps1 <url>` accepteert een gewone blog- of categorie-URL en vindt de feed zelf, via
 feed-autodiscovery in de HTML en anders door de bekende paden af te lopen. Categoriefeeds werken:
 `https://www.systemcenterdudes.com/category/intune/` wordt `/category/intune/feed/`.
 
-De feed wordt eerst gevalideerd (parsebaar, niet leeg, geen "Resource Not Found") en sources.json wordt
+De feed wordt eerst gevalideerd (parsebaar, niet leeg, geen "Resource Not Found") en `config/sources.json` wordt
 alleen weggeschreven als het resultaat geldige JSON is.
 
 ### T9 - Categorieen
-Elk item krijgt maximaal drie categorieen uit de vaste lijst in `sources.json` (Autopilot, Enrollment,
+Elk item krijgt maximaal drie categorieen uit de vaste lijst in `config/sources.json` (Autopilot, Enrollment,
 Compliance, Conditional Access, Identiteit & MFA, Defender & Security, Windows Update, Apps & Packaging,
 Scripting & Graph, Windows 11, macOS, iOS & iPadOS, Android, Licensing, Reporting). Die zijn klikbaar
 als filter.
@@ -103,7 +103,7 @@ zichtbaar, zodat een kapotte feed niet jarenlang stil blijft. Dit is hoe het ver
 Intune Customer Success gevonden is.
 
 ### T11 - Nieuw sinds vorige run klopt
-`state.json` onthoudt 180 dagen welke items gezien zijn. Twee keer op een dag draaien levert niet
+`data/state.json` onthoudt 180 dagen welke items gezien zijn. Twee keer op een dag draaien levert niet
 twee keer dezelfde "Nieuw"-labels op.
 
 ### T12 - Scoren op de hele tekst, tonen op een fragment
@@ -208,7 +208,7 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 ## V10 - Agent-eindredactie, kanalen en persoonlijke radar
 
 - Codex beoordeelt ieder artikel inhoudelijk en schrijft titel, samenvatting en actiepunten in het Nederlands.
-- Een inhoudshash voorkomt nieuwe modelcalls voor ongewijzigde artikelen; `agent-review.json` is de cache.
+- Een inhoudshash voorkomt nieuwe modelcalls voor ongewijzigde artikelen; `data/review-cache.json` is de cache.
 - De regelscore blijft zichtbaar en uitlegbaar. De agent mag een trefwoordfoutpositief terugzetten naar informatie.
 - Eén stroom blijft de bron van waarheid, met weergaven voor Voor jou, Microsoft & tenant, Vakblogs en Alles.
 - Onderwerp- en bronkeuzes zijn per browser. Optionele domeinen staan standaard uit.
@@ -230,22 +230,23 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 
 | Bestand | Rol |
 |---|---|
-| `Get-IntuneNews.ps1` | Ophalen, scoren, datums herkennen, dashboard schrijven |
-| `Invoke-IntuneNewsReview.ps1` | Nederlandse Codex-eindredactie met cache en schema-validatie |
-| `Add-NewsSource.ps1` | Bron toevoegen vanaf een gewone URL |
-| `Import-IntuneRadarPreferences.ps1` | Geëxporteerde RSS-aanvragen valideren en importeren |
-| `agent-review-schema.json` | Strikt uitvoerschema voor de agentreview |
-| `agent-review.json` | Reviewcache op inhoudshash |
-| `sources.json` | Feeds, categorieen, trefwoorden, drempels - hier tune je |
-| `template.html` | Vormgeving, los van de logica |
-| `news.html` | Het resultaat |
-| `state.json` | Wat al gezien is |
+| `scripts/Update-CtrlUpdate.ps1` | Ophalen, scoren, datums herkennen, dashboard schrijven |
+| `scripts/Invoke-CtrlUpdateReview.ps1` | Nederlandse Codex-eindredactie met cache en schema-validatie |
+| `scripts/Add-CtrlUpdateSource.ps1` | Bron toevoegen vanaf een gewone URL |
+| `scripts/Import-CtrlUpdatePreferences.ps1` | Geëxporteerde RSS-aanvragen valideren en importeren |
+| `scripts/Test-CtrlUpdate.ps1` | Netwerkloze repository- en publicatiecontroles |
+| `schemas/review.schema.json` | Strikt uitvoerschema voor de agentreview |
+| `data/review-cache.json` | Reviewcache op inhoudshash |
+| `config/sources.json` | Feeds, categorieen, trefwoorden en drempels |
+| `src/index.template.html` | Vormgeving, los van de logica |
+| `dist/index.html` | De publicatie voor GitHub Pages |
+| `data/state.json` | Wat al gezien is |
 
 ## Testen
 
 ```powershell
 # Datumherkenning op een enkele pagina, zonder hele run
-.\Get-IntuneNews.ps1 -TestUrl 'https://learn.microsoft.com/en-us/entra/identity/authentication/concept-sms-voice-retirement'
+.\scripts\Update-CtrlUpdate.ps1 -TestUrl 'https://learn.microsoft.com/en-us/entra/identity/authentication/concept-sms-voice-retirement'
 ```
 
 Deze pagina is de vaste acceptatietest. Verwacht op 17-09-2026: vier datums (1 sep 2026 STOPT,

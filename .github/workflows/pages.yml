@@ -31,6 +31,10 @@ jobs:
       - name: Repository ophalen
         uses: actions/checkout@v6
 
+      - name: Repository controleren
+        shell: pwsh
+        run: ./scripts/Test-CtrlUpdate.ps1
+
       - name: GitHub Pages configureren
         uses: actions/configure-pages@v5
 

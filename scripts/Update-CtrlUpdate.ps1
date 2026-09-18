@@ -5,10 +5,10 @@
     en schrijft een self-contained HTML dashboard.
 
 .DESCRIPTION
-    Feeds, categorieen, keywords en drempelwaarden staan in sources.json naast dit
-    script. Een bron toevoegen gaat het makkelijkst via .\Add-NewsSource.ps1 <url>.
+    Feeds, categorieen, keywords en drempelwaarden staan in config/sources.json.
+    Een bron toevoegen gaat het makkelijkst via .\scripts\Add-CtrlUpdateSource.ps1 <url>.
 
-    Items die eerder zijn gezien worden onthouden in state.json, zodat "nieuw sinds
+    Items die eerder zijn gezien worden onthouden in data/state.json, zodat "nieuw sinds
     vorige run" klopt ook als je het script vaker op een dag draait.
 
     Message Center vereist een actieve Graph-sessie met ServiceMessage.Read.All:
@@ -25,30 +25,39 @@
     Open het dashboard in de standaardbrowser na afloop.
 
 .EXAMPLE
-    .\Get-IntuneNews.ps1 -Days 30 -Open
+    .\scripts\Update-CtrlUpdate.ps1 -Days 30 -Open
 
 .EXAMPLE
     Connect-MgGraph -Scopes 'ServiceMessage.Read.All'
-    .\Get-IntuneNews.ps1 -Open
+    .\scripts\Update-CtrlUpdate.ps1 -Open
 #>
 [CmdletBinding()]
 param(
     [int]    $Days,
     [switch] $SkipMessageCenter,
     [switch] $SkipAgentReview,
+    [switch] $RequireAgentReview,
     [switch] $Open,
 
     # Haalt een enkele pagina op, laat zien welke datums eruit komen en stopt.
     # Bedoeld om de datumherkenning te testen zonder een hele run te draaien.
     [string] $TestUrl,
 
-    [string] $ConfigPath = (Join-Path $PSScriptRoot 'sources.json'),
-    [string] $OutputPath = (Join-Path $PSScriptRoot 'news.html'),
-    [string] $StatePath  = (Join-Path $PSScriptRoot 'state.json')
+    [string] $ConfigPath = (Join-Path (Split-Path -Parent $PSScriptRoot) 'config/sources.json'),
+    [string] $OutputPath = (Join-Path (Split-Path -Parent $PSScriptRoot) 'dist/index.html'),
+    [string] $StatePath  = (Join-Path (Split-Path -Parent $PSScriptRoot) 'data/state.json')
 )
 
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+$outputDirectory = Split-Path -Parent $OutputPath
+$stateDirectory = Split-Path -Parent $StatePath
+foreach ($directory in @($outputDirectory, $stateDirectory)) {
+    if ($directory -and -not (Test-Path -LiteralPath $directory)) {
+        $null = New-Item -ItemType Directory -Path $directory -Force
+    }
+}
 
 #region Tekst-helpers ---------------------------------------------------------
 
@@ -1183,11 +1192,12 @@ foreach ($item in $deduped) {
 }
 
 if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -gt 0) {
-    $reviewInputPath = Join-Path $PSScriptRoot 'agent-review-input.json'
+    $projectRoot = Split-Path -Parent $PSScriptRoot
+    $reviewInputPath = Join-Path $projectRoot 'data/review-input.json'
     $reviewOutputPath = if ([IO.Path]::IsPathRooted([string]$reviewSettings.outputPath)) {
         [string]$reviewSettings.outputPath
     } else {
-        Join-Path $PSScriptRoot ([string]$reviewSettings.outputPath)
+        Join-Path $projectRoot ([string]$reviewSettings.outputPath)
     }
 
     $reviewInput = [PSCustomObject]@{
@@ -1212,7 +1222,7 @@ if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -g
     $reviewInput | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $reviewInputPath -Encoding UTF8
 
     try {
-        & (Join-Path $PSScriptRoot 'Invoke-IntuneNewsReview.ps1') `
+        & (Join-Path $PSScriptRoot 'Invoke-CtrlUpdateReview.ps1') `
             -InputPath $reviewInputPath -OutputPath $reviewOutputPath -ConfigPath $ConfigPath
 
         $reviewData = Get-Content -LiteralPath $reviewOutputPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -1259,6 +1269,10 @@ if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -g
         $reviewStatus = 'mislukt'
         Write-Warning "Agentreview mislukt; regelscore en brontekst blijven beschikbaar: $($_.Exception.Message)"
     }
+}
+
+if ($RequireAgentReview -and $reviewStatus -ne 'volledig') {
+    throw "Publicatie gestopt: agentreview is '$reviewStatus' ($reviewedCount/$(@($deduped).Count)) in plaats van volledig."
 }
 
 # Officiële bronnen, inhoudelijke wijzigingen, praktijktips en periodieke
@@ -1427,7 +1441,7 @@ $payload = [PSCustomObject]@{
 $json = $payload | ConvertTo-Json -Depth 8 -Compress
 $json = $json -replace '</', '<\/'   # voorkomt dat data het script-blok vroegtijdig sluit
 
-$templatePath = Join-Path $PSScriptRoot 'template.html'
+$templatePath = Join-Path (Split-Path -Parent $PSScriptRoot) 'src/index.template.html'
 if (-not (Test-Path -LiteralPath $templatePath)) {
     throw "Template niet gevonden: $templatePath"
 }
@@ -1445,7 +1459,7 @@ $newItems    = @($sorted | Where-Object { $_.IsNew })
 $urgent      = @($agenda | Where-Object { $_.date.urgency -eq 'urgent' })
 
 Write-Host ''
-Write-Host "Intune Nieuws  |  $($sorted.Count) items over $Days dagen" -ForegroundColor Cyan
+Write-Host "CTRL UPDATE  |  $($sorted.Count) items over $Days dagen" -ForegroundColor Cyan
 Write-Host "  Actie: $($actionItems.Count)   Nieuw: $($newItems.Count)   Agenda: $($agenda.Count)   Dubbel verwijderd: $duplicatesRemoved"
 Write-Host "  Agentreview: $reviewStatus ($reviewedCount/$($sorted.Count))"
 Write-Host "  Dashboard: $OutputPath"

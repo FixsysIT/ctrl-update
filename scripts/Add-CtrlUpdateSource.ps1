@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Voegt een bron toe aan sources.json. Je plakt een gewone blog- of categorie-URL,
+    Voegt een bron toe aan config/sources.json. Je plakt een gewone blog- of categorie-URL,
     het script zoekt zelf de bijbehorende RSS/Atom-feed.
 
 .DESCRIPTION
@@ -25,13 +25,13 @@
     Vrij label, bijvoorbeeld Microsoft of Community. Standaard Community.
 
 .PARAMETER WhatIf
-    Laat zien wat er gevonden is zonder sources.json aan te passen.
+    Laat zien wat er gevonden is zonder config/sources.json aan te passen.
 
 .EXAMPLE
-    .\Add-NewsSource.ps1 https://www.systemcenterdudes.com/category/autopilot/
+    .\scripts\Add-CtrlUpdateSource.ps1 https://www.systemcenterdudes.com/category/autopilot/
 
 .EXAMPLE
-    .\Add-NewsSource.ps1 https://patchmypc.com/blog/ -Name 'Patch My PC' -Boost 1
+    .\scripts\Add-CtrlUpdateSource.ps1 https://patchmypc.com/blog/ -Name 'Patch My PC' -Boost 1
 #>
 [CmdletBinding(SupportsShouldProcess)]
 param(
@@ -41,7 +41,7 @@ param(
     [string] $Name,
     [int]    $Boost = 0,
     [string] $Tag   = 'Community',
-    [string] $ConfigPath = (Join-Path $PSScriptRoot 'sources.json')
+    [string] $ConfigPath = (Join-Path (Split-Path -Parent $PSScriptRoot) 'config/sources.json')
 )
 
 $ErrorActionPreference = 'Stop'
@@ -178,4 +178,4 @@ catch { throw "Resultaat is geen geldige JSON, sources.json niet aangepast: $($_
 Set-Content -LiteralPath $ConfigPath -Value $updated -Encoding UTF8
 
 Write-Host "Toegevoegd aan sources.json." -ForegroundColor Green
-Write-Host "Draai .\Get-IntuneNews.ps1 -Open om het resultaat te zien."
+Write-Host "Draai .\scripts\Update-CtrlUpdate.ps1 -Open om het resultaat te zien."
