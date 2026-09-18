@@ -35,6 +35,7 @@ De site publiceert alleen:
 
 - afgeleide Nederlandse en Engelse titel en samenvatting;
 - algemene urgentie;
+- persoonlijke informatiewaarde voor de eigenaar;
 - `Bevestigd in referentietenant`;
 - actieerbaarheid, categorieën en een eventueel handelingsadvies.
 

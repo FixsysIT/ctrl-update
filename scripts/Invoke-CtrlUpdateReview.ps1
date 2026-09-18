@@ -55,9 +55,13 @@ foreach ($item in $wanted) {
     $id = [string]$item.id
     if ($cacheById.ContainsKey($id) -and
         [string]$cacheById[$id].contentHash -eq [string]$item.contentHash -and
+        [int]$cacheById[$id].reviewPolicyVersion -eq [int]$item.reviewPolicyVersion -and
         -not [string]::IsNullOrWhiteSpace([string]$cacheById[$id].titleEn) -and
         -not [string]::IsNullOrWhiteSpace([string]$cacheById[$id].summaryEn) -and
-        -not [string]::IsNullOrWhiteSpace([string]$cacheById[$id].reasonEn)) {
+        -not [string]::IsNullOrWhiteSpace([string]$cacheById[$id].reasonEn) -and
+        [string]$cacheById[$id].personalInterest -in @('mustRead', 'relevant', 'background', 'low') -and
+        -not [string]::IsNullOrWhiteSpace([string]$cacheById[$id].interestReasonNl) -and
+        -not [string]::IsNullOrWhiteSpace([string]$cacheById[$id].interestReasonEn)) {
         $resultById[$id] = $cacheById[$id]
     }
     else {
@@ -80,7 +84,7 @@ for ($offset = 0; $offset -lt $pending.Count; $offset += $BatchSize) {
 Je bent de eindredacteur van een Nederlands dashboard voor Intune- en Entra-beheerders.
 Beoordeel ALLE aangeleverde items op inhoud. Gebruik uitsluitend de meegeleverde titel en brontekst; verzin geen feiten.
 
-Lever voor elk item exact een object terug met hetzelfde id en contentHash.
+Lever voor elk item exact een object terug met hetzelfde id, contentHash en reviewPolicyVersion.
 - titleNl: natuurlijke, zakelijke Nederlandse titel. Productnamen, feature-namen en Message Center-id's niet vertalen.
 - summaryNl: maximaal twee korte Nederlandse zinnen die zeggen wat er werkelijk verandert of wordt uitgelegd.
 - whyNl: nul tot drie korte Nederlandse punten. Alleen concrete impact, vereiste beheeractie en harde datum. Geen reclame of algemene intro.
@@ -91,11 +95,13 @@ Lever voor elk item exact een object terug met hetzelfde id en contentHash.
 - urgency: critical alleen bij actuele brede uitval, actief misbruik, noodupdate of onmiddellijke harde deadline; high bij grote impact of nabije verplichte wijziging; normal bij reguliere wijzigingen en relevante statusinformatie; anders low.
 - tenantRelevance: confirmed wanneer channel tenant is; likely bij een openbare bron die duidelijk een beheerd Microsoft-, endpoint-, identity- of securityonderwerp raakt; unknown wanneer toepasbaarheid niet bewezen is; notApplicable alleen met expliciete evidence.
 - tenantReasonNl en tenantReasonEn: een korte toelichting op de tenantrelevantie. Confirmed betekent bevestigd in de referentietenant, niet bewezen impact voor iedere klant.
+- personalInterest: mustRead wanneer de eigenaar dit beslist moet zien voor Intune, Entra, endpointbeheer, Microsoft 365-beheer, security, actuele storingen, lifecycle, licenties of klantcommunicatie; relevant voor waarschijnlijk bruikbare veranderingen, praktische kennis en handleidingen; background voor nuttige context zonder directe toepassing; low alleen voor marketing, herhaling of nauwelijks aansluitende inhoud.
+- interestReasonNl en interestReasonEn: een concrete zin waarom dit voor hem deze informatiewaarde heeft.
 - confidence: 0 tot 1, lager als de brontekst onvoldoende bewijs bevat.
 - reasonNl: een korte Nederlandse toelichting op de gekozen tier.
 - reasonEn: dezelfde korte toelichting in het Engels.
 
-De regelscore en voorgestelde waarden zijn aanwijzingen, geen feiten. Corrigeer foutpositieven. Een hoge trefwoordscore maakt naslag niet automatisch actie. Service Health kan kritisch zijn zonder concrete actie. Message Center is tenantbevestigd maar kan informatief, te volgen of actiegericht zijn.
+De regelscore en voorgestelde waarden zijn aanwijzingen, geen feiten. Jij bepaalt voor ieder item zelfstandig soort, categorie, actieerbaarheid, urgentie, tenantrelevantie en persoonlijke informatiewaarde. Corrigeer foutpositieven. Een hoge trefwoordscore maakt naslag niet automatisch actie. Service Health kan kritisch zijn zonder concrete actie. Message Center is tenantbevestigd maar kan informatief, te volgen of actiegericht zijn.
 Schrijf de *Nl-velden volledig in het Nederlands en de *En-velden volledig in het Engels, helder en zonder Markdown. Geef alleen JSON volgens het schema.
 
 ITEMS:

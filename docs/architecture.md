@@ -27,7 +27,13 @@ dist/index.html -> GitHub Pages -> news.intunetools.com
 ## Ontwerpkeuzes
 
 - **Statisch bij uitlevering.** De browser ontvangt geen tokens en hoeft geen feeds rechtstreeks te benaderen.
-- **Reviewcache op inhoudshash.** Alleen nieuwe of gewijzigde inhoud vraagt een nieuwe modelreview.
+- **Verplichte agentreview.** Ieder gepubliceerd item heeft een geldige agentreview
+  voor soort, actieerbaarheid, urgentie, tenantrelevantie en persoonlijke
+  informatiewaarde.
+- **Reviewcache op inhoudshash en beleidsversie.** Alleen ongewijzigde inhoud met
+  dezelfde volledige beoordelingsregels mag een eerdere agentreview hergebruiken.
+  Nieuwe of gewijzigde inhoud en gewijzigd beoordelingsbeleid gaan opnieuw naar
+  de agent.
 - **Fail-safe publicatie.** De laatst succesvolle `dist/index.html` blijft online als ophalen of reviewen mislukt.
 - **Persoonlijke instellingen lokaal.** Filters, taal, leesstatus en triage staan in `localStorage`; er is geen gebruikersdatabase.
 - **Git als audittrail.** Configuratie, cache, status en het gepubliceerde resultaat zijn per commit terug te vinden.

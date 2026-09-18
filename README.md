@@ -11,8 +11,9 @@ CTRL UPDATE bundelt officiële Microsoft-updates, Message Center-berichten, rele
 
 - haalt RSS- en Atom-bronnen op en kan optioneel Microsoft 365 Service Health en Message Center meenemen;
 - ontdubbelt berichten en groepeert officiële updates, nieuws, gidsen en weekoverzichten;
-- scoort urgentie met uitlegbare regels;
-- laat Codex titels, samenvattingen, categorieën en actiestatus inhoudelijk controleren;
+- gebruikt regels uitsluitend als voorselectie;
+- laat ieder gepubliceerd item door de agent beoordelen op soort informatie,
+  actieerbaarheid, urgentie, tenantrelevantie en persoonlijke informatiewaarde;
 - publiceert een zelfstandige statische pagina via GitHub Pages;
 - bewaart taal, filters, leesstatus en persoonlijke onderwerpen uitsluitend in de browser.
 

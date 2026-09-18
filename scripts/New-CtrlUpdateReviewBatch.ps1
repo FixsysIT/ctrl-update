@@ -24,13 +24,17 @@ $pending = @($inputData.items | Where-Object {
     $id = [string]$_.id
     -not $cacheById.ContainsKey($id) -or
     [string]$cacheById[$id].contentHash -ne [string]$_.contentHash -or
+    [int]$cacheById[$id].reviewPolicyVersion -ne [int]$_.reviewPolicyVersion -or
     [string]::IsNullOrWhiteSpace([string]$cacheById[$id].titleEn) -or
     [string]::IsNullOrWhiteSpace([string]$cacheById[$id].summaryEn) -or
     [string]::IsNullOrWhiteSpace([string]$cacheById[$id].reasonEn) -or
     [string]$cacheById[$id].urgency -notin @('critical', 'high', 'normal', 'low') -or
     [string]$cacheById[$id].tenantRelevance -notin @('confirmed', 'likely', 'unknown', 'notApplicable') -or
     [string]::IsNullOrWhiteSpace([string]$cacheById[$id].tenantReasonNl) -or
-    [string]::IsNullOrWhiteSpace([string]$cacheById[$id].tenantReasonEn)
+    [string]::IsNullOrWhiteSpace([string]$cacheById[$id].tenantReasonEn) -or
+    [string]$cacheById[$id].personalInterest -notin @('mustRead', 'relevant', 'background', 'low') -or
+    [string]::IsNullOrWhiteSpace([string]$cacheById[$id].interestReasonNl) -or
+    [string]::IsNullOrWhiteSpace([string]$cacheById[$id].interestReasonEn)
 })
 
 $outputDirectory = Split-Path -Parent $OutputPath

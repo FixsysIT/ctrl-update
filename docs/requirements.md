@@ -208,7 +208,9 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 ## V12 - Veilige automatische actualisatie
 
 - GitHub Actions draait dagelijks om 06:30 en 14:00 in `Europe/Amsterdam`, inclusief zomertijd.
-- Alleen nieuwe of inhoudelijk gewijzigde items gaan naar de agentreview; de reviewcache voorkomt dubbele modelkosten.
+- Ieder gepubliceerd item moet een volledige agentreview hebben. Alleen ongewijzigde
+  inhoud met dezelfde reviewbeleidsversie mag een eerdere agentreview uit de cache
+  hergebruiken; nieuwe of gewijzigde inhoud en gewijzigd beleid gaan opnieuw langs de agent.
 - Parsing, schema-validatie, agentreview en de netwerkloze repositorytest zijn verplichte publicatiepoorten.
 - Een mislukte run commit en publiceert niets; de laatst geslaagde GitHub Pages-versie blijft online.
 - De kop toont de laatste succesvolle publicatie en een zichtbare waarschuwing na 26 uur zonder succes.
@@ -218,14 +220,17 @@ Dertig items per keer, daarna "Nog N items tonen". Categorieen in de zijbalk kla
 ## V10 - Agent-eindredactie, kanalen en persoonlijke radar
 
 - Codex beoordeelt ieder artikel inhoudelijk en schrijft titel, samenvatting en actiepunten in het Nederlands.
-- Een inhoudshash voorkomt nieuwe modelcalls voor ongewijzigde artikelen; `data/review-cache.json` is de cache.
+- Inhoudshash plus reviewbeleidsversie voorkomen dubbele modelcalls zonder een oud
+  agentoordeel na gewijzigde regels te hergebruiken; `data/review-cache.json` is de cache.
 - De regelscore blijft zichtbaar en uitlegbaar. De agent mag een trefwoordfoutpositief terugzetten naar informatie.
 - Eén stroom blijft de bron van waarheid, met weergaven voor Voor jou, Microsoft & tenant, Vakblogs en Alles.
 - Onderwerp- en bronkeuzes zijn per browser. Optionele domeinen staan standaard uit.
 - Een RSS-aanvraag uit de browser wordt geëxporteerd en daarna centraal ontdekt en gevalideerd. De statische
   browserpagina is bewust geen open RSS-proxy.
-- Ieder item toont afzonderlijk algemene urgentie, tenantrelevantie en persoonlijke
-  actiestatus. Actiestatus kent `Te beoordelen`, `Opvolgen`, `Gepland`, `Afgerond`
+- Ieder item toont afzonderlijk algemene urgentie, tenantrelevantie, persoonlijke
+  informatiewaarde en persoonlijke actiestatus. De agent kent `Moet je zien`,
+  `Relevant`, `Achtergrond` of `Lage relevantie` toe; regelscore, bronsoort en
+  populariteit mogen dit oordeel niet vervangen. Actiestatus kent `Te beoordelen`, `Opvolgen`, `Gepland`, `Afgerond`
   en `Niet van toepassing` en blijft browserlokaal.
 - Tenantgerichte Service Health- en Message Center-signalen zijn `Bevestigd in
   referentietenant`; dit is geen bewijs van impact in iedere klantconfiguratie.

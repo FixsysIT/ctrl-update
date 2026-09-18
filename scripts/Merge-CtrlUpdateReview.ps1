@@ -28,8 +28,10 @@ if (Test-Path -LiteralPath $CachePath) {
 }
 
 $expectedById = @{}
+$expectedPolicyById = @{}
 foreach ($item in @($pendingData.items)) {
     $expectedById[[string]$item.id] = [string]$item.contentHash
+    $expectedPolicyById[[string]$item.id] = [int]$item.reviewPolicyVersion
 }
 
 $receivedById = @{}
@@ -47,6 +49,10 @@ foreach ($review in @($resultData.items)) {
         Write-Warning "contentHash door pipeline hersteld voor: $id"
         $review.contentHash = $expectedById[$id]
     }
+    if ([int]$review.reviewPolicyVersion -ne $expectedPolicyById[$id]) {
+        Write-Warning "reviewPolicyVersion door pipeline hersteld voor: $id"
+        $review.reviewPolicyVersion = $expectedPolicyById[$id]
+    }
 
     $categories = @($review.categories | Where-Object { $_ -in $allowedCategories } | Select-Object -Unique)
     if ($categories.Count -lt 1 -or $categories.Count -gt 3) { throw "Ongeldige categorieën voor: $id" }
@@ -57,7 +63,9 @@ foreach ($review in @($resultData.items)) {
         [string]::IsNullOrWhiteSpace([string]$review.reasonNl) -or
         [string]::IsNullOrWhiteSpace([string]$review.reasonEn) -or
         [string]::IsNullOrWhiteSpace([string]$review.tenantReasonNl) -or
-        [string]::IsNullOrWhiteSpace([string]$review.tenantReasonEn)) {
+        [string]::IsNullOrWhiteSpace([string]$review.tenantReasonEn) -or
+        [string]::IsNullOrWhiteSpace([string]$review.interestReasonNl) -or
+        [string]::IsNullOrWhiteSpace([string]$review.interestReasonEn)) {
         throw "Onvolledig reviewitem ontvangen: $id"
     }
     if ([string]$review.urgency -notin @('critical', 'high', 'normal', 'low')) {
@@ -65,6 +73,9 @@ foreach ($review in @($resultData.items)) {
     }
     if ([string]$review.tenantRelevance -notin @('confirmed', 'likely', 'unknown', 'notApplicable')) {
         throw "Ongeldige tenantrelevantie voor: $id"
+    }
+    if ([string]$review.personalInterest -notin @('mustRead', 'relevant', 'background', 'low')) {
+        throw "Ongeldige persoonlijke informatiewaarde voor: $id"
     }
 
     $review.categories = $categories
@@ -83,6 +94,7 @@ $ordered = @($inputData.items | ForEach-Object {
     if (-not $cacheById.ContainsKey($id)) { throw "Geen review beschikbaar voor actueel item: $id" }
     $cached = $cacheById[$id]
     if ([string]$cached.contentHash -ne [string]$_.contentHash) { throw "Verouderde reviewcache voor: $id" }
+    if ([int]$cached.reviewPolicyVersion -ne [int]$_.reviewPolicyVersion) { throw "Verouderd agentbeleid voor: $id" }
     $cached
 })
 

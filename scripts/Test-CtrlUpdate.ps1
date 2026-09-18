@@ -108,6 +108,9 @@ if ($rdsAlerts.Count -ne 2 -or
 $allowedCategories = @($config.categories.PSObject.Properties.Name)
 $reviewPath = Join-Path $projectRoot 'data/review-cache.json'
 $reviewCache = Get-Content -LiteralPath $reviewPath -Raw -Encoding UTF8 | ConvertFrom-Json
+if ([int]$config.agentReview.policyVersion -lt 2) {
+    Add-Failure 'Agentreview mist een expliciete beleidsversie voor profielwijzigingen'
+}
 foreach ($item in @($reviewCache.items)) {
     if (-not $item.id -or -not $item.contentHash) {
         Add-Failure 'Reviewcache bevat een item zonder id of contentHash'
@@ -169,10 +172,11 @@ if ($template -notmatch "store\(THEME_KEY, 'light'\)" -or $template -match 'pref
 }
 if ($updater -notmatch "Urgency -eq 'critical'" -or
     $updater -notmatch "Tier -eq 'action'" -or
+    $updater -notmatch "PersonalInterest -eq 'mustRead'" -or
     $updater -notmatch '(?s)Sort-Object -Property.*?\$_\.Published.*?\$_\.Score') {
     Add-Failure 'Bronitems worden niet volgens kritiek-, actie- en daarna nieuwste-eerst opgebouwd'
 }
-if ($template -notmatch "item\.urgency === 'critical'" -or $template -notmatch "item\.tier === 'action'" -or $template -notmatch 'a\.date !== b\.date') {
+if ($template -notmatch "item\.urgency === 'critical'" -or $template -notmatch "item\.tier === 'action'" -or $template -notmatch "item\.personalInterest === 'mustRead'" -or $template -notmatch 'a\.date !== b\.date') {
     Add-Failure 'Browserweergave borgt de prioriteit- en datumsortering niet'
 }
 if ($template -notmatch 'Nieuwsbron' -or $updater -notmatch 'includeTerms' -or $updater -notmatch '\$feed\.tag -eq ''News''') {
@@ -205,10 +209,15 @@ if (-not $config.messageCenter.enabled -or
     $refreshWorkflow -notmatch 'ServiceMessage.Read.All') {
     Add-Failure 'Message Center is niet feature-gated, least-privilege en privacyveilig geconfigureerd'
 }
-foreach ($phaseTwoFragment in @('urgency-filter', 'relevance-filter', 'workflow-planned', "value: 'planned'", 'tenantRelevance')) {
+foreach ($phaseTwoFragment in @('urgency-filter', 'relevance-filter', 'interest-filter', 'workflow-planned', "value: 'planned'", 'tenantRelevance', 'personalInterest', 'interestReason')) {
     if ($template -notmatch [regex]::Escape($phaseTwoFragment) -and $updater -notmatch [regex]::Escape($phaseTwoFragment)) {
         Add-Failure "Fase 2 mist verplicht oordeel of workflowveld: $phaseTwoFragment"
     }
+}
+if ($updater -notmatch 'reviewPolicyVersion' -or
+    $updater -notmatch 'Publicatie gestopt: agentreview' -or
+    $refreshWorkflow -notmatch '-RequireAgentReview') {
+    Add-Failure 'Een item kan zonder actuele volledige agentreview de publicatiepoort passeren'
 }
 if ($template -notmatch 'searchBox\.scrollIntoView' -or $template -notmatch 'searchBox\.focus\(\)') {
     Add-Failure 'De zichtbare zoekknop activeert de bestaande zoekfunctie niet'
@@ -418,20 +427,21 @@ $testResultPath = Join-Path $testDirectory 'result.json'
 function New-TestReview {
     param([string] $Id, [string] $Hash)
     [PSCustomObject]@{
-        id = $Id; contentHash = $Hash
+        id = $Id; contentHash = $Hash; reviewPolicyVersion = 2
         titleNl = "Nederlandse titel $Id"; summaryNl = 'Nederlandse samenvatting.'; whyNl = @()
         titleEn = "English title $Id"; summaryEn = 'English summary.'; whyEn = @()
         categories = @($allowedCategories[0]); kind = 'nieuws'; tier = 'info'; confidence = 0.9
         urgency = 'normal'; tenantRelevance = 'unknown'
         tenantReasonNl = 'Tenantimpact niet bevestigd.'; tenantReasonEn = 'Tenant impact is not confirmed.'
+        personalInterest = 'relevant'; interestReasonNl = 'Bruikbaar voor dagelijks beheer.'; interestReasonEn = 'Useful for daily administration.'
         reasonNl = 'Geen concrete beheeractie.'; reasonEn = 'No concrete administrative action.'
     }
 }
 
 try {
     [PSCustomObject]@{ items = @(
-        [PSCustomObject]@{ id = 'fixture-1'; contentHash = 'hash-1' },
-        [PSCustomObject]@{ id = 'fixture-2'; contentHash = 'hash-2' }
+        [PSCustomObject]@{ id = 'fixture-1'; contentHash = 'hash-1'; reviewPolicyVersion = 2 },
+        [PSCustomObject]@{ id = 'fixture-2'; contentHash = 'hash-2'; reviewPolicyVersion = 2 }
     ) } | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $testInputPath -Encoding UTF8
     [PSCustomObject]@{ generated = '2026-01-01T00:00:00Z'; items = @(
         (New-TestReview -Id 'fixture-1' -Hash 'hash-1')
@@ -441,11 +451,12 @@ try {
         -InputPath $testInputPath -CachePath $testCachePath -OutputPath $testPendingPath
     if ($pendingCount -ne 1) { Add-Failure "Reviewbatchfixture verwachtte 1 item maar vond $pendingCount" }
 
-    [PSCustomObject]@{ items = @(
-        # Simuleert een model dat pipeline-metadata verkeerd terugkopieert. De
-        # merge moet de bekende hash herstellen zonder onbekende ids toe te laten.
-        (New-TestReview -Id 'fixture-2' -Hash '0')
-    ) } | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $testResultPath -Encoding UTF8
+    # Simuleert een model dat pipeline-metadata verkeerd terugkopieert. De merge
+    # moet hash én beleidsversie herstellen zonder onbekende ids toe te laten.
+    $fixtureTwoResult = New-TestReview -Id 'fixture-2' -Hash '0'
+    $fixtureTwoResult.reviewPolicyVersion = 1
+    [PSCustomObject]@{ items = @($fixtureTwoResult) } |
+        ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $testResultPath -Encoding UTF8
 
     & (Join-Path $PSScriptRoot 'Merge-CtrlUpdateReview.ps1') `
         -InputPath $testInputPath -PendingPath $testPendingPath -ResultPath $testResultPath `
@@ -455,6 +466,9 @@ try {
     if (@($mergedFixture.items).Count -ne 2) { Add-Failure 'Reviewmergefixture bevat niet exact twee items' }
     elseif ([string]@($mergedFixture.items | Where-Object id -eq 'fixture-2')[0].contentHash -ne 'hash-2') {
         Add-Failure 'Reviewmerge herstelt pipeline-metadata niet deterministisch'
+    }
+    elseif ([int]@($mergedFixture.items | Where-Object id -eq 'fixture-2')[0].reviewPolicyVersion -ne 2) {
+        Add-Failure 'Reviewmerge herstelt de reviewbeleidsversie niet deterministisch'
     }
     elseif ($failures.Count -eq 0) { Write-Pass 'Cloudreviewselectie en atomaire cachemerge geldig' }
 }

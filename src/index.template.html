@@ -390,6 +390,10 @@
   .badge.relevance-confirmed { background: var(--ok-soft); color: var(--ok); }
   .badge.relevance-likely { background: var(--accent-soft); color: var(--accent); }
   .badge.relevance-unknown, .badge.relevance-notApplicable { background: var(--neutral-soft); color: var(--muted); }
+  .badge.interest-mustRead { background: var(--accent); color: #fff; }
+  .badge.interest-relevant { background: var(--accent-soft); color: var(--accent); }
+  .badge.interest-background { background: var(--neutral-soft); color: var(--text); }
+  .badge.interest-low, .badge.interest-unreviewed { background: var(--neutral-soft); color: var(--muted); }
   .badge.workflow-review { background: var(--crit-soft); color: var(--crit); }
   .badge.workflow-followup { background: var(--warn-soft); color: var(--warn); }
   .badge.workflow-planned { background: var(--sched-soft); color: var(--sched); }
@@ -652,6 +656,10 @@
         <h3 id="relevance-heading">Tenantrelevantie</h3>
         <select id="relevance-filter" aria-label="Filter op tenantrelevantie"></select>
       </div>
+      <div class="side-block">
+        <h3 id="interest-heading">Voor jou</h3>
+        <select id="interest-filter" aria-label="Filter op persoonlijke informatiewaarde"></select>
+      </div>
       <div class="side-block facets-block">
         <h3 data-i18n="category">Categorie</h3>
         <div class="facets" id="cats"></div>
@@ -861,6 +869,7 @@
     document.getElementById('action-status-heading').textContent = language === 'en' ? 'Action & status' : 'Actie & status';
     document.getElementById('urgency-heading').textContent = language === 'en' ? 'General urgency' : 'Algemene urgentie';
     document.getElementById('relevance-heading').textContent = language === 'en' ? 'Tenant relevance' : 'Tenantrelevantie';
+    document.getElementById('interest-heading').textContent = language === 'en' ? 'For you' : 'Voor jou';
     if (language === 'en') { document.getElementById('rss-name').placeholder = 'For example Veeam Blog'; }
   }
   applyStaticLanguage();
@@ -887,6 +896,13 @@
       ? { confirmed: 'Confirmed in reference tenant', likely: 'Likely', unknown: 'Unknown', notApplicable: 'Not applicable' }
       : { confirmed: 'Bevestigd in referentietenant', likely: 'Waarschijnlijk', unknown: 'Onbekend', notApplicable: 'Niet van toepassing' };
     return labels[value] || labels.unknown;
+  }
+
+  function interestLabel(value) {
+    var labels = language === 'en'
+      ? { mustRead: 'Must read', relevant: 'Relevant', background: 'Background', low: 'Low relevance', unreviewed: 'Not reviewed' }
+      : { mustRead: 'Moet je zien', relevant: 'Relevant', background: 'Achtergrond', low: 'Lage relevantie', unreviewed: 'Niet beoordeeld' };
+    return labels[value] || labels.unreviewed;
   }
 
   function workflowLabel(value) {
@@ -1179,7 +1195,7 @@
 
   /* ---------- filters ---------- */
 
-  var filters = { tier: preferences.channel === 'personal' && counts.review > 0 ? 'todo' : 'all', urgency: 'all', relevance: 'all', q: '', cats: [] };
+  var filters = { tier: preferences.channel === 'personal' && counts.review > 0 ? 'todo' : 'all', urgency: 'all', relevance: 'all', interest: 'all', q: '', cats: [] };
   var view = 'urgentie';
   var shownLimit = PAGE;
 
@@ -1191,9 +1207,10 @@
       button.setAttribute('aria-pressed', String(button.dataset.channel === preferences.channel));
     });
     filters.tier = 'all';
-    filters.urgency = 'all'; filters.relevance = 'all';
+    filters.urgency = 'all'; filters.relevance = 'all'; filters.interest = 'all';
     document.getElementById('urgency-filter').value = 'all';
     document.getElementById('relevance-filter').value = 'all';
+    document.getElementById('interest-filter').value = 'all';
     Array.prototype.forEach.call(tierBox.querySelectorAll('[data-tier]'), function (button) {
       button.setAttribute('aria-pressed', String(button.dataset.tier === 'all'));
     });
@@ -1289,6 +1306,16 @@
   ]);
   relevanceFilter.addEventListener('change', function () { filters.relevance = relevanceFilter.value; shownLimit = PAGE; render(); });
 
+  var interestFilter = document.getElementById('interest-filter');
+  fillSelect(interestFilter, [
+    { value: 'all', label: language === 'en' ? 'All information values' : 'Alle informatiewaarden' },
+    { value: 'mustRead', label: interestLabel('mustRead') },
+    { value: 'relevant', label: interestLabel('relevant') },
+    { value: 'background', label: interestLabel('background') },
+    { value: 'low', label: interestLabel('low') }
+  ]);
+  interestFilter.addEventListener('change', function () { filters.interest = interestFilter.value; shownLimit = PAGE; render(); });
+
   /* Alle categorieën staan direct open: geen verborgen +x-laag. */
   var catBox = document.getElementById('cats');
 
@@ -1325,9 +1352,9 @@
 
   document.getElementById('reset').addEventListener('click', resetFilters);
   function resetFilters() {
-    filters = { tier: 'all', urgency: 'all', relevance: 'all', q: '', cats: [] };
+    filters = { tier: 'all', urgency: 'all', relevance: 'all', interest: 'all', q: '', cats: [] };
     searchBox.value = '';
-    urgencyFilter.value = 'all'; relevanceFilter.value = 'all';
+    urgencyFilter.value = 'all'; relevanceFilter.value = 'all'; interestFilter.value = 'all';
     Array.prototype.forEach.call(document.querySelectorAll('[data-cat]'), function (b) { b.setAttribute('aria-pressed', 'false'); });
     setTier('all');
   }
@@ -1388,12 +1415,13 @@
     if (filters.tier === 'unread' && read[item.id])          { return false; }
     if (filters.urgency !== 'all' && item.urgency !== filters.urgency) { return false; }
     if (filters.relevance !== 'all' && item.tenantRelevance !== filters.relevance) { return false; }
+    if (filters.interest !== 'all' && item.personalInterest !== filters.interest) { return false; }
     if (filters.cats.length) {
       var hit = filters.cats.some(function (c) { return item.categories.indexOf(c) !== -1; });
       if (!hit) { return false; }
     }
     if (filters.q) {
-      var hay = (item.title + ' ' + item.titleEn + ' ' + item.summary + ' ' + item.summaryEn + ' ' + (item.tenantReason || '') + ' ' + (item.tenantReasonEn || '') + ' ' + item.keywords.join(' ') + ' ' +
+      var hay = (item.title + ' ' + item.titleEn + ' ' + item.summary + ' ' + item.summaryEn + ' ' + (item.tenantReason || '') + ' ' + (item.tenantReasonEn || '') + ' ' + (item.interestReason || '') + ' ' + (item.interestReasonEn || '') + ' ' + item.keywords.join(' ') + ' ' +
                  item.categories.join(' ') + ' ' + (item.nativeTags || []).join(' ')).toLowerCase();
       if (hay.indexOf(filters.q) === -1) { return false; }
     }
@@ -1455,6 +1483,12 @@
     urgency.title = language === 'en' ? 'General urgency, independent of whether an administrative action is required' : 'Algemene urgentie, los van de vraag of een beheeractie nodig is';
     flags.appendChild(urgency);
 
+    var interest = document.createElement('span');
+    interest.className = 'badge interest-' + (item.personalInterest || 'unreviewed');
+    interest.textContent = (language === 'en' ? 'For you: ' : 'Voor jou: ') + interestLabel(item.personalInterest || 'unreviewed');
+    interest.title = language === 'en' ? (item.interestReasonEn || item.interestReason || '') : (item.interestReason || '');
+    flags.appendChild(interest);
+
     var relevance = document.createElement('span');
     relevance.className = 'badge relevance-' + (item.tenantRelevance || 'unknown');
     relevance.textContent = (language === 'en' ? 'Tenant: ' : 'Tenant: ') + relevanceLabel(item.tenantRelevance || 'unknown');
@@ -1483,13 +1517,12 @@
         : (item.demote === 'guide' ? 'Uitleg of handleiding: noemt woorden als retire en mandatory in het voorbijgaan, wordt daarom nooit rood' : (item.demote === 'reference' ? 'Naslagpagina zonder concrete wijzigingsdatum: nuttig om te lezen, maar geen bevestigde actie' : 'Maandoverzicht of nieuwsbrief: vat andermans wijzigingen samen, wordt daarom nooit rood'));
       flags.appendChild(dm);
     }
-    var reviewBadge = document.createElement('span');
-    reviewBadge.className = 'badge ' + (item.agentReviewed ? 'reviewed' : 'unreviewed');
-    reviewBadge.textContent = item.agentReviewed ? (language === 'en' ? 'Agent reviewed' : 'Door agent beoordeeld') : (language === 'en' ? 'Agent review missing' : 'Agentreview ontbreekt');
-    reviewBadge.title = item.agentReviewed
-      ? (language === 'en' ? 'Bilingual editing and content classification by the agent' : 'Nederlandse eindredactie en inhoudelijke classificatie door de agent')
-      : (language === 'en' ? 'This item shows source text and the rule score only' : 'Dit item toont de oorspronkelijke brontekst en alleen de regelscore');
-    flags.appendChild(reviewBadge);
+    if (!item.agentReviewed) {
+      var reviewBadge = document.createElement('span');
+      reviewBadge.className = 'badge unreviewed';
+      reviewBadge.textContent = language === 'en' ? 'Review missing' : 'Beoordeling ontbreekt';
+      flags.appendChild(reviewBadge);
+    }
     if (item.isNew) {
       var nw = document.createElement('span');
       nw.className = 'badge new'; nw.textContent = language === 'en' ? 'New' : 'Nieuw';
@@ -1739,9 +1772,12 @@
         function priority(item) {
           if (item.urgency === 'critical') { return 0; }
           if (item.tier === 'action') { return 1; }
-          if (item.urgency === 'high') { return 2; }
-          if (item.tier === 'watch') { return 3; }
-          return 4;
+          if (item.personalInterest === 'mustRead') { return 2; }
+          if (item.urgency === 'high') { return 3; }
+          if (item.personalInterest === 'relevant') { return 4; }
+          if (item.tier === 'watch') { return 5; }
+          if (item.personalInterest === 'background') { return 6; }
+          return 7;
         }
         var aPriority = priority(a);
         var bPriority = priority(b);

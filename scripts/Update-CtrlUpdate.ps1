@@ -1350,6 +1350,15 @@ foreach ($item in $deduped) {
         $reasonEn = if ($item.Channel -eq 'tenant') { 'This signal comes from the reference tenant.' } else { 'A public source does not confirm tenant impact.' }
         $item | Add-Member -NotePropertyName TenantReasonEn -NotePropertyValue $reasonEn -Force
     }
+    if (-not $item.PSObject.Properties['PersonalInterest']) {
+        $item | Add-Member -NotePropertyName PersonalInterest -NotePropertyValue 'unreviewed' -Force
+    }
+    if (-not $item.PSObject.Properties['InterestReason']) {
+        $item | Add-Member -NotePropertyName InterestReason -NotePropertyValue 'Nog niet inhoudelijk beoordeeld door de agent.' -Force
+    }
+    if (-not $item.PSObject.Properties['InterestReasonEn']) {
+        $item | Add-Member -NotePropertyName InterestReasonEn -NotePropertyValue 'Not yet assessed by the agent.' -Force
+    }
 }
 
 # De regelscore is snel en uitlegbaar; de agentreview doet daarna de inhoudelijke
@@ -1388,6 +1397,7 @@ if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -g
             [PSCustomObject]@{
                 id = $_.Id
                 contentHash = $_.ContentHash
+                reviewPolicyVersion = [int]$reviewSettings.policyVersion
                 title = $_.Title
                 source = $_.Source
                 kind = $_.Kind
@@ -1437,6 +1447,10 @@ if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -g
             if (-not $reviewById.ContainsKey([string]$item.Id)) { continue }
             $review = $reviewById[[string]$item.Id]
             if ([string]$review.contentHash -ne $item.ContentHash) { continue }
+            if ([int]$review.reviewPolicyVersion -ne [int]$reviewSettings.policyVersion) { continue }
+            if ([string]$review.personalInterest -notin @('mustRead', 'relevant', 'background', 'low')) { continue }
+            if ([string]::IsNullOrWhiteSpace([string]$review.interestReasonNl) -or
+                [string]::IsNullOrWhiteSpace([string]$review.interestReasonEn)) { continue }
 
             if (-not [string]::IsNullOrWhiteSpace([string]$review.titleNl)) { $item.Title = [string]$review.titleNl }
             if (-not [string]::IsNullOrWhiteSpace([string]$review.summaryNl)) { $item.Summary = [string]$review.summaryNl }
@@ -1476,6 +1490,13 @@ if ($reviewSettings.enabled -and -not $SkipAgentReview -and @($deduped).Count -g
                 }
             }
 
+            $agentInterest = [string]$review.personalInterest
+            if ($agentInterest -in @('mustRead', 'relevant', 'background', 'low')) {
+                $item.PersonalInterest = $agentInterest
+            }
+            $item.InterestReason = [string]$review.interestReasonNl
+            $item.InterestReasonEn = [string]$review.interestReasonEn
+
             $item.AgentReviewed = $true
             $item.AgentConfidence = [Math]::Round([double]$review.confidence, 2)
             $item.AgentReason = [string]$review.reasonNl
@@ -1514,9 +1535,12 @@ $sorted = @($deduped |
     Sort-Object -Property @{ Expression = {
                               if ($_.Urgency -eq 'critical') { 0 }
                               elseif ($_.Tier -eq 'action') { 1 }
-                              elseif ($_.Urgency -eq 'high') { 2 }
-                              elseif ($_.Tier -eq 'watch') { 3 }
-                              else { 4 }
+                              elseif ($_.PersonalInterest -eq 'mustRead') { 2 }
+                              elseif ($_.Urgency -eq 'high') { 3 }
+                              elseif ($_.PersonalInterest -eq 'relevant') { 4 }
+                              elseif ($_.Tier -eq 'watch') { 5 }
+                              elseif ($_.PersonalInterest -eq 'background') { 6 }
+                              else { 7 }
                           } },
                           @{ Expression = { $_.Published }; Descending = $true },
                           @{ Expression = { $_.Score };     Descending = $true })
@@ -1655,6 +1679,9 @@ $payload = [PSCustomObject]@{
             tenantRelevance = $_.TenantRelevance
             tenantReason = $_.TenantReason
             tenantReasonEn = $_.TenantReasonEn
+            personalInterest = $_.PersonalInterest
+            interestReason = $_.InterestReason
+            interestReasonEn = $_.InterestReasonEn
             keywords   = @($_.Keywords)
             actionCtx  = @($_.ActionCtx)
             actionCtxEn = @($_.EnglishActionCtx)
