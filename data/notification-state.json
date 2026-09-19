@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-18T17:44:55.0565402+00:00",
+  "updatedAt": "2026-09-19T08:56:57.3944455+00:00",
   "items": {
     "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-emergency-windows-updates-to-fix-rds-failures/": {
       "tier": "action",
@@ -162,6 +162,20 @@
       "dateKind": "available",
       "hardDates": []
     },
+    "https://learn.microsoft.com/en-us/defender-endpoint/mac-install-with-intune": {
+      "tier": "info",
+      "urgency": "normal",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/intune/whats-new/in-development": {
+      "tier": "watch",
+      "urgency": "normal",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
     "MC:7ff84cd73cc0f006ba154cb5": {
       "tier": "watch",
       "urgency": "normal",
@@ -181,7 +195,7 @@
       ]
     },
     "https://www.bleepingcomputer.com/news/security/microsoft-fixes-bug-behind-defender-antivirus-is-turned-off-alerts/": {
-      "tier": "info",
+      "tier": "watch",
       "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
@@ -222,15 +236,15 @@
       "dateKind": null,
       "hardDates": []
     },
-    "https://learn.microsoft.com/en-us/defender-endpoint/mac-install-with-intune": {
-      "tier": "info",
+    "https://ourcloudnetwork.com/microsoft-adds-basic-permissions-for-groups-in-graph/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-adds-basic-permissions-for-groups-in-graph": {
+      "tier": "watch",
       "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
-    "https://ourcloudnetwork.com/microsoft-adds-basic-permissions-for-groups-in-graph/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-adds-basic-permissions-for-groups-in-graph": {
-      "tier": "watch",
+    "https://learn.microsoft.com/en-us/entra/id-governance/licensing-fundamentals": {
+      "tier": "info",
       "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
@@ -302,13 +316,6 @@
       "dateKind": null,
       "hardDates": []
     },
-    "https://learn.microsoft.com/en-us/intune/whats-new/in-development": {
-      "tier": "watch",
-      "urgency": "normal",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
     "https://intunestuff.com/2026/09/07/device-association/": {
       "tier": "watch",
       "urgency": "normal",
@@ -337,6 +344,13 @@
       "dateKind": null,
       "hardDates": []
     },
+    "https://jannikreinhard.com/five-gates-mcp-tool-production/": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
     "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/known-issues": {
       "tier": "info",
       "urgency": "normal",
@@ -352,6 +366,13 @@
       "hardDates": []
     },
     "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/replace-vpn-access-with-identity-driven-security/ba-p/4529309": {
+      "tier": "info",
+      "urgency": "low",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-install-roadmap": {
       "tier": "info",
       "urgency": "low",
       "dateIso": null,
@@ -393,13 +414,6 @@
       "dateKind": "start",
       "hardDates": []
     },
-    "https://learn.microsoft.com/en-us/entra/id-governance/licensing-fundamentals": {
-      "tier": "info",
-      "urgency": "low",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
     "https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-reference": {
       "tier": "info",
       "urgency": "low",
@@ -421,14 +435,14 @@
       "dateKind": "available",
       "hardDates": []
     },
-    "https://learn.microsoft.com/en-us/microsoft-365/enterprise/desktop-deployment-center-home": {
-      "tier": "watch",
-      "urgency": "normal",
+    "MC:29062ab7dbccdd70603032dd": {
+      "tier": "info",
+      "urgency": "low",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
-    "MC:29062ab7dbccdd70603032dd": {
+    "https://jannikreinhard.com/azure-api-management-mcp-control-plane/": {
       "tier": "info",
       "urgency": "low",
       "dateIso": null,
@@ -456,14 +470,14 @@
       "dateKind": null,
       "hardDates": []
     },
-    "https://patchmypc.com/blog/autopilot-device-preparation-vs-device-association-vs-autopilot/": {
+    "https://patchmypc.com/blog/autopilot-device-preparation-vs-device-association-vs-autopilot/?utm_term=rss": {
       "tier": "info",
       "urgency": "low",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
     },
-    "https://patchmypc.com/blog/autopilot-device-preparation-vs-device-association-vs-autopilot/?utm_term=rss": {
+    "https://patchmypc.com/blog/autopilot-device-preparation-vs-device-association-vs-autopilot/": {
       "tier": "info",
       "urgency": "low",
       "dateIso": null,
@@ -491,25 +505,11 @@
       "dateKind": "start",
       "hardDates": []
     },
-    "https://jannikreinhard.com/five-gates-mcp-tool-production/": {
-      "tier": "info",
-      "urgency": "low",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
     "https://andrewstaylor.com/2026/09/11/intune-newsletter-11th-september-2026/": {
       "tier": "info",
       "urgency": "low",
       "dateIso": "2026-09-01",
       "dateKind": "deadline",
-      "hardDates": []
-    },
-    "https://jannikreinhard.com/azure-api-management-mcp-control-plane/": {
-      "tier": "info",
-      "urgency": "low",
-      "dateIso": null,
-      "dateKind": null,
       "hardDates": []
     },
     "https://www.microsoft.com/en-us/security/blog/2026/09/09/threat-matrix-mapping-threats-across-cloud-web-applications/": {
@@ -536,20 +536,6 @@
     "https://learn.microsoft.com/en-us/entra/verified-id/": {
       "tier": "info",
       "urgency": "low",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://msendpointmgr.com/2026/09/05/1phonemirror-levels-up-webcam-stats-better-screenshots-and-signed/": {
-      "tier": "info",
-      "urgency": "low",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
-    "https://www.microsoft.com/en-us/security/blog/2026/09/04/secure-edge-ai-customer-owned-environments/": {
-      "tier": "info",
-      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []

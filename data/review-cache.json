@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-18T17:44:52.2176528Z",
+  "generated": "2026-09-19T08:56:55.3703180Z",
   "items": [
     {
       "id": "https://andrewstaylor.com/2026/09/11/intune-newsletter-11th-september-2026/",
@@ -95,13 +95,13 @@
     },
     {
       "id": "https://jannikreinhard.com/azure-api-management-mcp-control-plane/",
-      "contentHash": "c06ac01cd96c1f46b64923a09e426ee3b3777bfbbf54372fd7a91779ce4bc98d",
+      "contentHash": "5d0c25329cbef69ad128573c79ccb65b376e5594531f818d545d94f45b92022b",
       "reviewPolicyVersion": 2,
-      "titleNl": "Azure API Management als besturingslaag voor MCP-tools",
-      "summaryNl": "Korte analyse van het plaatsen van identity-, limiet-, monitoring- en toegangsgrenscontroles vóór MCP-tools met Azure API Management.",
+      "titleNl": "Azure API Management MCP als controlelaag voor agenttools",
+      "summaryNl": "Analyse van Azure API Management als beheerlaag tussen AI-agents en MCP-servers. De auteur behandelt identiteit, beperkte tooltoegang, limieten, streaming en telemetrie.",
       "whyNl": [],
-      "titleEn": "Azure API Management as a control plane for MCP tools",
-      "summaryEn": "A brief analysis of placing identity, limits, monitoring, and tool-boundary controls in front of MCP tools with Azure API Management.",
+      "titleEn": "Azure API Management MCP as a control plane for agent tools",
+      "summaryEn": "Analysis of Azure API Management as a management layer between AI agents and MCP servers. The author covers identity, limited tool access, limits, streaming, and telemetry.",
       "whyEn": [],
       "categories": [
         "Identiteit & MFA",
@@ -110,15 +110,15 @@
       "kind": "analyse",
       "tier": "info",
       "urgency": "low",
-      "tenantRelevance": "unknown",
-      "tenantReasonNl": "De bron noemt Azure API Management en identitycontroles, maar toont geen directe toepassing voor beheerde endpoints of tenants.",
-      "tenantReasonEn": "The source mentions Azure API Management and identity controls, but shows no direct application to managed endpoints or tenants.",
-      "personalInterest": "background",
-      "interestReasonNl": "Dit biedt algemene context voor governance van AI-tools, zonder directe endpointbeheerimpact.",
-      "interestReasonEn": "It offers general context for AI-tool governance without direct endpoint-management impact.",
-      "confidence": 0.72,
-      "reasonNl": "De bron is een algemene technische analyse zonder concrete beheeractie.",
-      "reasonEn": "The source is a general technical analysis without a concrete administrative action."
+      "tenantRelevance": "likely",
+      "tenantReasonNl": "De openbare bron behandelt Microsoft Entra ID en Azure API Management voor bedrijfsbeheer.",
+      "tenantReasonEn": "The public source covers Microsoft Entra ID and Azure API Management for enterprise administration.",
+      "personalInterest": "relevant",
+      "interestReasonNl": "Dit biedt praktische beveiligings- en beheercontext voor het gecontroleerd inzetten van agenttools.",
+      "interestReasonEn": "It provides practical security and governance context for controlled use of agent tools.",
+      "confidence": 0.91,
+      "reasonNl": "Dit is architectuuradvies zonder aantoonbare wijziging of concrete beheeractie.",
+      "reasonEn": "This is architectural guidance without a demonstrated change or concrete administrative action."
     },
     {
       "id": "https://jannikreinhard.com/copilot-vs-cowork-vs-agents/",
@@ -153,30 +153,31 @@
     },
     {
       "id": "https://jannikreinhard.com/five-gates-mcp-tool-production/",
-      "contentHash": "799494aeddf7853a9e1b14d3d7b67cdcd9684dc34bee7915f35b636f62c5f047",
+      "contentHash": "4e56f04db7ecd81687ffc043b07bded414d6c29a04798752c02727cf4bc9a8c5",
       "reviewPolicyVersion": 2,
-      "titleNl": "Vijf controles vóór een MCP-tool naar productie gaat",
-      "summaryNl": "Korte uiteenzetting van vijf beveiligingscontroles voor MCP-tools: identity, bereik, limieten, goedkeuring en bewijsvoering.",
+      "titleNl": "Vijf controles voordat een MCP-tool productie bereikt",
+      "summaryNl": "Praktische analyse voor productiegebruik van MCP-tools die bedrijfsdata lezen of wijzigen. De vijf controles betreffen identiteit, scope, limieten, goedkeuring en herleidbaarheid.",
       "whyNl": [],
       "titleEn": "Five controls before an MCP tool reaches production",
-      "summaryEn": "A brief outline of five security controls for MCP tools: identity, scope, limits, approval, and evidence.",
+      "summaryEn": "Practical analysis for production use of MCP tools that read or modify business data. The five controls cover identity, scope, limits, approval, and traceability.",
       "whyEn": [],
       "categories": [
         "Identiteit & MFA",
-        "Defender & Security"
+        "Compliance",
+        "Reporting"
       ],
       "kind": "analyse",
       "tier": "info",
       "urgency": "low",
-      "tenantRelevance": "unknown",
-      "tenantReasonNl": "De bron gaat over algemene beveiliging van MCP-tools en koppelt die niet aan een beheerde Microsoft-omgeving.",
-      "tenantReasonEn": "The source concerns general MCP-tool security and does not connect it to a managed Microsoft environment.",
-      "personalInterest": "background",
-      "interestReasonNl": "Dit geeft algemene securitycontext voor productiegebruik van AI-tools.",
-      "interestReasonEn": "This provides general security context for production use of AI tools.",
-      "confidence": 0.76,
-      "reasonNl": "De bron noemt principes, maar geen concrete productwijziging of beheeractie.",
-      "reasonEn": "The source states principles, but no concrete product change or administrative action."
+      "tenantRelevance": "likely",
+      "tenantReasonNl": "De openbare bron gaat over Microsoft Entra ID en beheer van MCP-tools voor bedrijfsdata.",
+      "tenantReasonEn": "The public source concerns Microsoft Entra ID and governance of MCP tools for enterprise data.",
+      "personalInterest": "relevant",
+      "interestReasonNl": "De controles zijn bruikbaar bij het beoordelen van AI-agentintegraties met beheerde bedrijfsystemen.",
+      "interestReasonEn": "The controls are useful when assessing AI-agent integrations with managed business systems.",
+      "confidence": 0.92,
+      "reasonNl": "Dit is algemene productiegerichte adviesinformatie zonder concrete productwijziging.",
+      "reasonEn": "This is general production-focused guidance without a concrete product change."
     },
     {
       "id": "https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-reference",
@@ -241,35 +242,34 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/defender-endpoint/mac-install-with-intune",
-      "contentHash": "691b4a2385d534408760a7c266f4829170497b4b13a187c459a822a1269e62db",
+      "contentHash": "a6500b806e08cfe3f8ab76745f339f544d26dd1293c8193c94bf257b8bffbcb9",
       "reviewPolicyVersion": 2,
       "titleNl": "Microsoft Defender for Endpoint op macOS implementeren met Intune",
-      "summaryNl": "Handleiding voor het implementeren van Microsoft Defender for Endpoint op beheerde macOS-apparaten met Intune. De benodigde profielen omvatten onder meer systeemextensies, netwerkfilter, Full Disk Access en onboarding.",
+      "summaryNl": "Microsoft-handleiding voor het implementeren en onboarden van Microsoft Defender for Endpoint op beheerde macOS-apparaten met Intune. De documentatie beschrijft de benodigde configuratieprofielen, app en onboardingpakket.",
       "whyNl": [
-        "macOS ondersteunt slechts één network filter-mobileconfig-profiel; meerdere profielen kunnen netwerkproblemen veroorzaken."
+        "De implementatie vereist onder meer systeemextensies, netwerkfilter en Full Disk Access-profielen."
       ],
       "titleEn": "Deploy Microsoft Defender for Endpoint on macOS with Intune",
-      "summaryEn": "A guide to deploying Microsoft Defender for Endpoint to managed macOS devices with Intune. Required profiles include system extensions, a network filter, Full Disk Access, and onboarding.",
+      "summaryEn": "Microsoft guidance for deploying and onboarding Microsoft Defender for Endpoint on managed macOS devices with Intune. The documentation describes the required configuration profiles, app, and onboarding package.",
       "whyEn": [
-        "macOS supports only one network-filter mobileconfig profile; multiple profiles can cause network connectivity problems."
+        "The deployment requires profiles including system extensions, a network filter, and Full Disk Access."
       ],
       "categories": [
-        "Defender & Security",
         "macOS",
-        "Enrollment"
+        "Defender & Security"
       ],
       "kind": "handleiding",
       "tier": "info",
       "urgency": "normal",
       "tenantRelevance": "likely",
-      "tenantReasonNl": "De openbare Microsoft-documentatie behandelt Intune-implementatie van Defender for Endpoint op macOS.",
-      "tenantReasonEn": "The public Microsoft documentation covers Intune deployment of Defender for Endpoint on macOS.",
+      "tenantReasonNl": "De openbare Microsoft-documentatie beschrijft Intune-beheer van Defender for Endpoint op macOS.",
+      "tenantReasonEn": "The public Microsoft documentation describes Intune management of Defender for Endpoint on macOS.",
       "personalInterest": "mustRead",
-      "interestReasonNl": "Dit bevat concrete configuratievereisten voor endpointbeveiliging op beheerde Macs.",
-      "interestReasonEn": "This contains concrete configuration requirements for endpoint security on managed Macs.",
+      "interestReasonNl": "Dit is rechtstreeks bruikbaar voor Intune- en Defender-beheer van macOS-apparaten.",
+      "interestReasonEn": "This is directly useful for Intune and Defender administration of macOS devices.",
       "confidence": 0.96,
-      "reasonNl": "De bron is implementatiedocumentatie zonder aangetoonde verplichte wijziging.",
-      "reasonEn": "The source is deployment documentation without a demonstrated mandatory change."
+      "reasonNl": "De bron is een implementatiehandleiding en meldt geen verplichte wijziging of deadline.",
+      "reasonEn": "The source is a deployment guide and reports no mandatory change or deadline."
     },
     {
       "id": "https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/overview",
@@ -353,30 +353,34 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/id-governance/licensing-fundamentals",
-      "contentHash": "fb16780bfaf3e1d663d1a1e55dc2fed939dfb87be498edcbe270f94c9749f089",
+      "contentHash": "1266305be5ee806ed434a87f259d987b433cac3cde303a27cc966be8724fcd73",
       "reviewPolicyVersion": 2,
-      "titleNl": "Licentiegrondslagen voor Microsoft Entra ID Governance",
-      "summaryNl": "Naslag over licenties voor Microsoft Entra ID Governance, inclusief governance voor agentidentiteiten en service principals.",
-      "whyNl": [],
+      "titleNl": "Basisprincipes van licenties voor Microsoft Entra ID Governance",
+      "summaryNl": "Naslag over beschikbare Microsoft Entra ID Governance-licenties en hun vereisten. De pagina behandelt onder meer P1-, P2-, Governance- en Entra Suite-licenties.",
+      "whyNl": [
+        "De juiste Governance-licentie hangt af van de bestaande P1- of P2-licentie in de tenant."
+      ],
       "titleEn": "Microsoft Entra ID Governance licensing fundamentals",
-      "summaryEn": "Reference guidance on Microsoft Entra ID Governance licensing, including governance for agent identities and service principals.",
-      "whyEn": [],
+      "summaryEn": "Reference information on available Microsoft Entra ID Governance licenses and their prerequisites. The page covers P1, P2, Governance, and Entra Suite licensing, among others.",
+      "whyEn": [
+        "The appropriate Governance license depends on the tenant's existing P1 or P2 licensing."
+      ],
       "categories": [
         "Licensing",
         "Identiteit & MFA"
       ],
       "kind": "naslag",
       "tier": "info",
-      "urgency": "low",
+      "urgency": "normal",
       "tenantRelevance": "likely",
-      "tenantReasonNl": "De openbare documentatie gaat over licenties en identity governance in Microsoft Entra.",
-      "tenantReasonEn": "The public documentation covers licensing and identity governance in Microsoft Entra.",
-      "personalInterest": "relevant",
-      "interestReasonNl": "Licentievereisten voor identity governance zijn bruikbaar bij ontwerp- en klantadvies.",
-      "interestReasonEn": "Licensing requirements for identity governance are useful for solution design and customer advice.",
-      "confidence": 0.72,
-      "reasonNl": "Dit is naslag zonder aangekondigde wijziging of beheeractie.",
-      "reasonEn": "This is reference material without an announced change or administrative action."
+      "tenantReasonNl": "De openbare Microsoft-documentatie betreft licenties voor Microsoft Entra ID Governance in een tenant.",
+      "tenantReasonEn": "The public Microsoft documentation concerns Microsoft Entra ID Governance licensing in a tenant.",
+      "personalInterest": "mustRead",
+      "interestReasonNl": "Licentievereisten voor identity governance zijn direct relevant voor klantadvies en tenantbeheer.",
+      "interestReasonEn": "Identity-governance licensing requirements are directly relevant to customer advice and tenant administration.",
+      "confidence": 0.95,
+      "reasonNl": "De bron licht licenties toe, zonder aangekondigde verplichte omzetting of deadline.",
+      "reasonEn": "The source explains licensing without announcing a mandatory transition or deadline."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/identity/authentication/concept-sspr-policy",
@@ -404,6 +408,32 @@
       "confidence": 0.94,
       "reasonNl": "De bron legt bestaand beleid uit en kondigt geen wijziging aan.",
       "reasonEn": "The source explains existing policy and does not announce a change."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-install-roadmap",
+      "contentHash": "1999fa335ca2f92aca8f2b0916a7fa0abe1aadc70fb2104e186e07a0f104e49e",
+      "reviewPolicyVersion": 2,
+      "titleNl": "Installatieoverzicht voor Microsoft Entra Connect en Connect Health",
+      "summaryNl": "Kort overzicht van installatieopties en -paden voor Microsoft Entra Connect en Connect Health.",
+      "whyNl": [],
+      "titleEn": "Installation roadmap for Microsoft Entra Connect and Connect Health",
+      "summaryEn": "Brief overview of installation options and paths for Microsoft Entra Connect and Connect Health.",
+      "whyEn": [],
+      "categories": [
+        "Identiteit & MFA"
+      ],
+      "kind": "naslag",
+      "tier": "info",
+      "urgency": "low",
+      "tenantRelevance": "likely",
+      "tenantReasonNl": "De openbare Microsoft-documentatie gaat over hybride identiteitsynchronisatie met Microsoft Entra Connect.",
+      "tenantReasonEn": "The public Microsoft documentation concerns hybrid identity synchronization with Microsoft Entra Connect.",
+      "personalInterest": "relevant",
+      "interestReasonNl": "Microsoft Entra Connect blijft praktische beheerkennis voor omgevingen met hybride identiteit.",
+      "interestReasonEn": "Microsoft Entra Connect remains practical administrative knowledge for hybrid-identity environments.",
+      "confidence": 0.58,
+      "reasonNl": "De beschikbare tekst noemt alleen een overzicht en onderbouwt geen wijziging of actie.",
+      "reasonEn": "The available text only states that this is an overview and does not substantiate a change or action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq",
@@ -586,34 +616,6 @@
       "reasonEn": "The announcements are relevant for preparation, but are not yet released and have no concrete action."
     },
     {
-      "id": "https://learn.microsoft.com/en-us/microsoft-365/enterprise/desktop-deployment-center-home",
-      "contentHash": "9cae62cfd888d44d0077cfba7bd47c288cc42067fa82ce8e2ef19c341ff35f59",
-      "reviewPolicyVersion": 2,
-      "titleNl": "Desktop Deployment Center is verouderd",
-      "summaryNl": "De inhoud van Desktop Deployment Center is verouderd. Microsoft verwijst voor moderne desktopimplementaties naar onder meer Windows 11, Microsoft 365 Apps en Microsoft Intune.",
-      "whyNl": [],
-      "titleEn": "Desktop Deployment Center is deprecated",
-      "summaryEn": "The content of Desktop Deployment Center is deprecated. Microsoft points to Windows 11, Microsoft 365 Apps, and Microsoft Intune resources for modern desktop deployments.",
-      "whyEn": [],
-      "categories": [
-        "Windows 11",
-        "Apps & Packaging",
-        "Autopilot"
-      ],
-      "kind": "wijziging",
-      "tier": "watch",
-      "urgency": "normal",
-      "tenantRelevance": "likely",
-      "tenantReasonNl": "De openbare bron betreft hulpmiddelen voor beheerde Windows- en Microsoft 365-desktopimplementaties.",
-      "tenantReasonEn": "The public source concerns resources for managed Windows and Microsoft 365 desktop deployments.",
-      "personalInterest": "relevant",
-      "interestReasonNl": "Beheerders die nog naar dit centrum verwijzen moeten de actuele implementatiedocumentatie gebruiken.",
-      "interestReasonEn": "Administrators still referring to this center should use the current deployment documentation.",
-      "confidence": 0.92,
-      "reasonNl": "De bron meldt veroudering, maar noemt geen verplichte migratie of deadline.",
-      "reasonEn": "The source reports deprecation but gives no mandatory migration or deadline."
-    },
-    {
       "id": "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/known-issues",
       "contentHash": "5829690857b34aee43c1fc008ceb87d259ba960c3b79017535274a62f30e93ea",
       "reviewPolicyVersion": 2,
@@ -638,38 +640,6 @@
       "confidence": 0.7,
       "reasonNl": "De aangeleverde tekst noemt geen specifiek actueel probleem of vereiste actie.",
       "reasonEn": "The supplied text names no specific current issue or required action."
-    },
-    {
-      "id": "https://msendpointmgr.com/2026/09/05/1phonemirror-levels-up-webcam-stats-better-screenshots-and-signed/",
-      "contentHash": "94c52244f126c0232bd16cd3d619ca83d4d6681d282ad7194e44179301ea4e6b",
-      "reviewPolicyVersion": 2,
-      "titleNl": "1PhoneMirror voegt webcam, statistieken en codeondertekening toe",
-      "summaryNl": "1PhoneMirror 0.6.0 voegt onder meer een webcamvenster, lokale gebruiksstatistieken en verbeterde schermafbeeldingen toe. De MSI, uitvoerbare bestanden en DLL's zijn nu digitaal ondertekend; de auteur testte distributie via Intune.",
-      "whyNl": [
-        "De auteur meldt dat de MSI-distributie via Patch My PC Custom App met Intune is getest."
-      ],
-      "titleEn": "1PhoneMirror adds webcam, statistics, and code signing",
-      "summaryEn": "1PhoneMirror 0.6.0 adds a webcam panel, local usage statistics, and improved screenshots. Its MSI, executables, and DLLs are now digitally signed; the author tested distribution through Intune.",
-      "whyEn": [
-        "The author reports testing MSI distribution through Patch My PC Custom App with Intune."
-      ],
-      "categories": [
-        "Apps & Packaging",
-        "iOS & iPadOS",
-        "Android"
-      ],
-      "kind": "nieuws",
-      "tier": "info",
-      "urgency": "low",
-      "tenantRelevance": "likely",
-      "tenantReasonNl": "De openbare bron noemt distributie van een mobiele hulpprogramma via Microsoft Intune.",
-      "tenantReasonEn": "The public source mentions distributing a mobile utility through Microsoft Intune.",
-      "personalInterest": "background",
-      "interestReasonNl": "Het biedt context over een nichehulpprogramma dat via Intune kan worden verpakt.",
-      "interestReasonEn": "It provides context on a niche utility that can be packaged through Intune.",
-      "confidence": 0.89,
-      "reasonNl": "Dit is een productupdate zonder aangetoonde beheeractie voor bestaande tenants.",
-      "reasonEn": "This is a product update without a demonstrated administrative action for existing tenants."
     },
     {
       "id": "https://ourcloudnetwork.com/microsoft-adds-basic-permissions-for-groups-in-graph/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-adds-basic-permissions-for-groups-in-graph",
@@ -1380,33 +1350,36 @@
     },
     {
       "id": "https://www.bleepingcomputer.com/news/security/microsoft-fixes-bug-behind-defender-antivirus-is-turned-off-alerts/",
-      "contentHash": "d030cf38529857bf60793650fc84f7d942c387770757731ef84f017a4ede681e",
+      "contentHash": "f0cf1c63ab702d3f8deb062a7aa6e007df4fda62d7565c589e029c920b8babfb",
       "reviewPolicyVersion": 2,
-      "titleNl": "Microsoft herstelt onterechte meldingen dat Defender Antivirus is uitgeschakeld",
-      "summaryNl": "Microsoft Defender Antivirus-update 4.18.26080.4 verhelpt onterechte meldingen dat antivirus is uitgeschakeld terwijl deze actief is. Het probleem raakte ondersteunde Windows-client- en serverversies.",
+      "titleNl": "Microsoft verhelpt onjuiste meldingen dat Defender Antivirus is uitgeschakeld",
+      "summaryNl": "Microsoft heeft een probleem opgelost waarbij Windows ten onrechte meldde dat Microsoft Defender Antivirus was uitgeschakeld. De oplossing zit in Microsoft Defender Antivirus-versie 4.18.26080.4.",
       "whyNl": [
-        "De herstelupdate is uitgebracht op 17 september 2026."
+        "De oplossing werd uitgebracht op 17 september 2026.",
+        "De fout trof ondersteunde Windows-client- en serverversies met onjuiste beveiligingsmeldingen."
       ],
       "titleEn": "Microsoft fixes false Defender Antivirus turned-off alerts",
-      "summaryEn": "Microsoft Defender Antivirus update 4.18.26080.4 fixes false alerts that antivirus is turned off while it is active. The issue affected supported Windows client and server versions.",
+      "summaryEn": "Microsoft resolved an issue in which Windows incorrectly reported that Microsoft Defender Antivirus was turned off. The fix is in Microsoft Defender Antivirus version 4.18.26080.4.",
       "whyEn": [
-        "The remediation update was released on September 17, 2026."
+        "The fix was released on September 17, 2026.",
+        "The issue affected supported Windows client and server versions with incorrect security notifications."
       ],
       "categories": [
-        "Defender & Security"
+        "Defender & Security",
+        "Windows 11"
       ],
       "kind": "nieuws",
-      "tier": "info",
+      "tier": "watch",
       "urgency": "normal",
       "tenantRelevance": "likely",
-      "tenantReasonNl": "De openbare bron betreft Microsoft Defender Antivirus op ondersteunde beheerde Windows-systemen.",
-      "tenantReasonEn": "The public source concerns Microsoft Defender Antivirus on supported managed Windows systems.",
+      "tenantReasonNl": "De openbare bron beschrijft een Microsoft Defender Antivirus-probleem op ondersteunde Windows-clients en -servers.",
+      "tenantReasonEn": "The public source describes a Microsoft Defender Antivirus issue on supported Windows clients and servers.",
       "personalInterest": "mustRead",
-      "interestReasonNl": "De oplossing voorkomt dat beheerders onterechte Defender-waarschuwingen als een echte beveiligingsstoring behandelen.",
-      "interestReasonEn": "The fix helps administrators avoid treating false Defender warnings as a genuine security incident.",
-      "confidence": 0.95,
-      "reasonNl": "Dit is relevante statusinformatie over een opgelost probleem, zonder aantoonbare beheeractie.",
-      "reasonEn": "This is relevant status information about a resolved issue, with no evidenced administrative action."
+      "interestReasonNl": "De oplossing voorkomt verwarrende Defender-meldingen die securitybeheerders en gebruikers kunnen raken.",
+      "interestReasonEn": "The resolution prevents confusing Defender notifications that can affect security administrators and users.",
+      "confidence": 0.93,
+      "reasonNl": "De gemelde fout is opgelost, maar de bron toont geen concrete klantactie die beheerders moeten uitvoeren.",
+      "reasonEn": "The reported issue is resolved, but the source does not show a concrete customer action that administrators must perform."
     },
     {
       "id": "https://www.bleepingcomputer.com/news/security/microsoft-teams-will-let-admins-block-custom-file-extensions/",
@@ -1493,32 +1466,6 @@
       "confidence": 0.99,
       "reasonNl": "Dit is alleen een webinar-aankondiging zonder beheeractie.",
       "reasonEn": "This is only a webinar announcement with no administrative action."
-    },
-    {
-      "id": "https://www.microsoft.com/en-us/security/blog/2026/09/04/secure-edge-ai-customer-owned-environments/",
-      "contentHash": "28c933b134afb0be68b101b88660931a3721a0064877d44d448b757791ce1cf6",
-      "reviewPolicyVersion": 2,
-      "titleNl": "Edge AI in klantomgevingen beveiligen",
-      "summaryNl": "Microsoft beschrijft hoe Edge AI het vertrouwensmodel verandert wanneer klanten de infrastructuur beheren. De guidance adviseert runtime-attestatie, herkomstcontrole van AI-artefacten en deterministische begrenzing van modelacties.",
-      "whyNl": [],
-      "titleEn": "Securing Edge AI in customer-owned environments",
-      "summaryEn": "Microsoft describes how Edge AI changes the trust model when customers manage the infrastructure. The guidance recommends runtime attestation, AI-artifact provenance checks, and deterministic constraints on model actions.",
-      "whyEn": [],
-      "categories": [
-        "Defender & Security"
-      ],
-      "kind": "handleiding",
-      "tier": "info",
-      "urgency": "normal",
-      "tenantRelevance": "likely",
-      "tenantReasonNl": "Het behandelt beveiliging van AI-workloads in door klanten beheerde omgevingen.",
-      "tenantReasonEn": "It covers security for AI workloads in customer-managed environments.",
-      "personalInterest": "background",
-      "interestReasonNl": "Het biedt relevante beveiligingscontext voor organisaties die Edge AI inzetten.",
-      "interestReasonEn": "It provides relevant security context for organizations deploying Edge AI.",
-      "confidence": 0.96,
-      "reasonNl": "Dit is algemene ontwerpgerichte beveiligingsguidance zonder aangekondigde wijziging.",
-      "reasonEn": "This is general security design guidance without an announced change."
     },
     {
       "id": "https://www.microsoft.com/en-us/security/blog/2026/09/09/passkey-themed-social-engineering-leads-identity-cloud-compromise/",
