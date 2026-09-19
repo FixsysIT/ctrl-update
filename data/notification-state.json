@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-19T08:56:57.3944455+00:00",
+  "updatedAt": "2026-09-19T15:08:05.0658533+00:00",
   "items": {
     "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-emergency-windows-updates-to-fix-rds-failures/": {
       "tier": "action",
@@ -12,6 +12,13 @@
     "https://www.microsoft.com/en-us/security/blog/2026/09/09/passkey-themed-social-engineering-leads-identity-cloud-compromise/": {
       "tier": "action",
       "urgency": "critical",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://www.bleepingcomputer.com/news/security/bragjack-attacks-hijack-ai-browser-agents-through-malicious-extensions/": {
+      "tier": "action",
+      "urgency": "high",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
@@ -38,16 +45,6 @@
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
-    },
-    "https://www.bleepingcomputer.com/news/microsoft/windows-11-24h2-home-and-pro-reach-end-of-support-in-october/": {
-      "tier": "action",
-      "urgency": "high",
-      "dateIso": "2026-10-13",
-      "dateKind": "deadline",
-      "hardDates": [
-        "deadline:2026-10-13",
-        "deadline:2027-10-01"
-      ]
     },
     "MC:8af7ed3a790adfc73bc3991a": {
       "tier": "action",
@@ -236,7 +233,7 @@
       "dateKind": null,
       "hardDates": []
     },
-    "https://ourcloudnetwork.com/microsoft-adds-basic-permissions-for-groups-in-graph/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-adds-basic-permissions-for-groups-in-graph": {
+    "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq": {
       "tier": "watch",
       "urgency": "normal",
       "dateIso": null,
@@ -290,6 +287,13 @@
     },
     "https://learn.microsoft.com/en-us/defender-endpoint/configure-endpoints-mdm": {
       "tier": "info",
+      "urgency": "normal",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://learn.microsoft.com/en-us/microsoft-365/enterprise/desktop-deployment-center-home": {
+      "tier": "watch",
       "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
@@ -358,13 +362,6 @@
       "dateKind": null,
       "hardDates": []
     },
-    "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq": {
-      "tier": "info",
-      "urgency": "low",
-      "dateIso": null,
-      "dateKind": null,
-      "hardDates": []
-    },
     "https://techcommunity.microsoft.com/t5/microsoft-entra-blog/replace-vpn-access-with-identity-driven-security/ba-p/4529309": {
       "tier": "info",
       "urgency": "low",
@@ -374,7 +371,7 @@
     },
     "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-install-roadmap": {
       "tier": "info",
-      "urgency": "low",
+      "urgency": "normal",
       "dateIso": null,
       "dateKind": null,
       "hardDates": []
@@ -394,6 +391,13 @@
       "hardDates": []
     },
     "https://jannikreinhard.com/copilot-vs-cowork-vs-agents/": {
+      "tier": "watch",
+      "urgency": "normal",
+      "dateIso": null,
+      "dateKind": null,
+      "hardDates": []
+    },
+    "https://ourcloudnetwork.com/microsoft-adds-basic-permissions-for-groups-in-graph/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-adds-basic-permissions-for-groups-in-graph": {
       "tier": "watch",
       "urgency": "normal",
       "dateIso": null,

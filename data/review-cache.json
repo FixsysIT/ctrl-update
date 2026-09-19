@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-19T08:56:55.3703180Z",
+  "generated": "2026-09-19T15:08:02.4621097Z",
   "items": [
     {
       "id": "https://andrewstaylor.com/2026/09/11/intune-newsletter-11th-september-2026/",
@@ -325,31 +325,29 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/fundamentals/what-is-entra",
-      "contentHash": "282a43ebec96bb01a5803cd1413d5f0b2037ab358af6f322da681ebd7bce555f",
+      "contentHash": "38e7836ef957b55a742a333ac4d843fc6a86cfd2299446749ac53373c9690b95",
       "reviewPolicyVersion": 2,
       "titleNl": "Wat is Microsoft Entra?",
-      "summaryNl": "Inleidend overzicht van de Microsoft Entra-productfamilie voor identity, toegang, governance en beveiliging. Het beschrijft onder andere Entra ID, Private Access, Internet Access, ID Governance en ID Protection.",
+      "summaryNl": "Dit naslagartikel beschrijft Microsoft Entra als productfamilie voor identiteit en netwerktoegang binnen een Zero Trust-strategie.",
       "whyNl": [],
       "titleEn": "What is Microsoft Entra?",
-      "summaryEn": "An introductory overview of the Microsoft Entra product family for identity, access, governance, and security. It describes Entra ID, Private Access, Internet Access, ID Governance, and ID Protection, among others.",
+      "summaryEn": "This reference article describes Microsoft Entra as a family of identity and network-access products for a Zero Trust strategy.",
       "whyEn": [],
       "categories": [
-        "Identiteit & MFA",
-        "Conditional Access",
-        "Defender & Security"
+        "Identiteit & MFA"
       ],
       "kind": "naslag",
       "tier": "info",
       "urgency": "low",
       "tenantRelevance": "likely",
-      "tenantReasonNl": "De openbare Microsoft-documentatie beschrijft Entra-diensten voor identity- en toegangsbeheer in organisaties.",
-      "tenantReasonEn": "The public Microsoft documentation describes Entra services for organizational identity and access management.",
+      "tenantReasonNl": "De openbare bron gaat duidelijk over Microsoft-identiteits- en toegangsbeheer.",
+      "tenantReasonEn": "The public source clearly concerns Microsoft identity and access management.",
       "personalInterest": "background",
-      "interestReasonNl": "Dit is nuttige basiscontext voor identitybeheer, maar geen operationele wijziging.",
-      "interestReasonEn": "This is useful foundational context for identity administration, but not an operational change.",
-      "confidence": 0.97,
-      "reasonNl": "Dit is algemene naslag zonder concrete wijziging of beheeractie.",
-      "reasonEn": "This is general reference material without a concrete change or administrative action."
+      "interestReasonNl": "Het biedt algemene context over een kernplatform voor identiteitsbeheer.",
+      "interestReasonEn": "It provides general context on a core identity-management platform.",
+      "confidence": 0.94,
+      "reasonNl": "Het is algemene productdocumentatie zonder wijziging of vereiste actie.",
+      "reasonEn": "It is general product documentation without a change or required action."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/id-governance/licensing-fundamentals",
@@ -384,40 +382,13 @@
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/identity/authentication/concept-sspr-policy",
-      "contentHash": "0e536856bbc7a8529e8fb083a0ff056be307fe3fbff7c359b981846883f3789c",
+      "contentHash": "2409f2eea035b84fb25dcc65139092a941d61e4c9e89fdd5df73b0a9527e0d0b",
       "reviewPolicyVersion": 2,
-      "titleNl": "Beleid voor self-service password reset in Microsoft Entra ID",
-      "summaryNl": "De documentatie beschrijft wachtwoord-, UPN- en smart-lockoutbeleid bij SSPR. Ook worden aandachtspunten voor hybride accounts en password writeback uitgelegd.",
+      "titleNl": "Beleid voor selfservicewachtwoordherstel in Microsoft Entra ID",
+      "summaryNl": "Dit artikel licht wachtwoordbeleid en accountbeperkingen in Microsoft Entra ID toe, inclusief de hybride context.",
       "whyNl": [],
       "titleEn": "Self-service password reset policies in Microsoft Entra ID",
-      "summaryEn": "The documentation describes password, UPN, and smart lockout policies for SSPR. It also explains considerations for hybrid accounts and password writeback.",
-      "whyEn": [],
-      "categories": [
-        "Identiteit & MFA",
-        "Scripting & Graph"
-      ],
-      "kind": "naslag",
-      "tier": "info",
-      "urgency": "low",
-      "tenantRelevance": "likely",
-      "tenantReasonNl": "De openbare documentatie betreft Entra-wachtwoord- en SSPR-beleid voor beheerde identiteiten.",
-      "tenantReasonEn": "The public documentation concerns Entra password and SSPR policies for managed identities.",
-      "personalInterest": "relevant",
-      "interestReasonNl": "Dit helpt bij het beheren van wachtwoordbeleid, SSPR en hybride identiteiten.",
-      "interestReasonEn": "This helps with administering password policy, SSPR, and hybrid identities.",
-      "confidence": 0.94,
-      "reasonNl": "De bron legt bestaand beleid uit en kondigt geen wijziging aan.",
-      "reasonEn": "The source explains existing policy and does not announce a change."
-    },
-    {
-      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-install-roadmap",
-      "contentHash": "1999fa335ca2f92aca8f2b0916a7fa0abe1aadc70fb2104e186e07a0f104e49e",
-      "reviewPolicyVersion": 2,
-      "titleNl": "Installatieoverzicht voor Microsoft Entra Connect en Connect Health",
-      "summaryNl": "Kort overzicht van installatieopties en -paden voor Microsoft Entra Connect en Connect Health.",
-      "whyNl": [],
-      "titleEn": "Installation roadmap for Microsoft Entra Connect and Connect Health",
-      "summaryEn": "Brief overview of installation options and paths for Microsoft Entra Connect and Connect Health.",
+      "summaryEn": "This article explains password policies and account restrictions in Microsoft Entra ID, including the hybrid context.",
       "whyEn": [],
       "categories": [
         "Identiteit & MFA"
@@ -426,41 +397,73 @@
       "tier": "info",
       "urgency": "low",
       "tenantRelevance": "likely",
-      "tenantReasonNl": "De openbare Microsoft-documentatie gaat over hybride identiteitsynchronisatie met Microsoft Entra Connect.",
-      "tenantReasonEn": "The public Microsoft documentation concerns hybrid identity synchronization with Microsoft Entra Connect.",
+      "tenantReasonNl": "De openbare bron behandelt Microsoft Entra ID-wachtwoord- en authenticatiebeleid.",
+      "tenantReasonEn": "The public source covers Microsoft Entra ID password and authentication policies.",
       "personalInterest": "relevant",
-      "interestReasonNl": "Microsoft Entra Connect blijft praktische beheerkennis voor omgevingen met hybride identiteit.",
-      "interestReasonEn": "Microsoft Entra Connect remains practical administrative knowledge for hybrid-identity environments.",
-      "confidence": 0.58,
-      "reasonNl": "De beschikbare tekst noemt alleen een overzicht en onderbouwt geen wijziging of actie.",
-      "reasonEn": "The available text only states that this is an overview and does not substantiate a change or action."
+      "interestReasonNl": "Wachtwoord- en SSPR-beleid zijn direct bruikbaar voor identitybeheer.",
+      "interestReasonEn": "Password and SSPR policies are directly useful for identity administration.",
+      "confidence": 0.83,
+      "reasonNl": "Het is naslaginformatie zonder aangetoonde nieuwe wijziging of actie.",
+      "reasonEn": "It is reference information without an evidenced new change or action."
     },
     {
-      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq",
-      "contentHash": "a2c9cf34b9ac7225d230d11106fd16bdbe0b1a58a657b625aa600c5e656d713e",
+      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-install-roadmap",
+      "contentHash": "d40143165c78e1e87b4e8538eff11dbe1f124d62113d2a478a2760c8a37055dc",
       "reviewPolicyVersion": 2,
-      "titleNl": "Veelgestelde vragen over Microsoft Entra seamless single sign-on",
-      "summaryNl": "Een beknopte verwijzing naar veelgestelde vragen over Microsoft Entra seamless single sign-on.",
+      "titleNl": "Installatieroutekaart voor Microsoft Entra Connect en Microsoft Entra Connect Health",
+      "summaryNl": "Deze handleiding behandelt installatie, upgrades en configuratie van Microsoft Entra Connect. Ook worden synchronisatiefuncties en operationele aandachtspunten voor hybride identiteiten beschreven.",
       "whyNl": [],
-      "titleEn": "Microsoft Entra seamless single sign-on FAQ",
-      "summaryEn": "A brief reference to frequently asked questions about Microsoft Entra seamless single sign-on.",
+      "titleEn": "Microsoft Entra Connect and Microsoft Entra Connect Health installation roadmap",
+      "summaryEn": "This guide covers installation, upgrades, and configuration of Microsoft Entra Connect. It also describes synchronization features and operational considerations for hybrid identities.",
       "whyEn": [],
       "categories": [
         "Identiteit & MFA",
-        "Enrollment"
+        "Enrollment",
+        "Conditional Access"
       ],
-      "kind": "naslag",
+      "kind": "handleiding",
       "tier": "info",
-      "urgency": "low",
+      "urgency": "normal",
       "tenantRelevance": "likely",
-      "tenantReasonNl": "De openbare bron gaat over Entra single sign-on in hybride identiteitsomgevingen.",
-      "tenantReasonEn": "The public source covers Entra single sign-on in hybrid identity environments.",
+      "tenantReasonNl": "De openbare bron gaat over hybride synchronisatie met Microsoft Entra ID.",
+      "tenantReasonEn": "The public source concerns hybrid synchronization with Microsoft Entra ID.",
       "personalInterest": "relevant",
-      "interestReasonNl": "Seamless SSO is praktische kennis voor beheerders van hybride Entra-omgevingen.",
-      "interestReasonEn": "Seamless SSO is practical knowledge for administrators of hybrid Entra environments.",
-      "confidence": 0.66,
-      "reasonNl": "Er is alleen een verwijzing naar naslagmateriaal, zonder wijziging of actie.",
-      "reasonEn": "This is only a reference to documentation, with no change or action."
+      "interestReasonNl": "De handleiding ondersteunt beheer van hybride identiteitssynchronisatie.",
+      "interestReasonEn": "The guide supports administration of hybrid identity synchronization.",
+      "confidence": 0.96,
+      "reasonNl": "Dit is uitgebreide implementatie- en naslagdocumentatie, geen nieuwe verplichte wijziging.",
+      "reasonEn": "This is extensive implementation and reference documentation, not a new mandatory change."
+    },
+    {
+      "id": "https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-sso-faq",
+      "contentHash": "f3b5afa49dbd80012ecb02ed10f7afc162cdae3e317b0cfdea2d92781162b1a2",
+      "reviewPolicyVersion": 2,
+      "titleNl": "Veelgestelde vragen over Microsoft Entra naadloze eenmalige aanmelding",
+      "summaryNl": "Deze handleiding beschrijft compatibiliteit en werking van Microsoft Entra Seamless SSO. Voor ingeschakelde forests wordt aanbevolen de Kerberos-ontsleutelingssleutel van AZUREADSSO minstens elke 30 dagen te vernieuwen.",
+      "whyNl": [
+        "Vernieuw de AZUREADSSO-Kerberosontsleutelingssleutel minstens elke 30 dagen als Seamless SSO is ingeschakeld."
+      ],
+      "titleEn": "Microsoft Entra seamless single sign-on frequently asked questions",
+      "summaryEn": "This guide describes compatibility and operation of Microsoft Entra Seamless SSO. For enabled forests, it recommends renewing the AZUREADSSO Kerberos decryption key at least every 30 days.",
+      "whyEn": [
+        "Renew the AZUREADSSO Kerberos decryption key at least every 30 days if Seamless SSO is enabled."
+      ],
+      "categories": [
+        "Identiteit & MFA",
+        "Scripting & Graph"
+      ],
+      "kind": "handleiding",
+      "tier": "action",
+      "urgency": "normal",
+      "tenantRelevance": "likely",
+      "tenantReasonNl": "De openbare bron bevat beheerinstructies voor Microsoft Entra hybride aanmelding.",
+      "tenantReasonEn": "The public source contains administration guidance for Microsoft Entra hybrid sign-in.",
+      "personalInterest": "mustRead",
+      "interestReasonNl": "De bron noemt een terugkerende sleutelrotatie voor een hybride aanmeldingsfunctie.",
+      "interestReasonEn": "The source identifies recurring key rotation for a hybrid sign-in feature.",
+      "confidence": 0.95,
+      "reasonNl": "De bron noemt een concrete terugkerende beheeractie voor ingeschakelde Seamless SSO.",
+      "reasonEn": "The source specifies a concrete recurring administrative action for enabled Seamless SSO."
     },
     {
       "id": "https://learn.microsoft.com/en-us/entra/verified-id/",
@@ -616,6 +619,38 @@
       "reasonEn": "The announcements are relevant for preparation, but are not yet released and have no concrete action."
     },
     {
+      "id": "https://learn.microsoft.com/en-us/microsoft-365/enterprise/desktop-deployment-center-home",
+      "contentHash": "9cae62cfd888d44d0077cfba7bd47c288cc42067fa82ce8e2ef19c341ff35f59",
+      "reviewPolicyVersion": 2,
+      "titleNl": "Desktop Deployment Center is verouderd",
+      "summaryNl": "De inhoud van het Desktop Deployment Center is verouderd. Microsoft verwijst voor moderne desktopimplementaties naar onder meer Windows 11-implementatie, Microsoft 365 Apps, Intune en identiteit- en apparaatbeleid.",
+      "whyNl": [
+        "Gebruik de genoemde actuele implementatieresources in plaats van het verouderde Desktop Deployment Center."
+      ],
+      "titleEn": "Desktop Deployment Center is deprecated",
+      "summaryEn": "The content of the Desktop Deployment Center is deprecated. Microsoft directs modern desktop deployments to resources including Windows 11 deployment, Microsoft 365 Apps, Intune, and identity and device-access policies.",
+      "whyEn": [
+        "Use the referenced current deployment resources instead of the deprecated Desktop Deployment Center."
+      ],
+      "categories": [
+        "Windows 11",
+        "Apps & Packaging",
+        "Autopilot"
+      ],
+      "kind": "wijziging",
+      "tier": "watch",
+      "urgency": "normal",
+      "tenantRelevance": "likely",
+      "tenantReasonNl": "De openbare bron gaat over Microsoft-resources voor beheerde desktopimplementaties.",
+      "tenantReasonEn": "The public source concerns Microsoft resources for managed desktop deployments.",
+      "personalInterest": "mustRead",
+      "interestReasonNl": "Verouderde implementatiedocumentatie kan bestaande beheerprocessen en verwijzingen raken.",
+      "interestReasonEn": "Deprecated deployment documentation can affect existing administration processes and references.",
+      "confidence": 0.98,
+      "reasonNl": "Een documentatieportaal is verouderd, maar de bron toont geen harde migratiedeadline.",
+      "reasonEn": "A documentation portal is deprecated, but the source shows no hard migration deadline."
+    },
+    {
       "id": "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/known-issues",
       "contentHash": "5829690857b34aee43c1fc008ceb87d259ba960c3b79017535274a62f30e93ea",
       "reviewPolicyVersion": 2,
@@ -643,36 +678,33 @@
     },
     {
       "id": "https://ourcloudnetwork.com/microsoft-adds-basic-permissions-for-groups-in-graph/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-adds-basic-permissions-for-groups-in-graph",
-      "contentHash": "18f8c5d87f653bc23a41ccf3d0a790034df438199df67c06daefd18616b6dc13",
+      "contentHash": "4f346a05f73fdf6dd6bbd47854d7cc18796dfc8e68e6fa1b7753ea6c5566d316",
       "reviewPolicyVersion": 2,
-      "titleNl": "Microsoft voegt beperkte groepsmachtigingen toe aan Graph",
-      "summaryNl": "Microsoft heeft drie nieuwe Graph-machtigingen toegevoegd voor basisgegevens, lidmaatschap en preferredDataLocation van groepen. Ze kunnen toepassingen helpen om brede groepsmachtigingen te vervangen door minder uitgebreide toegang.",
+      "titleNl": "Microsoft voegt basismachtigingen voor groepen toe aan Graph",
+      "summaryNl": "Microsoft heeft volgens deze bron nieuwe Microsoft Graph-machtigingen toegevoegd voor basisgegevens van groepen, het lezen van lidmaatschappen en updates van preferred data location. Daarmee kan de afhankelijkheid van Group.Read.All afnemen.",
       "whyNl": [
-        "De nieuwe machtigingen vereisen beheerderstoestemming.",
-        "Test een aanvraag met alleen de nieuwe scope voordat bestaande consent wordt vervangen."
+        "Nieuwe gerichte machtigingen kunnen de behoefte aan Group.Read.All verminderen."
       ],
-      "titleEn": "Microsoft adds limited group permissions to Graph",
-      "summaryEn": "Microsoft has added three Graph permissions for basic group data, membership, and a group's preferredDataLocation. They can help applications replace broad group permissions with less extensive access.",
+      "titleEn": "Microsoft adds basic group permissions to Graph",
+      "summaryEn": "According to this source, Microsoft added new Microsoft Graph permissions for basic group data, membership reads, and preferred data location updates. This can reduce reliance on Group.Read.All.",
       "whyEn": [
-        "The new permissions require administrator consent.",
-        "Test a request using only the new scope before replacing existing consent."
+        "New targeted permissions can reduce the need for Group.Read.All."
       ],
       "categories": [
-        "Scripting & Graph",
-        "Identiteit & MFA"
+        "Scripting & Graph"
       ],
-      "kind": "wijziging",
+      "kind": "nieuws",
       "tier": "watch",
       "urgency": "normal",
       "tenantRelevance": "likely",
-      "tenantReasonNl": "De openbare bron beschrijft nieuwe Microsoft Graph-machtigingen voor Microsoft 365-groepen.",
-      "tenantReasonEn": "The public source describes new Microsoft Graph permissions for Microsoft 365 groups.",
-      "personalInterest": "mustRead",
-      "interestReasonNl": "De nieuwe least-privilege-machtigingen zijn direct relevant voor Graph-apps en consentbeheer.",
-      "interestReasonEn": "The new least-privilege permissions are directly relevant to Graph applications and consent management.",
-      "confidence": 0.86,
-      "reasonNl": "De wijziging is relevant voor bestaande toepassingen, maar vervanging van machtigingen is niet verplicht aangetoond.",
-      "reasonEn": "The change is relevant to existing applications, but replacing permissions is not shown to be mandatory."
+      "tenantReasonNl": "De openbare bron gaat duidelijk over Microsoft Graph-machtigingen voor groepen.",
+      "tenantReasonEn": "The public source clearly concerns Microsoft Graph permissions for groups.",
+      "personalInterest": "relevant",
+      "interestReasonNl": "Granulaire Graph-machtigingen zijn relevant voor least-privilege-integraties en automatisering.",
+      "interestReasonEn": "Granular Graph permissions matter for least-privilege integrations and automation.",
+      "confidence": 0.75,
+      "reasonNl": "De ontwikkeling is relevant, maar de korte bron onderbouwt geen verplichte actie.",
+      "reasonEn": "The development is relevant, but the short source does not substantiate a required action."
     },
     {
       "id": "https://ourcloudnetwork.com/microsoft-closes-a-data-access-gap-for-graph-api-permission/?utm_source=rss&utm_medium=rss&utm_campaign=microsoft-closes-a-data-access-gap-for-graph-api-permission",
@@ -1314,55 +1346,52 @@
       "reasonEn": "There are serious but not yet fully confirmed reports, without a final Microsoft remediation action."
     },
     {
-      "id": "https://www.bleepingcomputer.com/news/microsoft/windows-11-24h2-home-and-pro-reach-end-of-support-in-october/",
-      "contentHash": "adfde190cf8e7a0df626c4d236af408023e95e446e0b52e3e1e673c93ff1c773",
+      "id": "https://www.bleepingcomputer.com/news/security/bragjack-attacks-hijack-ai-browser-agents-through-malicious-extensions/",
+      "contentHash": "79f475c5e99028b59f0b55d9a12c83050b488a1cde35cd72d89abb959bbd8d04",
       "reviewPolicyVersion": 2,
-      "titleNl": "Windows 11 24H2 Home en Pro bereiken in oktober het einde van updates",
-      "summaryNl": "Windows 11 versie 24H2 Home en Pro ontvangen vanaf 13 oktober 2026 geen maandelijkse beveiligings- of previewupdates meer. Microsoft adviseert een upgrade naar Windows 11 25H2.",
+      "titleNl": "BragJack-aanvallen kapen AI-browseragents via schadelijke extensies",
+      "summaryNl": "Onderzoekers beschrijven BragJack, waarbij een al geïnstalleerde schadelijke browserextensie AI-browseragents kan misbruiken. De bron meldt dat Microsoft de aan Microsoft Edge toegewezen kwetsbaarheid heeft opgelost.",
       "whyNl": [
-        "Inventariseer en plan de upgrade van beheerde Windows 11 24H2 Home- en Pro-apparaten.",
-        "Einde van updates: 13 oktober 2026.",
-        "Enterprise en Education 24H2 blijven ondersteund tot oktober 2027."
+        "De aanval vereist dat al een schadelijke extensie is geïnstalleerd.",
+        "Beoordeel browserextensies en zorg dat browsers actueel zijn."
       ],
-      "titleEn": "Windows 11 24H2 Home and Pro reach end of updates in October",
-      "summaryEn": "Windows 11 version 24H2 Home and Pro will no longer receive monthly security or preview updates from October 13, 2026. Microsoft recommends upgrading to Windows 11 25H2.",
+      "titleEn": "BragJack attacks hijack AI browser agents through malicious extensions",
+      "summaryEn": "Researchers describe BragJack, where an already installed malicious browser extension can abuse AI browser agents. The source reports that Microsoft resolved the vulnerability assigned to Microsoft Edge.",
       "whyEn": [
-        "Inventory and plan the upgrade of managed Windows 11 24H2 Home and Pro devices.",
-        "End of updates: October 13, 2026.",
-        "Enterprise and Education 24H2 remain supported until October 2027."
+        "The attack requires a malicious extension to already be installed.",
+        "Review browser extensions and ensure browsers are kept current."
       ],
       "categories": [
-        "Windows 11",
-        "Windows Update"
+        "Defender & Security"
       ],
-      "kind": "wijziging",
+      "kind": "nieuws",
       "tier": "action",
       "urgency": "high",
       "tenantRelevance": "likely",
-      "tenantReasonNl": "De openbare bron beschrijft een lifecycledeadline voor beheerde Windows 11-apparaten.",
-      "tenantReasonEn": "The public source describes a lifecycle deadline for managed Windows 11 devices.",
+      "tenantReasonNl": "De openbare bron behandelt een beveiligingsrisico voor Microsoft Edge en beheerde browserextensies.",
+      "tenantReasonEn": "The public source covers a security risk affecting Microsoft Edge and managed browser extensions.",
       "personalInterest": "mustRead",
-      "interestReasonNl": "De lifecycledeadline vereist planning voor Windows 11-versies die geen beveiligingsupdates meer ontvangen.",
-      "interestReasonEn": "The lifecycle deadline requires planning for Windows 11 versions that will no longer receive security updates.",
-      "confidence": 0.97,
-      "reasonNl": "Voor Home- en Pro-apparaten is vóór een vaste nabije datum een upgradeplanning nodig.",
-      "reasonEn": "Home and Pro devices require upgrade planning before a fixed near-term date."
+      "interestReasonNl": "De aanval kan via een browserextensie toegang tot gevoelige gegevens en gebruikersacties geven.",
+      "interestReasonEn": "The attack can use a browser extension to access sensitive data and perform user actions.",
+      "confidence": 0.88,
+      "reasonNl": "De bron geeft concrete maatregelen voor extensiebeheer en browserupdates bij een beveiligingsrisico.",
+      "reasonEn": "The source gives concrete extension-management and browser-update measures for a security risk."
     },
     {
       "id": "https://www.bleepingcomputer.com/news/security/microsoft-fixes-bug-behind-defender-antivirus-is-turned-off-alerts/",
-      "contentHash": "f0cf1c63ab702d3f8deb062a7aa6e007df4fda62d7565c589e029c920b8babfb",
+      "contentHash": "9ac39c4c1d0f495f50df87664c6e1fcd1e14854e04a9809387510a4019797c81",
       "reviewPolicyVersion": 2,
-      "titleNl": "Microsoft verhelpt onjuiste meldingen dat Defender Antivirus is uitgeschakeld",
-      "summaryNl": "Microsoft heeft een probleem opgelost waarbij Windows ten onrechte meldde dat Microsoft Defender Antivirus was uitgeschakeld. De oplossing zit in Microsoft Defender Antivirus-versie 4.18.26080.4.",
+      "titleNl": "Microsoft lost foutieve meldingen dat Defender Antivirus is uitgeschakeld op",
+      "summaryNl": "Microsoft heeft een bekend probleem opgelost waarbij Windows ten onrechte meldde dat Defender Antivirus was uitgeschakeld. Volgens de bron is de oplossing opgenomen in Microsoft Defender Antivirus-versie 4.18.26080.4 van 17 september.",
       "whyNl": [
-        "De oplossing werd uitgebracht op 17 september 2026.",
-        "De fout trof ondersteunde Windows-client- en serverversies met onjuiste beveiligingsmeldingen."
+        "De foutieve meldingen betroffen ondersteunde Windows-client- en serverversies.",
+        "De oplossing zit in Microsoft Defender Antivirus-versie 4.18.26080.4, uitgebracht op 17 september."
       ],
       "titleEn": "Microsoft fixes false Defender Antivirus turned-off alerts",
-      "summaryEn": "Microsoft resolved an issue in which Windows incorrectly reported that Microsoft Defender Antivirus was turned off. The fix is in Microsoft Defender Antivirus version 4.18.26080.4.",
+      "summaryEn": "Microsoft resolved a known issue where Windows incorrectly reported that Defender Antivirus was turned off. According to the source, the fix is in Microsoft Defender Antivirus version 4.18.26080.4, released on September 17.",
       "whyEn": [
-        "The fix was released on September 17, 2026.",
-        "The issue affected supported Windows client and server versions with incorrect security notifications."
+        "The false alerts affected supported Windows client and server versions.",
+        "The fix is in Microsoft Defender Antivirus version 4.18.26080.4, released on September 17."
       ],
       "categories": [
         "Defender & Security",
@@ -1372,14 +1401,14 @@
       "tier": "watch",
       "urgency": "normal",
       "tenantRelevance": "likely",
-      "tenantReasonNl": "De openbare bron beschrijft een Microsoft Defender Antivirus-probleem op ondersteunde Windows-clients en -servers.",
-      "tenantReasonEn": "The public source describes a Microsoft Defender Antivirus issue on supported Windows clients and servers.",
+      "tenantReasonNl": "De openbare bron betreft Microsoft Defender Antivirus op ondersteunde Windows-clients en -servers.",
+      "tenantReasonEn": "The public source concerns Microsoft Defender Antivirus on supported Windows clients and servers.",
       "personalInterest": "mustRead",
-      "interestReasonNl": "De oplossing voorkomt verwarrende Defender-meldingen die securitybeheerders en gebruikers kunnen raken.",
-      "interestReasonEn": "The resolution prevents confusing Defender notifications that can affect security administrators and users.",
+      "interestReasonNl": "De oplossing verklaart onjuiste Defender-statusmeldingen die beheer- en supportteams kunnen raken.",
+      "interestReasonEn": "The resolution explains incorrect Defender status alerts that can affect administration and support teams.",
       "confidence": 0.93,
-      "reasonNl": "De gemelde fout is opgelost, maar de bron toont geen concrete klantactie die beheerders moeten uitvoeren.",
-      "reasonEn": "The reported issue is resolved, but the source does not show a concrete customer action that administrators must perform."
+      "reasonNl": "De fout is opgelost, maar de bron toont geen concrete klantactie voor uitrol of herstel.",
+      "reasonEn": "The issue is resolved, but the source does not show a concrete customer action for deployment or remediation."
     },
     {
       "id": "https://www.bleepingcomputer.com/news/security/microsoft-teams-will-let-admins-block-custom-file-extensions/",
